@@ -18,15 +18,4 @@ public class run extends StarMacro {
         activeSim.activeSim.getSimulationIterator().run();
         activeSim.saveSim();
     }
-
-    public void killSim(simComponents activeSim)
-    {
-        activeSim.activeSim.kill();
-    }
-
-    public void clearHist(simComponents activeSim)
-    {
-        activeSim.activeSim.getSolution().clearSolution(Solution.Clear.History);
-    }
-
 }
