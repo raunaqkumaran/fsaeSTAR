@@ -6,11 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69b21611-2600-4019-87cb-6d4bcc8cef50" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Macro GUI (C#_.NET)/Macro GUI (WPF)/Macro GUI/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Macro GUI (C#_.NET)/Macro GUI (WPF)/Macro GUI/MainWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/loopTest (1).sh" beforeDir="false" />
-    </list>
+    <list default="true" id="69b21611-2600-4019-87cb-6d4bcc8cef50" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,8 +20,8 @@
       <file leaf-file-name="simComponents.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/simComponents/simComponents.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="720">
-              <caret line="282" column="41" lean-forward="true" selection-start-line="282" selection-start-column="41" selection-end-line="282" selection-end-column="41" />
+            <state relative-caret-position="580">
+              <caret line="295" column="42" lean-forward="true" selection-start-line="295" selection-start-column="42" selection-end-line="295" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -385,7 +381,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1112" height="1220" extended-state="0" />
+    <frame x="-7" y="-7" width="2208" height="1218" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
@@ -395,7 +392,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28324226" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14175023" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.24072398" />
@@ -781,8 +778,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/simComponents/simComponents.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="282" column="41" lean-forward="true" selection-start-line="282" selection-start-column="41" selection-end-line="282" selection-end-column="41" />
+        <state relative-caret-position="580">
+          <caret line="295" column="42" lean-forward="true" selection-start-line="295" selection-start-column="42" selection-end-line="295" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
