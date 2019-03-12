@@ -1,7 +1,5 @@
 // You NEED to run these via batch
 
-import star.common.Simulation;
-import star.common.Solution;
 import star.common.StarMacro;
 import simComponents.*;
 
