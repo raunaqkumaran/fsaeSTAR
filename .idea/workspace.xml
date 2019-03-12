@@ -6,10 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69b21611-2600-4019-87cb-6d4bcc8cef50" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/READ_THIS.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/whatIsThis.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="69b21611-2600-4019-87cb-6d4bcc8cef50" name="Default" comment="test" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,8 +20,8 @@
       <file leaf-file-name="simComponents.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/simComponents/simComponents.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
-              <caret line="281" lean-forward="true" selection-start-line="281" selection-end-line="281" />
+            <state relative-caret-position="520">
+              <caret line="267" column="53" lean-forward="true" selection-start-line="267" selection-start-column="53" selection-end-line="267" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -773,8 +770,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/simComponents/simComponents.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="281" lean-forward="true" selection-start-line="281" selection-end-line="281" />
+        <state relative-caret-position="520">
+          <caret line="267" column="53" lean-forward="true" selection-start-line="267" selection-start-column="53" selection-end-line="267" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
