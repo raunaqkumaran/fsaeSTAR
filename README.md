@@ -7,16 +7,27 @@ These macros are meant to be used with batch operations. There are sysenvs the m
 
 
 frh - Sets front ride height. (rideHeight.java)
+
 rrh - Sets rear ride height (rideHeight.java)
+
 newName - Sets new file name (must end with .sim) (rideHeight.java)
+
 rws - Enter 1 if you want to sweep through rear wing scenes. 0 if not. (exportScenes.java)
+
 fws - Front wing scenes. See above
+
 uts - Undertray scenes. See above
+
 cs - Car scenes. See above
+
 ps - Plot scenes. See above
+
 sceneMultiplier - Multiplies scene dimension steps by the input. Use 1 to use default (very fine)
+
 yaw - Yaw angle in degrees. Positive value rotates turns the vehicle to the left.
+
 domainSet - "full" or "half". Sets the domain to be either full-car or half-car. 
+
 freestream - set freestream velocity in m/s
 
 
