@@ -6,7 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69b21611-2600-4019-87cb-6d4bcc8cef50" name="Default" comment="" />
+    <list default="true" id="69b21611-2600-4019-87cb-6d4bcc8cef50" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/READ_THIS.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/whatIsThis.txt" beforeDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
