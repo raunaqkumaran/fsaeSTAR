@@ -244,7 +244,7 @@ public class simComponents  {
         }
         catch (Exception e)
         {
-            activeSim.println("simComponents.simComponents.java - Couldn't find aero or non-aero surface wrappers");
+            activeSim.println(this.getClass().getName() +  " - Couldn't find aero or non-aero surface wrappers");
         }
 
         // Initialize mesher
@@ -666,10 +666,15 @@ public class simComponents  {
         {
             activeSim.println("Can't create new regions");
         }
-
-        activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[] {radPart, subtractPart}),
-                "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
-                "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
+        try {
+            activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart}),
+                    "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
+                    "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
+        }
+        catch (NullPointerException e)
+        {
+            activeSim.println(this.getClass().getName() + " - Region swap failed");
+        }
 
         domainRegion = activeSim.getRegionManager().getRegion(subtractName);
         domainRegion.setPresentationName(domainRegionName);
@@ -740,6 +745,21 @@ public class simComponents  {
             sim.saveState(sim.getSessionDir() + File.separator + newName);
         else
             sim.saveState(sim.getSessionDir() + File.separator + sim.getPresentationName() + ".sim");
+    }
+
+    public void killSim()
+    {
+        activeSim.kill();
+    }
+
+    public static void killSim(Simulation sim)
+    {
+        sim.kill();
+    }
+
+    public void clearHistory()
+    {
+        activeSim.getSolution().clearSolution(Solution.Clear.History);
     }
 
 
