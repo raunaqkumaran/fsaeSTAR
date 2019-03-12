@@ -13,6 +13,7 @@ import star.base.neo.NeoObjectVector;
 import star.base.report.Report;
 import star.cadmodeler.SolidModelPart;
 import star.common.*;
+import star.lagrangian.ParticleModel;
 import star.meshing.*;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
@@ -45,11 +46,13 @@ public class simComponents  {
     public Collection<GeometryPart> wheels;
     public Collection<GeometryPart> radiator;
     public Collection<GeometryPart> liftGenerators;
+    public Collection<GeometryPart> dualRadiator;
     public Collection<String> aeroPrefixes;
     public Collection<String> liftGeneratorPrefixes;
     public Collection<String> nonAeroPrefixes;
     public Collection<String> wheelNames;
     public String radiatorName;
+    public String dualRadiatorName;
     public SolidModelPart radPart;
     public String volumetricCarName;
     public String volumetricWakeName;
@@ -57,6 +60,7 @@ public class simComponents  {
     public GeometryPart volumetricCar;
 
     // Boundaries
+    public Collection<Boundary> dualRadBounds;
     public Collection<Boundary> domainBounds;
     public Collection<Boundary> radBounds;
     public Collection<Boundary> freestreamBounds;
@@ -72,8 +76,10 @@ public class simComponents  {
 
     // Regions
     public Region radiatorRegion;
+    public Region dualRadiatorRegion;
     public Region domainRegion;
     public String radiatorRegionName;
+    public String dualRadRegionName;
     public String domainRegionName;
     public BoundaryInterface massFlowInterfaceInlet;
     public BoundaryInterface massFlowInterfaceOutlet;
@@ -85,12 +91,14 @@ public class simComponents  {
     public String radiatorAxisName;
     public String frontWheelAxisName;
     public String rearWheelAxisName;
+    public String dualRadiatorRegionName;
 
     public CylindricalCoordinateSystem frontWheelCoord;
     public CylindricalCoordinateSystem rearWheelCoord;
     public LabCoordinateSystem labCoord;
     public CartesianCoordinateSystem radiatorCoord;
     public CartesianCoordinateSystem rollAxis;
+    public CartesianCoordinateSystem dualRadCoord;
 
     //Scenes and displayers
     public PlaneSection crossSection;
@@ -225,6 +233,7 @@ public class simComponents  {
     public PhysicsContinuum mainPhysics;
     public String mainPhysicsName;
     public double freestreamVal;
+    public boolean dualRadFlag;
 
     // Constructor
 
@@ -263,6 +272,7 @@ public class simComponents  {
         nonAeroPrefixes = new ArrayList<>();
         wheelNames = new ArrayList<>();
         radiatorName = "CFD_RADIATOR";
+        dualRadiatorName = "CFD_DUAL_RADIATOR";
         liftGeneratorPrefixes = new ArrayList<>();
         aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "NS", "MOUNT", "SW", "FC"));
         nonAeroPrefixes.addAll(Arrays.asList("CFD"));
@@ -278,6 +288,7 @@ public class simComponents  {
         nonAeroParts = new ArrayList<>();
         wheels = new ArrayList<>();
         radiator = new ArrayList<>();
+        dualRadiator = new ArrayList<>();
         liftGenerators = new ArrayList<>();
 
         for (GeometryPart prt : allParts)
@@ -310,22 +321,31 @@ public class simComponents  {
             if (prtName.startsWith(radiatorName))
                 radiator.add(prt);
 
+            if (prtName.startsWith(dualRadiatorName))
+                dualRadiator.add(prt);
+
         }
+
+        if (dualRadiator.size() == 0)
+            dualRadFlag = false;
+        else
+            dualRadFlag = true;
 
         // Set up regions
 
         domainRegionName = "Subtract";
         radiatorRegionName = "Radiator";
+        dualRadRegionName = "Radiator 2";
 
         try{
-            domainRegion = activeSim.getRegionManager().getRegion(domainRegionName);
-            radiatorRegion = activeSim.getRegionManager().getRegion(radiatorRegionName);
+            domainRegion = assignRegion(domainRegionName);
+            radiatorRegion = assignRegion(radiatorRegionName);
             massFlowInterfaceNameInlet = "Inlet interface";
             massFlowInterfaceNameOutlet = "Outlet interface";
         }
         catch (Exception e)
         {
-            activeSim.println("simComponents.simComponents.java - Couldn't find domain or radiator region");
+            activeSim.println("simComponents.simComponents.java - Couldn't find/create domain or radiator region");
         }
 
 
@@ -643,6 +663,11 @@ public class simComponents  {
         // Flags
         fullCarFlag = boolEnv("domainSet");
         freestreamVal = valEnv("freestream");
+
+        // This is where all the dual radiator assignments happen
+
+        if (dualRadFlag)
+            dualRadMagic();
     }
 
     public void regionSwap()
@@ -762,6 +787,25 @@ public class simComponents  {
         activeSim.getSolution().clearSolution(Solution.Clear.History);
     }
 
+    public Region assignRegion(String regName)
+    {
+        Region output;
+        if (activeSim.getRegionManager().has(regName))
+            output = activeSim.getRegionManager().getRegion(regName);
+        else
+        {
+            output = activeSim.getRegionManager().createEmptyRegion();
+            output.setPresentationName(regName);
+        }
+        return output;
+    }
+
+    public void dualRadMagic()
+    {
+        /*
+        TODO: Write this. 
+         */
+    }
 
 
 }
