@@ -1,5 +1,3 @@
-# fsaeMacros
-
 # fsaeSTAR
 Code written for Purdue Formula SAE's CFD programme
 
