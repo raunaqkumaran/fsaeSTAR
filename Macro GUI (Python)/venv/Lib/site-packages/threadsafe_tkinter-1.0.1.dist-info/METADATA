@@ -1,0 +1,22 @@
+Metadata-Version: 2.0
+Name: threadsafe-tkinter
+Version: 1.0.1
+Summary: A thread-safe version of Tkinter for Python3.
+Home-page: UNKNOWN
+Author: Devin Bobadilla
+Author-email: MosesBobadilla@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: tkinter,thread,multithread,threadsafe
+Platform: POSIX
+Platform: Windows
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Provides: threadsafe_tkinter
+
+Could not read long description from readme.
+
+

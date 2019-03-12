@@ -1,0 +1,13 @@
+So the 2019 macros I wrote are fucking terrible and I want to rewrite them. Well, some of them at least. 
+
+Hopefully this time I'll comment them, they'll be quicker, and easier to maintain. The 2019 postprocessing macros were....really bad. The others were okay, but still could be rewritten.
+
+I also want to write something that can also automate writing the batch files themsevles. Just read vehicle parameters/import CAD files based on a spreadsheet entry or something. And turn that into a batch file that can be executed straight from a terminal without having to fiddle with anything whatsoever with STAR. Maybe with a GUI? Could be a fun project. For now command line arguments are more than sufficient. 
+
+Maybe this will be useful for 2020. Maybe not. 
+
+There's a good chance these are all going to be broken while I work on them. 
+
+Another note. Rather than supporting a million different macros, each corresponding to a specific permutation or combination of macros and maintaining backwards compataibility, I only intend on supporting a small set of macros. Make your own combinations and macro queues if you need them. 
+
+If you want to modify these. I'd suggest using intelliJ. That's what these were written in. Except for the GUI projects, those were VS for the C#/.NET project, and pyCharm for the Python project. I don't know which one I'll actually end up writing. 

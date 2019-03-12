@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="src">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/lib/java/platform/examples/assistant/HelloWorld/src" />
+      <root url="file://C:/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/lib/java/platform/examples/assistant/InternalFlowAssistant/src" />
+      <root url="file://C:/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/lib/java/platform/examples/assistant/SimpleBranch/src" />
+      <root url="file://C:/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/lib/java/platform/examples/assistant/SimpleLoop/src" />
+      <root url="file://C:/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/lib/java/platform/examples/assistant/Simple/src" />
+    </SOURCES>
+  </library>
+</component>
