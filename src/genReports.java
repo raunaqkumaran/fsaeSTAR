@@ -74,6 +74,8 @@ public class genReports extends StarMacro {
             if (flag == 0 && repName.contains(activeSim.massFlowRepName))
             {
                 massFlowRep.getParts().setObjects(activeSim.domainRadInlet);
+                if (activeSim.dualRadFlag)
+                    massFlowRep.getParts().addObjects(activeSim.domainDualRadInlet);
             }
 
         }

@@ -90,6 +90,10 @@ public class simComponents  {
     public BoundaryInterface massFlowInterfaceOutlet;
     public String massFlowInterfaceNameInlet;
     public String massFlowInterfaceNameOutlet;
+    public String dualMassFlowInterfaceNameInlet;
+    public String dualMassFlowInterfaceNameOutlet;
+    public BoundaryInterface dualMassFlowInterfaceInlet;
+    public BoundaryInterface dualMassFlowInterfaceOutlet;
 
     //Coordinate systems
     public String rollAxisName;
@@ -347,7 +351,11 @@ public class simComponents  {
             massFlowInterfaceNameInlet = "Inlet interface";
             massFlowInterfaceNameOutlet = "Outlet interface";
             if (dualRadFlag)
+            {
                 dualRadiatorRegion = assignRegion(dualRadRegionName);
+                dualMassFlowInterfaceNameInlet = "Dual inlet interface";
+                dualMassFlowInterfaceNameOutlet = "Dual outlet interface";
+            }
         }
         catch (Exception e)
         {
@@ -358,6 +366,7 @@ public class simComponents  {
         // Set up boundaries
 
         domainBounds = domainRegion.getBoundaryManager().getBoundaries();
+        dualRadBounds = new ArrayList<>();
         radBounds = radiatorRegion.getBoundaryManager().getBoundaries();
         if (dualRadFlag)
             dualRadBounds = dualRadiatorRegion.getBoundaryManager().getBoundaries();
@@ -370,7 +379,6 @@ public class simComponents  {
         partBounds = new ArrayList<>();
         liftGeneratorBounds = new ArrayList<>();
         partSpecBounds = new HashMap<>();
-        dualRadBounds = new ArrayList<>();
 
         for (Boundary bound : domainBounds)
         {
@@ -439,20 +447,23 @@ public class simComponents  {
             }
         }
 
-        for (Boundary bound : radBounds)
-        {
+        for (Boundary bound : radBounds) {
             String boundName = bound.getPresentationName();
 
-            if (boundName.contains("Inlet") && boundName.contains(radiatorName))
+            if (boundName.contains("Inlet"))
                 radInlet = bound;
-            if (boundName.contains("Outlet") && boundName.contains(radiatorName))
+            if (boundName.contains("Outlet"))
                 radOutlet = bound;
+        }
 
-            if (boundName.contains("Inlet") && boundName.contains(dualRadiatorName))
+        for (Boundary bound: dualRadBounds) {
+
+            String boundName = bound.getPresentationName();
+
+            if (boundName.contains("Inlet"))
                 dualRadInlet = bound;
-            if (boundName.contains("Outlet") && boundName.contains(dualRadiatorName))
+            if (boundName.contains("Outlet"))
                 dualRadOutlet = bound;
-
         }
 
         // Set up coordinate systems
@@ -832,7 +843,5 @@ public class simComponents  {
         }
         return output;
     }
-
-
 
 }
