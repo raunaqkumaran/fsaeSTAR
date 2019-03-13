@@ -1,2 +1,5 @@
-scripts/
-.idea/
+.idea\
+out\
+venv\
+.vs\
+out\
