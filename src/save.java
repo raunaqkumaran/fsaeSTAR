@@ -1,9 +1,6 @@
 import simComponents.simComponents;
 import star.common.StarMacro;
 
-/* TODO
-Use the sys env to pick the new filename
- */
 // DEPRECATED
 
 public class save extends StarMacro {

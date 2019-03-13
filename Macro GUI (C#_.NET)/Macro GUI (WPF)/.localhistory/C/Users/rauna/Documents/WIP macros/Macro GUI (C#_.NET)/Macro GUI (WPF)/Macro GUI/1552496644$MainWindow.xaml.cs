@@ -21,13 +21,13 @@ namespace Macro_GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        string PoDKey;
-        string starDir;
-        string outFilePath;
+        String PoDKey;
+        String starDir;
+        String outFilePath;
         int platformFlag;
-        Dictionary<int, string> platformDict;
-        string initStarDirBox;
-        string starPodBox;
+        Dictionary<int, String> platformDict;
+        String initStarDirBox;
+        String starPodBox;
 
         public MainWindow()
         {
@@ -59,7 +59,8 @@ namespace Macro_GUI
 
         private void runButton(object sender, EventArgs e)
         {
-            readVals();
+            PoDKey = PoD_Box.GetLineText(0);
+            starDir = starccm__location.GetLineText(0);
             if (platformDict[platformFlag] == "Linux")
                 runLinux();
             if (platformDict[platformFlag] == "Windows")
@@ -80,7 +81,7 @@ namespace Macro_GUI
                 PoD_Box.Text = starPodBox;
         }
 
-        private string removeNonAlphaNum(string input)
+        private String removeNonAlphaNum(String input)
         {
             char[] output = new char[input.Length];
             char hold;
@@ -119,14 +120,6 @@ namespace Macro_GUI
         }
 
         private void runWindows()
-        {
-            /*
-             * TODO
-             * Write code
-             */
-        }
-
-        private void readVals()
         {
 
         }

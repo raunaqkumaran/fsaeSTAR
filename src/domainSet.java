@@ -2,9 +2,6 @@ import star.base.neo.DoubleVector;
 import star.common.StarMacro;
 import simComponents.*;
 
-/* TODO
-Actually write this macro
- */
 
 import java.util.Map;
 

@@ -13,7 +13,6 @@ import star.base.neo.NeoObjectVector;
 import star.base.report.Report;
 import star.cadmodeler.SolidModelPart;
 import star.common.*;
-import star.lagrangian.ParticleModel;
 import star.meshing.*;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
@@ -243,6 +242,9 @@ public class simComponents  {
     public String mainPhysicsName;
     public double freestreamVal;
     public boolean dualRadFlag;
+    public int maxSteps;
+    public String maxStepsName;
+    public StepStoppingCriterion maxStepStop;
 
     // Constructor
 
@@ -284,7 +286,7 @@ public class simComponents  {
         dualRadiatorName = "CFD_DUAL_RADIATOR";
         liftGeneratorPrefixes = new ArrayList<>();
         aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "NS", "MOUNT", "SW", "FC"));
-        nonAeroPrefixes.addAll(Arrays.asList("CFD"));
+        nonAeroPrefixes.addAll(Collections.singletonList("CFD"));
         wheelNames.addAll(Arrays.asList("Front Left", "Front Right", "Rear Left", "Rear Right"));
         liftGeneratorPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "SW", "FC"));
 
@@ -334,10 +336,7 @@ public class simComponents  {
                 dualRadiator.add(prt);
         }
 
-        if (dualRadiator.size() == 0)
-            dualRadFlag = false;
-        else
-            dualRadFlag = true;
+        dualRadFlag = dualRadiator.size() != 0;
 
         // Set up regions
 
@@ -702,12 +701,13 @@ public class simComponents  {
         // Define physics block
         mainPhysicsName = "Physics 1";
         mainPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum(mainPhysicsName);
+        maxSteps = (int)valEnv("maxSteps");
+        maxStepsName = "Maximum Steps";
+        maxStepStop = (StepStoppingCriterion) activeSim.getSolverStoppingCriterionManager().getSolverStoppingCriterion(maxStepsName);
 
         // Flags
         fullCarFlag = boolEnv("domainSet");
         freestreamVal = valEnv("freestream");
-
-        // This is where all the dual radiator assignments happen
 
     }
 
@@ -780,6 +780,8 @@ public class simComponents  {
             return Double.parseDouble(System.getenv(env));
         else if (env.equals("freestream"))
                 return 15;
+        else if (env.equals("maxSteps"))
+            return 1100;
         else
             return 0;
     }
@@ -789,10 +791,7 @@ public class simComponents  {
         // Read the sys environment to figure out if you want a full car or a half car sim
         if (env.equals("domainSet") && System.getenv(env)!=null && System.getenv(env).toLowerCase().equals("full"))
             return true;
-        if (System.getenv(env)!=null && System.getenv(env).toLowerCase().equals("true"))
-            return true;
-        else
-            return false;
+        return System.getenv(env) != null && System.getenv(env).toLowerCase().equals("true");
 
     }
 

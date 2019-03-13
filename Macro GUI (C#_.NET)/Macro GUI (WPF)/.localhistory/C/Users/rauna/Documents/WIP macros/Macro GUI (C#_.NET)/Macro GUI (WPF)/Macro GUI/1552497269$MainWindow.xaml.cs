@@ -59,7 +59,8 @@ namespace Macro_GUI
 
         private void runButton(object sender, EventArgs e)
         {
-            readVals();
+            PoDKey = PoD_Box.GetLineText(0);
+            starDir = starccm__location.GetLineText(0);
             if (platformDict[platformFlag] == "Linux")
                 runLinux();
             if (platformDict[platformFlag] == "Windows")
@@ -119,14 +120,6 @@ namespace Macro_GUI
         }
 
         private void runWindows()
-        {
-            /*
-             * TODO
-             * Write code
-             */
-        }
-
-        private void readVals()
         {
 
         }

@@ -136,7 +136,6 @@ public class regions extends StarMacro {
                     getMethod(PrincipalTensorProfileMethod.class).getProfile(2).
                     getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.radResBig);
         }
-
         activeSim.saveSim();
     }
 }
