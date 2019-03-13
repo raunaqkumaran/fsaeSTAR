@@ -1,0 +1,16 @@
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\bin\Release\Macro GUI.exe.config
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\bin\Release\Macro GUI.exe
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\bin\Release\Macro GUI.pdb
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI.csprojAssemblyReference.cache
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\MainWindow.g.cs
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\App.g.cs
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI_MarkupCompile.cache
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI_MarkupCompile.lref
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\App.baml
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\MainWindow.baml
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI.g.resources
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro_GUI.Properties.Resources.resources
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI.csproj.GenerateResource.cache
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI.csproj.CoreCompileInputs.cache
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI.exe
+C:\Users\rauna\Documents\WIP macros\Macro GUI (C#_.NET)\Macro GUI (WPF)\Macro GUI\obj\Release\Macro GUI.pdb
