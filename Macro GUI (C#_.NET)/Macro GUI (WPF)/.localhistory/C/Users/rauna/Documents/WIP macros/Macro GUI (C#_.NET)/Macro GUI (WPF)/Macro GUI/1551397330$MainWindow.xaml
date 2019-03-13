@@ -1,0 +1,99 @@
+﻿<Window x:Class="Macro_GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Macro_GUI"
+        mc:Ignorable="d"
+        Title="Macro GUI" Height="500" Width="1200">
+    <Window.Resources>
+        <CollectionViewSource x:Key="mainWindowViewSource" d:DesignSource="{d:DesignInstance {x:Type local:MainWindow}, CreateList=True}"/>
+    </Window.Resources>
+
+    <Grid Background="#FF6C6C6C" DataContext="{StaticResource mainWindowViewSource}" Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="160*"/>
+            <ColumnDefinition Width="480*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="PoD_Box" Margin="0" TextWrapping="Wrap" Text="STAR-CCM+ PoD Key" FontFamily="Consolas" GotFocus="boxClear" LostKeyboardFocus="PoDNoFocus" LostFocus="PoDNoFocus" MouseLeave="PoDNoFocus" MouseEnter="boxClear" Grid.ColumnSpan="6" Grid.Column="1" VerticalAlignment="Center" Height="16"/>
+        <TextBlock x:Name="Output_Window" Margin="0.285,35.714,17.286,35.429" TextWrapping="Wrap" Text="Output window" FontFamily="Consolas" Background="White" Grid.Column="10" Grid.Row="8" Grid.RowSpan="5" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="starccm__location" Margin="145,10,0.001,10" TextWrapping="Wrap" Text="starccm+ directory" FontFamily="Consolas" GotFocus="boxClear" MouseLeave="boxClear" Grid.Column="7" Grid.ColumnSpan="4" VerticalAlignment="Center" Height="16"/>
+        <ComboBox x:Name="Platform" Margin="0" SelectionChanged="ComboBoxChange" Grid.ColumnSpan="2" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" FontFamily="Consolas" FontSize="10"/>
+        <Label x:Name="Select_platform" Content="Select platform" Margin="18,7,35.857,5.571" FontFamily="Consolas" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="3" />
+        <Button Content="Add to script" Margin="18,0.143,35.857,0.429" FontFamily="Consolas" Click="runButton" Grid.Row="10" Grid.RowSpan="2" Grid.ColumnSpan="3"/>
+        <Button x:Name="OutputFile" Content="Output file" Margin="145,9,434.001,9.571" FontFamily="Consolas" Click="OutputFile_Click" Grid.Column="7" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="4"/>
+        <Label x:Name="filePathName" Content="Path" Margin="198.285,6,199.001,6.571" FontFamily="Consolas" Grid.Column="10" Grid.Row="1" VerticalAlignment="Center" Height="24" HorizontalAlignment="Center" />
+        <TextBox x:Name="scene_mult_box" Margin="0" TextWrapping="Wrap" Text="1" TextAlignment="Center" FontFamily="Consolas" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center"/>
+        <Label x:Name="scene_mult_label" Content="Scene multiplier" HorizontalAlignment="Left" Margin="18,6.429,0,5.571" Width="114" FontFamily="Consolas" Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <Label x:Name="newSimLabel" Content="New sim name" HorizontalAlignment="Left" Margin="0.143,6.143,0,6.429" Width="114" FontFamily="Consolas" Grid.Column="4" Grid.Row="11" VerticalAlignment="Center"/>
+        <TextBox x:Name="newSimName" Margin="144.143,10.143,0.143,9.429" TextWrapping="Wrap" FontFamily="Consolas" Grid.Column="4" Grid.ColumnSpan="4" Grid.Row="11" VerticalAlignment="Center" />
+        <Label x:Name="SimLabel" Content="Old sim name" HorizontalAlignment="Left" Margin="0.143,9.143,0,2.857" Width="114" FontFamily="Consolas" Grid.Column="4" Grid.Row="10" VerticalAlignment="Center"/>
+        <TextBox x:Name="simName" Margin="144.143,10.143,0.143,8.857" TextWrapping="Wrap" FontFamily="Consolas" Grid.Column="4" Grid.ColumnSpan="4" Grid.Row="10" VerticalAlignment="Center" />
+        <TextBox x:Name="scene_mult_box_Copy" Margin="0" TextWrapping="Wrap" Text="0" TextAlignment="Center" FontFamily="Consolas" Grid.Column="2" Grid.Row="3" VerticalAlignment="Center"/>
+        <Label x:Name="scene_mult_label_Copy" Content="Yaw, roll (degs)" Margin="18,6.429,35.857,6.143" FontFamily="Consolas" Grid.Row="3" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+        <TextBox x:Name="scene_mult_box_Copy1" Margin="0" TextWrapping="Wrap" Text="0" TextAlignment="Center" FontFamily="Consolas" Grid.Column="3" RenderTransformOrigin="0.881,0.455" Grid.Row="3" VerticalAlignment="Center"/>
+        <TextBox x:Name="scene_mult_box_Copy2" Margin="0" TextWrapping="Wrap" Text="0" TextAlignment="Center" FontFamily="Consolas" Grid.Column="2" RenderTransformOrigin="0.635,-0.634" Grid.Row="4" VerticalAlignment="Center"/>
+        <Label x:Name="scene_mult_label_Copy2" Content="Front/Rear rh" HorizontalAlignment="Left" Margin="18,5.857,0,6.143" Width="104" FontFamily="Consolas" Grid.Row="4" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="scene_mult_box_Copy3" Margin="0" TextWrapping="Wrap" Text="0" TextAlignment="Center" FontFamily="Consolas" Grid.Column="3" Grid.Row="4" VerticalAlignment="Center"/>
+        <Label x:Name="scene_mult_label_Copy1" Content="Front wing sweep" Margin="18,5.857,35.857,6.714" FontFamily="Consolas" Grid.Row="5" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+        <Label x:Name="scene_mult_label_Copy3" Content="Rear wing sweep" Margin="18,6.286,35.857,5.714" FontFamily="Consolas" Grid.Row="6" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+        <Label x:Name="scene_mult_label_Copy4" Content="Undertray sweep" Margin="18,6.286,35.857,6.286" FontFamily="Consolas" Grid.Row="7" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+        <Label x:Name="scene_mult_label_Copy5" Content="Car sweep" Margin="18,5.714,35.857,6.286" FontFamily="Consolas" Grid.Row="8" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+        <Label x:Name="scene_mult_label_Copy6" Content="Plot sweep" Margin="18,6.714,35.857,5.857" FontFamily="Consolas" Grid.Row="9" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+        <CheckBox Grid.Column="2" Margin="0" Grid.Row="5" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="2" Margin="0,8.286,0,7.714" Grid.Row="6" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="2" Margin="0,8.286" Grid.Row="7" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="2" Margin="0,7.714,0,8.286" Grid.Row="8" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="2" Margin="0,8.714,0,7.857" Grid.Row="9" VerticalAlignment="Center" Height="20" Width="16"/>
+        <Label x:Name="scene_mult_label_Copy7" Content="Non-aero wrap" Margin="0.143,6,0.429,6.571" FontFamily="Consolas" Grid.Row="1" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="scene_mult_label_Copy8" Content="Aero wrap" Margin="0.143,6.429,0.429,5.571" FontFamily="Consolas" Grid.Row="2" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="scene_mult_label_Copy9" Content="Subtract" Margin="0.143,6.429,0.429,6.143" FontFamily="Consolas" Grid.Row="3" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="scene_mult_label_Copy10" Content="Regions" Margin="0.143,5.857,0.429,6.143" FontFamily="Consolas" Grid.Row="4" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="scene_mult_label_Copy11" Content="Mesh repair" Margin="0.143,5.857,0.429,6.714" FontFamily="Consolas" Grid.Row="5" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="scene_mult_label_Copy12" Content="Clear solution" Margin="0.143,6.286,0.429,5.714" FontFamily="Consolas" Grid.Row="6" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="scene_mult_label_Copy13" Content="Export reports" Margin="0.143,6.286,0.429,6.286" FontFamily="Consolas" Grid.Row="7" VerticalAlignment="Center" Grid.Column="4"/>
+        <Label x:Name="Select_platform_Copy" Content="Turbulence model" Margin="0.143,5.714,0.429,6.286" FontFamily="Consolas" Grid.Row="8" VerticalAlignment="Center" Grid.Column="4" />
+        <ComboBox x:Name="Platform_Copy" Margin="144.143,8.714,0,9.286" SelectionChanged="ComboBoxChange" Grid.ColumnSpan="3" Grid.Column="4" Grid.Row="8" VerticalAlignment="Center" FontFamily="Consolas" FontSize="10"/>
+        <Label x:Name="scene_mult_label_Copy14" Content="Maximum steps" Margin="0.143,6.714,0.429,5.857" FontFamily="Consolas" Grid.Row="9" VerticalAlignment="Center" Grid.Column="4"/>
+        <TextBox x:Name="starccm__location_Copy" Margin="144.143,10.714,0,9.857" TextWrapping="Wrap" Text="700" FontFamily="Consolas" GotFocus="boxClear" MouseLeave="boxClear" Grid.Column="4" VerticalAlignment="Center" Height="16" Grid.Row="9" Grid.ColumnSpan="3" TextChanged="Starccm__location_Copy_TextChanged" TextAlignment="Center"/>
+        <CheckBox Grid.Column="5" Margin="0,10,0,6.571" Grid.Row="1" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="5" Margin="0,10.429,0,5.571" Grid.Row="2" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="5" Margin="0,10.429,0,6.143" Grid.Row="3" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="5" Margin="0,9.857,0,6.143" Grid.Row="4" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="5" Margin="0,9.857,0,6.714" Grid.Row="5" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="5" Margin="0,5.286,0,10.714" Grid.Row="6" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="5" Margin="0,5.286,0,11.286" Grid.Row="7" VerticalAlignment="Center" Height="20" Width="16"/>
+        <Label x:Name="scene_mult_label_Copy15" Content="Full car" Margin="0" FontFamily="Consolas" Grid.Row="2" VerticalAlignment="Center" Grid.Column="7"/>
+        <CheckBox Grid.Column="8" Margin="0" Grid.Row="2" VerticalAlignment="Center" Height="20" Width="16"/>
+        <Label x:Name="scene_mult_label_Copy16" Content="Auto mesh" Margin="0" FontFamily="Consolas" Grid.Row="3" VerticalAlignment="Center" Grid.Column="7"/>
+        <Label x:Name="scene_mult_label_Copy17" Content="Run-save" Margin="0" FontFamily="Consolas" Grid.Row="4" VerticalAlignment="Center" Grid.Column="7"/>
+        <CheckBox Grid.Column="8" Margin="0" Grid.Row="3" VerticalAlignment="Center" Height="20" Width="16"/>
+        <CheckBox Grid.Column="8" Margin="9.571,9.857,9.286,6.143" Grid.Row="4" VerticalAlignment="Center" Height="20" Width="16"/>
+
+    </Grid>
+</Window>

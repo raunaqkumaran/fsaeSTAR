@@ -1,0 +1,14 @@
+﻿<Application
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Macro_GUI"
+             xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Macro_GUI.App"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <System:Double x:Key="textboxHeight">20</System:Double>
+        <System:Double x:Key="PoDwidth">270</System:Double>
+        <System:Double x:Key="dirWidth">506</System:Double>
+
+    </Application.Resources>
+</Application>
