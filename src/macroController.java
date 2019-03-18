@@ -77,6 +77,8 @@ public class macroController extends StarMacro {
         getActiveRootObject().println(runMacros);
 
         // Run the macros
+        simComponents.printSystemEnvs();
+
         for (String macro : runMacros)
         {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath(macro))).play();

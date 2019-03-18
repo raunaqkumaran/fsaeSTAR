@@ -788,6 +788,7 @@ public class simComponents  {
 
     public static boolean boolEnv(String env)
     {
+
         // Read the sys environment to figure out if you want a full car or a half car sim
         if (env.equals("domainSet") && System.getenv(env)!=null && System.getenv(env).toLowerCase().equals("full"))
             return true;
@@ -841,6 +842,15 @@ public class simComponents  {
             output.setPresentationName(regName);
         }
         return output;
+    }
+
+    public static void printSystemEnvs()
+    {
+        // Print all system environments
+        for (String x : System.getenv().keySet())
+        {
+            System.out.println(x);
+        }
     }
 
 }
