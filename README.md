@@ -17,6 +17,7 @@ yaw - Yaw angle in degrees. Positive value rotates turns the vehicle to the left
 domainSet - "full" or "half". Sets the domain to be either full-car or half-car.
 freestream - set freestream velocity in m/s
 maxSteps - Maximum steps for stopping criteria
+geometryManip - Runs the rideHeight, yaw, and (once I write it) roll set macros.
 
 
 Another note. Sometimes the macros will throw error messages. This is usually okay. It's just to let you know it was expecting something that it didn't find. For example, the rollaxis coordinate system isn't in every sim set up. Sim setups without a solution wont have a finite volume representation, and might throw something in the terminal. That's fine. Sometimes displayers aren't entirely set-up. That's fine too. As long as it doesn't completely shit the bed, it should be okay. If it does shit the bed, hopefully it's in a try-catch and something shows up in the terminal. I'm not entirely confident the code is going to catch every possible exception STAR/Java could possibly throw.

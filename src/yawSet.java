@@ -58,6 +58,8 @@ public class yawSet extends StarMacro {
                 sim.activeSim.println(this.getClass().getName() + " Roll axis can't be rotated");
             }
 
+            sim.activeSim.println(this.getClass().getName() + " - Yaw change attampted");
+
         }
         sim.saveSim();
     }
