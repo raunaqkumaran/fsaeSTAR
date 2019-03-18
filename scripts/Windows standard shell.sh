@@ -8,15 +8,25 @@ runCommand()
   "$STARLOC" "$SIMPATH"\\"$FILENAME" -batch "$CP"\\"$MACRO" -cpubind -rsh ssh -np "$PROCESSES" -classpath "$CP" -licpath 1999@dock.ecn.purdue.edu
 }
 
-export PODKEY="iOJDZCUKWsPIjut3CFrKXQ";
-export MACRO="macroController.java";
-export PROCESSES="4";
-export CP="C:\Users\rauna\Documents\WIP macros\src";
-export SIMPATH="C:\Users\rauna\Documents\CFD\Yaw series";
-export STARLOC="/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe";
+export PODKEY="iOJDZCUKWsPIjut3CFrKXQ"
+export MACRO="macroController.java"
+export PROCESSES="4"
+export CP="C:\Users\rauna\Documents\WIP macros\src"
+export SIMPATH="C:\Users\rauna\Documents\CFD\Yaw series"
+export STARLOC="/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
 export domainSet="full"
 export geometryManip="true"
 
+export WSLENV=PODKEY\p
+export WSLENV=MACRO\p
+export WSLENV=PROCESSES\p
+export WSLENV=CP\p
+export WSLENV=SIMPATH\p
+export WSLENV=STARLOC\p
+export WSLENV=domainSet\p
+export WSLENV=geometryManip\p
+
+printenv
 
 export FILENAME="BASESIM_24-1.sim"
 export yaw="0.5"
