@@ -1,7 +1,13 @@
 # fsaeSTAR
 Code written for Purdue Formula SAE's CFD programme
 
+<<<<<<< HEAD
 These macros are meant to be used with batch operations. There are sysenvs the macros look for. I attempted to encapsulate every lookup within an if or a try-catch and have the macros still work or prompt for user input if something's missing, but more often than not things will break if you try using some of these with interactive sessions. Anyway; a list of all the envs the macros may be looking for. You WILL need to add the location of the macros to STAR's class path. The shell scripts automatically do that. I don't believe the batch scripts do. It's the same argument for both systems though I believe. 
+=======
+As of right now, the GUI projects are far from usable. The python folder is irrelevant for now. The C# folder has a functioning GUI but no backend. 
+
+These macros are meant to be used with batch operations. There are sysenvs the macros look for. I attempted to encapsulate every lookup within an if or a try-catch and have the macros still work or prompt for user input if something's missing, but more often than not things will break if you try using some of these with interactive sessions. Anyway; a list of all the envs the macros may be looking for. You WILL need to add the location of the macros to STAR's class path. The shell scripts automatically do that. I don't believe the batch scripts do. It's the same argument for both systems though I believe.
+>>>>>>> d71dbc6... Update README.md
 
 
 frh - Sets front ride height. (rideHeight.java)
