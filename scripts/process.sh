@@ -3,7 +3,7 @@ cd $PBS_O_WORKDIR;
 export PODKEY="iOJDZCUKWsPIjut3CFrKXQ";
 export MACRO="macroController.java";
 export PROCESSES="40";
-export CP="/scratch/scholar/rkumaran/Simulation_space"
+export CP="/home/rkumaran/fsaeSTAR/src"
 export STARLOC="/home/rkumaran/Desktop/star/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+"
 export SIMLOC="/scratch/scholar/rkumaran/Simulation_space/Preprocess/"
 export preprocess="false"
