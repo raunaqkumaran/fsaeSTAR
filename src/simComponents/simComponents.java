@@ -691,9 +691,21 @@ public class simComponents  {
         wakeSize.put(corner2, new double[] {2, 1, 16});
 
         domainName = "Freestream";
-        domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(domainName);
-        wake = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricWakeName);
-        car = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricCarName);
+        try{
+            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(domainName);
+        }
+        catch (Exception e)
+        {
+            activeSim.println(this.getClass().getName() + " - Domain could not be caught");
+        }
+        try {
+            wake = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricWakeName);
+            car = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricCarName);
+        }
+        catch (Exception e)
+        {
+            activeSim.println(this.getClass().getName() + " - Refinement regions could not be caught");
+        }
 
         if (createRollAxisFlag)
             createRollAxis();
