@@ -22,7 +22,7 @@ done
 for ((j=0; j<$i; j++)); do
   FILENAME=${arr[$j]}
   $STARLOC -machinefile $PBS_NODEFILE -np $PROCESSES -power -podkey $PODKEY -batch $CP/$MACRO -classpath $CP $FILENAME
-  mv $FILENAME $CP/Complete
+  mv $FILENAME /scratch/scholar/rkumaran/Simulation_space/Complete
 done
 
 qdel $PBS_JOBID;
