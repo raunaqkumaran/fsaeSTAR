@@ -21,7 +21,7 @@ done
 
 for ((j=0; j<$i; j++)); do
   FILENAME=${arr[$j]}
-  $STARLOC -machinefile $PBS_NODEFILE -np $PROCESSES -power -podkey $PODKEY -batch $MACRO -classpath $CP $FILENAME
+  $STARLOC -machinefile $PBS_NODEFILE -np $PROCESSES -power -podkey $PODKEY -batch $CP/$MACRO -classpath $CP $FILENAME
   mv $FILENAME $CP/Complete
 done
 
