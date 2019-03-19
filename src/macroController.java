@@ -22,7 +22,6 @@ public class macroController extends StarMacro {
                 "meshRepair.java",
                 "genReports.java",
                 "run.java",
-                "save.java",
                 "exportReports.java",
                 "kill.java"
         };
@@ -34,7 +33,6 @@ public class macroController extends StarMacro {
                 "autoMesh.java",
                 "meshRepair.java",
                 "genReports.java",
-                "save.java",
                 "kill.java"
         };
 
@@ -48,11 +46,12 @@ public class macroController extends StarMacro {
         String [] geometryManipMacros ={
                 "yawSet.java",
                 "rideHeight.java",
-                "save.java,"
+                "kill.kava"
         };
 
         String [] domainSetMacros = {
-                "domainSet.java"
+                "domainSet.java",
+                "kill.java"
         };
 
         List<String> runMacros = new ArrayList<>();
