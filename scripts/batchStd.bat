@@ -9,82 +9,82 @@ set geometryManip=true
 set domainSet=full
 
 set yaw=0.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=1
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=1.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=2
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=2.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=3
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=3.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=4
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=4.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=5.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=6
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=6.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=7
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=7.5
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 set yaw=8
-set newName=%fileName%_%yaw%.sim
+set newName=%yaw%_%fileName%.sim
 
 "%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
