@@ -91,6 +91,7 @@ public class regions extends StarMacro {
         activeSim.massFlowInterfaceInlet = activeSim.activeSim.getInterfaceManager().
                 createBoundaryInterface(activeSim.domainRadInlet, activeSim.radInlet,
                         activeSim.massFlowInterfaceNameInlet);
+
         activeSim.massFlowInterfaceOutlet = activeSim.activeSim.getInterfaceManager().
                 createBoundaryInterface(activeSim.domainRadOutlet, activeSim.radOutlet,
                         activeSim.massFlowInterfaceNameOutlet);

@@ -760,9 +760,13 @@ public class simComponents  {
         }
 
         domainRegion = assignRegion(domainRegionName);
-        radiatorRegion = assignRegion(radiatorRegionName);
+        radiatorRegion = assignRegion(radiatorName);
+        radiatorRegion.setPresentationName(radiatorRegionName);
         if (dualRadFlag)
+        {
             dualRadiatorRegion = assignRegion(dualRadiatorName);
+            dualRadiatorRegion.setPresentationName(dualRadRegionName);
+        }
 
     }
     private void createRollAxis()
