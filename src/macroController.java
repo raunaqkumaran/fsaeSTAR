@@ -37,7 +37,6 @@ public class macroController extends StarMacro {
 
         String [] processMacros = {
                 "run.java",
-                "save.java",
                 "exportReports.java",
         };
 
