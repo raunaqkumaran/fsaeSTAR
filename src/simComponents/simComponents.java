@@ -250,12 +250,25 @@ public class simComponents  {
 
     public simComponents(Simulation inputSim)
     {
+
         // Surface wrapper names
         aeroWrapName = "Aero wrap (Non-aero wrap, wings, mounts and bodywork)";
         nonAeroWrapName = "Non-aero wrap (Car)";
 
         // Initialize simulation
         activeSim = inputSim;
+
+        // Units
+
+        frontTyreRadius = 0.228599;
+        rearTyreRadius = 0.228599;
+        radResBig = 10000;
+        radResSmall = 70;
+        wheelBase = 61;
+        noUnit = activeSim.getUnitsManager().getObject("");
+        inches = activeSim.getUnitsManager().getObject("in");
+        degs = activeSim.getUnitsManager().getObject("deg");
+        meters = activeSim.getUnitsManager().getObject("m");
 
         // Initialize surface wrappers
         try {
@@ -491,12 +504,12 @@ public class simComponents  {
             }
             try {
                 rollAxis = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(rollAxisName);
-                createRollAxisFlag = false;
+                fixRollAxis();
             }
             catch (Exception e)
             {
                 activeSim.println(this.getClass().getName() + " rollAxis not found");
-                createRollAxisFlag = true;
+                createRollAxis();
             }
         }
 
@@ -643,16 +656,6 @@ public class simComponents  {
         repTable = (XyzInternalTable) activeSim.getTableManager().getTable(repTableName);
 
         // Miscellaneous constructor things
-
-        frontTyreRadius = 0.228599;
-        rearTyreRadius = 0.228599;
-        radResBig = 10000;
-        radResSmall = 70;
-        wheelBase = 61;
-        noUnit = activeSim.getUnitsManager().getObject("");
-        inches = activeSim.getUnitsManager().getObject("in");
-        degs = activeSim.getUnitsManager().getObject("deg");
-        meters = activeSim.getUnitsManager().getObject("m");
         radPart = (SolidModelPart) activeSim.get(SimulationPartManager.class).getObject(radiatorName);
         subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(subtractName);
         if (dualRadFlag)
@@ -707,8 +710,6 @@ public class simComponents  {
             activeSim.println(this.getClass().getName() + " - Refinement regions could not be caught");
         }
 
-        if (createRollAxisFlag)
-            createRollAxis();
 
         // Define physics block
         mainPhysicsName = "Physics 1";
@@ -766,15 +767,20 @@ public class simComponents  {
     }
     private void createRollAxis()
     {
-
         rollAxis = activeSim.getCoordinateSystemManager().
                 getLabCoordinateSystem().getLocalCoordinateSystemManager().
                 createLocalCoordinateSystem(CartesianCoordinateSystem.class, rollAxisName);
-        rollAxis.setBasis0(new DoubleVector(new double[] {-0.07617, 0, 0.997094}));
-        rollAxis.setBasis1(new DoubleVector(new double[] {0, 1, 0}));
-        inches = activeSim.getUnitsManager().getObject("in");
+        rollAxis.setBasis0(new DoubleVector(new double[] {0.9969535843827344, -0.017250030497470325, 0.07606567579568638}));
+        rollAxis.setBasis1(new DoubleVector(new double[] {0.01760408035593001, 0.9998370890828053, -0.003986433148115837}));
         rollAxis.getOrigin().setCoordinate(inches, inches, inches, new DoubleVector(new double[] {8.41, 0, 0}));
         rollAxis.setPresentationName(rollAxisName);
+    }
+
+    private void fixRollAxis()
+    {
+        activeSim.getCoordinateSystemManager().getLabCoordinateSystem().
+                getLocalCoordinateSystemManager().remove(rollAxis);
+        createRollAxis();
     }
 
     public static double[] vectorScale(double scalar, double [] vect)

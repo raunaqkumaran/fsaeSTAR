@@ -15,6 +15,7 @@ public class macroController extends StarMacro {
                 "domainSet.java",
                 "rideHeight.java",
                 "yawSet.java",
+                "rollSet.java",
                 "surfaceWrap.java",
                 "subtract.java",
                 "regions.java",
@@ -43,6 +44,7 @@ public class macroController extends StarMacro {
         String [] geometryManipMacros ={
                 "yawSet.java",
                 "rideHeight.java",
+                "rollSet.java"
         };
 
         String [] domainSetMacros = {

@@ -65,7 +65,7 @@ public class yawSet extends StarMacro {
                             new DoubleVector(sim.topBottomDirection), Arrays.asList(sim.noUnit,
                                     sim.noUnit, sim.noUnit), yawAngle, sim.labCoord );
 
-            sim.activeSim.println(this.getClass().getName() + " - Yaw change attampted");
+            sim.activeSim.println(this.getClass().getName() + " - Yaw change attampted " + Math.toDegrees(yawAngle));
 
         }
         sim.saveSim();
