@@ -1,4 +1,5 @@
 cd $PBS_O_WORKDIR;
+set -x
 
 export PODKEY="iOJDZCUKWsPIjut3CFrKXQ";
 export MACRO="macroController.java";
