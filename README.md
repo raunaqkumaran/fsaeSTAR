@@ -12,23 +12,40 @@ Sometimes the macros will throw error messages. This is usually okay. It's just 
 Your parts ****NEED**** to follow a naming convention. Here's the relevant code (aero, non-aero, lift-generators need to start with one of those prefixes, wheel names need to match exactly):
 
 aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "NS", "MOUNT", "SW", "FC"));
+
 nonAeroPrefixes.addAll(Arrays.asList("CFD"));
+
 wheelNames.addAll(Arrays.asList("Front Left", "Front Right", "Rear Left", "Rear Right"));
+
 liftGeneratorPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "SW", "FC"));
 
 
 frh - Sets front ride height. (rideHeight.java);
+
 rrh - Sets rear ride height (rideHeight.java);
+
 newName - Sets new file name (must end with .sim) (rideHeight.java);
+
 rws - Enter 1 if you want to sweep through rear wing scenes. 0 if not. (exportScenes.java);
+
 fws - Front wing scenes. See above;
+
 uts - Undertray scenes. See above;
+
 cs - Car scenes. See above;
+
 ps - Plot scenes. See above;
+
 sceneMultiplier - Multiplies scene dimension steps by the input. Use 1 to use default (very fine);
+
 yaw - Yaw angle in degrees. Positive value rotates turns the vehicle to the left.;
+
 domainSet - "full" or "half". Sets the domain to be either full-car or half-car.;
+
 freestream - set freestream velocity in m/s;
+
 maxSteps - Maximum steps for stopping criteria;
+
 geometryManip - Runs the rideHeight, yaw, and (once I write it) roll set macros.;
+
 roll - roll angle in degrees. Positive value pushes left side down.;
