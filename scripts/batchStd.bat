@@ -1,164 +1,91 @@
-set macroName=rideHeight.java
-set fileLoc=G:\Google Drive\Sync folders\Scholar sync\
+set macroName=macroController.java
+set fileLoc=C:\Users\rauna\Documents\CFD\Yaw series\
 set macroLoc=C:\Users\rauna\Documents\WIP macros\src\
 set location=C:\Program Files\CD-adapco\13.04.010-R8\STAR-CCM+13.04.010-R8\star\bin\starccm+.exe
 set procs=2
 set POD=iOJDZCUKWsPIjut3CFrKXQ
-set fileName=BASESIM_25-1.sim
+set fileName=BASESIM_24-1.sim
+set geometryManip=true
+set domainSet=full
 
+set yaw=0.5
+set newName=%fileName%_%yaw%.sim
 
-set frh=-1
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-set rrh=-0.75
-set newName=%frh%_%rrh%.sim
+set yaw=1
+set newName=%fileName%_%yaw%.sim
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
+set yaw=1.5
+set newName=%fileName%_%yaw%.sim
 
-set rrh=-0.5
-set newName=%frh%_%rrh%.sim
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+set yaw=2
+set newName=%fileName%_%yaw%.sim
 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-set rrh=-0.25
-set newName=%frh%_%rrh%.sim
+set yaw=2.5
+set newName=%fileName%_%yaw%.sim
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
+set yaw=3
+set newName=%fileName%_%yaw%.sim
 
-set rrh=0.25
-set newName=%frh%_%rrh%.sim
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+set yaw=3.5
+set newName=%fileName%_%yaw%.sim
 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-set rrh=0.5
-set newName=%frh%_%rrh%.sim
+set yaw=4
+set newName=%fileName%_%yaw%.sim
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
+set yaw=4.5
+set newName=%fileName%_%yaw%.sim
 
-set rrh=0.75
-set newName=%frh%_%rrh%.sim
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+set yaw=5
+set newName=%fileName%_%yaw%.sim
 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-set rrh=1
-set newName=%frh%_%rrh%.sim
+set yaw=5.5
+set newName=%fileName%_%yaw%.sim
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-set frh=-0.5
+set yaw=6
+set newName=%fileName%_%yaw%.sim
 
-set rrh=-0.75
-set newName=%frh%_%rrh%.sim
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+set yaw=6.5
+set newName=%fileName%_%yaw%.sim
 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-set rrh=-1
-set newName=%frh%_%rrh%.sim
+set yaw=7
+set newName=%fileName%_%yaw%.sim
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
+set yaw=7.5
+set newName=%fileName%_%yaw%.sim
 
-set rrh=-0.25
-set newName=%frh%_%rrh%.sim
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
+set yaw=8
+set newName=%fileName%_%yaw%.sim
 
-
-set rrh=0.25
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=0.5
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=0.75
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=1
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power
-
-set frh=0.5
-
-set rrh=-0.75
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=-0.5
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=-0.25
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=-1
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=0.5
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=0.75
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power 
-
-
-set rrh=1
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power  
-
-set frh=1
-
-set rrh=-0.25
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power  
-
-set rrh=-0.5
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power  
-
-set rrh=-0.75
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power  
-
-set rrh=-1
-set newName=%frh%_%rrh%.sim
-
-"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -podkey %POD% -licpath 1999@flex.cd-adapco.com -power  
-
-
+"%location%" "%fileLoc%%fileName%" -batch "%macroLoc%%macroName%" -cpubind -rsh ssh -np %procs% -licpath 1999@dock.ecn.purdue.edu
 
 PAUSE
-

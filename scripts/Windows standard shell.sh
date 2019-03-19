@@ -17,14 +17,7 @@ export STARLOC="/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R
 export domainSet="full"
 export geometryManip="true"
 
-export WSLENV=PODKEY\p
-export WSLENV=MACRO\p
-export WSLENV=PROCESSES\p
-export WSLENV=CP\p
-export WSLENV=SIMPATH\p
-export WSLENV=STARLOC\p
-export WSLENV=domainSet\p
-export WSLENV=geometryManip\p
+cmd.exe "set MACRO=$MACRO"
 
 printenv
 
