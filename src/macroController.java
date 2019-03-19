@@ -33,25 +33,21 @@ public class macroController extends StarMacro {
                 "autoMesh.java",
                 "meshRepair.java",
                 "genReports.java",
-                "kill.java"
         };
 
         String [] processMacros = {
                 "run.java",
                 "save.java",
                 "exportReports.java",
-                "kill.java"
         };
 
         String [] geometryManipMacros ={
                 "yawSet.java",
                 "rideHeight.java",
-                "kill.kava"
         };
 
         String [] domainSetMacros = {
                 "domainSet.java",
-                "kill.java"
         };
 
         List<String> runMacros = new ArrayList<>();
@@ -72,6 +68,8 @@ public class macroController extends StarMacro {
 
         if (process)
             runMacros.addAll(Arrays.asList(processMacros));
+
+        runMacros.add("kill.java");
 
         getActiveRootObject().println(runMacros);
 
