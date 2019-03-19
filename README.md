@@ -3,11 +3,9 @@ Code written for Purdue Formula SAE's CFD programme
 
 These macros are meant to be used with batch operations. There are sysenvs the macros look for. I attempted to encapsulate every lookup within an if or a try-catch and have the macros still work or prompt for user input if something's missing, but more often than not things will break if you try using some of these with interactive sessions. Anyway; a list of all the envs the macros may be looking for. You WILL need to add the location of the macros to STAR's class path. The shell scripts automatically do that. I don't believe the batch scripts do. It's the same argument for both systems though I believe.
 
-As of right now, the GUI projects are far from usable. The python folder is irrelevant for now. The C# folder has a functioning GUI but no backend.
+For the time being, don't reuse a sim after the macros have done things to it. Always start from a fresh basesim. Certain operations may be destructive, especially when dealing with roll/yaw transformations.
 
-These macros are meant to be used with batch operations. There are sysenvs the macros look for. I attempted to encapsulate every lookup within an if or a try-catch and have the macros still work or prompt for user input if something's missing, but more often than not things will break if you try using some of these with interactive sessions. Anyway; a list of all the envs the macros may be looking for. You WILL need to add the location of the macros to STAR's class path. The shell scripts automatically do that. I don't believe the batch scripts do. It's the same argument for both systems though I believe.
-
-frh - Sets front ride height. (rideHeight.java)
+frh - Sets front ride height. (rideHeight.java);
 
 rrh - Sets rear ride height (rideHeight.java)
 
