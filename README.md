@@ -25,6 +25,8 @@ sceneMultiplier - Multiplies scene dimension steps by the input. Use 1 to use de
 
 yaw - Yaw angle in degrees. Positive value rotates turns the vehicle to the left.
 
+roll - Roll angle in degrees. Positive value brings left side down. 
+
 domainSet - "full" or "half". Sets the domain to be either full-car or half-car.
 
 freestream - set freestream velocity in m/s
