@@ -10,6 +10,7 @@ export SIMLOC="/scratch/scholar/rkumaran/Simulation_space/Preprocess_2/"
 export preprocess="false"
 export process="true"
 export domainSet="full"
+export maxSteps="700"
 
 declare -a arr
 i=0
