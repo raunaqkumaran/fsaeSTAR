@@ -15,6 +15,7 @@ public class macroController extends StarMacro {
                 "domainSet.java",
                 "rideHeight.java",
                 "yawSet.java",
+                "rollSet.java",
                 "surfaceWrap.java",
                 "subtract.java",
                 "regions.java",
@@ -22,7 +23,6 @@ public class macroController extends StarMacro {
                 "meshRepair.java",
                 "genReports.java",
                 "run.java",
-                "save.java",
                 "exportReports.java",
                 "kill.java"
         };
@@ -34,32 +34,48 @@ public class macroController extends StarMacro {
                 "autoMesh.java",
                 "meshRepair.java",
                 "genReports.java",
-                "save.java",
-                "kill.java"
         };
 
         String [] processMacros = {
                 "run.java",
-                "save.java",
                 "exportReports.java",
-                "kill.java"
+        };
+
+        String [] geometryManipMacros ={
+                "yawSet.java",
+                "rideHeight.java",
+                "rollSet.java"
+        };
+
+        String [] domainSetMacros = {
+                "domainSet.java",
         };
 
         List<String> runMacros = new ArrayList<>();
 
         Boolean preprocess = simComponents.boolEnv("preprocess");
         Boolean process = simComponents.boolEnv("process");
+        Boolean geometryManip = simComponents.boolEnv("geometryManip");
+        Boolean domainSet = simComponents.boolEnv("domainSet");
+
+        if (domainSet)
+            runMacros.addAll(Arrays.asList(domainSetMacros));
+
+        if (geometryManip)
+            runMacros.addAll(Arrays.asList(geometryManipMacros));
 
         if (preprocess)
-        {
             runMacros.addAll(Arrays.asList(preprocessMacros));
-        }
 
         if (process)
-        {
             runMacros.addAll(Arrays.asList(processMacros));
-        }
 
+        runMacros.add("kill.java");
+
+        getActiveRootObject().println(runMacros);
+
+        //Print environment vars
+        simComponents.printSystemEnvs();
 
         // Run the macros
         for (String macro : runMacros)

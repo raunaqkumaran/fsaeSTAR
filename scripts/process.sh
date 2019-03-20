@@ -9,6 +9,8 @@ export STARLOC="/home/rkumaran/Desktop/star/13.04.010-R8/STAR-CCM+13.04.010-R8/s
 export SIMLOC="/scratch/scholar/rkumaran/Simulation_space/Preprocess/"
 export preprocess="false"
 export process="true"
+export domainSet="full"
+export maxSteps="700"
 
 declare -a arr
 i=0

@@ -2,9 +2,6 @@ import star.base.neo.DoubleVector;
 import star.common.StarMacro;
 import simComponents.*;
 
-/* TODO
-Actually write this macro
- */
 
 import java.util.Map;
 
@@ -49,9 +46,6 @@ public class domainSet extends StarMacro {
 
         sim.wake.getCorner1().setCoordinate(sim.meters, sim.meters, sim.meters, new DoubleVector(wake.get(sim.corner1)));
         sim.wake.getCorner2().setCoordinate(sim.meters, sim.meters, sim.meters, new DoubleVector(wake.get(sim.corner2)));
-
-        sim.saveSim();
-
 
     }
 

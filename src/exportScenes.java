@@ -4,10 +4,6 @@
 // There may be some oddities with some of the logic operations here because of that.
 
 
-/* TODO
-Run the save function
- */
-
 
 import star.base.neo.DoubleVector;
 import star.common.StarMacro;

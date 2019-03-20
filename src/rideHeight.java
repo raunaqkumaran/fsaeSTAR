@@ -79,8 +79,5 @@ public class rideHeight extends StarMacro {
                 sim.activeSim.println(this.getClass().getName() + " - No roll axis");
             }
         }
-
-        String macroName = "save.java";
-        new StarScript(getActiveRootObject(), new java.io.File(resolvePath(macroName))).play();
     }
 }

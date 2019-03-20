@@ -24,7 +24,6 @@ import java.util.*;
 public class simComponents  {
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understnad
-    // but STAR requires
 
     // The Simulation
     public Simulation activeSim;
@@ -45,11 +44,14 @@ public class simComponents  {
     public Collection<GeometryPart> wheels;
     public Collection<GeometryPart> radiator;
     public Collection<GeometryPart> liftGenerators;
+    public Collection<GeometryPart> dualRadiator;
     public Collection<String> aeroPrefixes;
     public Collection<String> liftGeneratorPrefixes;
     public Collection<String> nonAeroPrefixes;
     public Collection<String> wheelNames;
     public String radiatorName;
+    public String dualRadiatorName;
+    public SolidModelPart dualRadPart;
     public SolidModelPart radPart;
     public String volumetricCarName;
     public String volumetricWakeName;
@@ -57,6 +59,7 @@ public class simComponents  {
     public GeometryPart volumetricCar;
 
     // Boundaries
+    public Collection<Boundary> dualRadBounds;
     public Collection<Boundary> domainBounds;
     public Collection<Boundary> radBounds;
     public Collection<Boundary> freestreamBounds;
@@ -64,33 +67,45 @@ public class simComponents  {
     public Collection<Boundary> wheelBounds;
     public Collection<Boundary> liftGeneratorBounds;
     public String freestreamPrefix;
+    public Boundary dualRadInlet;
+    public Boundary dualRadOutlet;
     public Boundary radInlet;            // There are two sets of these corresponding to the two regions. Need these for interfacing
     public Boundary radOutlet;
     public Boundary domainRadInlet;
     public Boundary domainRadOutlet;
+    public Boundary domainDualRadInlet;
+    public Boundary domainDualRadOutlet;
     public Map<String, Collection<Boundary>> partSpecBounds;
 
     // Regions
     public Region radiatorRegion;
+    public Region dualRadiatorRegion;
     public Region domainRegion;
     public String radiatorRegionName;
+    public String dualRadRegionName;
     public String domainRegionName;
     public BoundaryInterface massFlowInterfaceInlet;
     public BoundaryInterface massFlowInterfaceOutlet;
     public String massFlowInterfaceNameInlet;
     public String massFlowInterfaceNameOutlet;
+    public String dualMassFlowInterfaceNameInlet;
+    public String dualMassFlowInterfaceNameOutlet;
+    public BoundaryInterface dualMassFlowInterfaceInlet;
+    public BoundaryInterface dualMassFlowInterfaceOutlet;
 
     //Coordinate systems
     public String rollAxisName;
     public String radiatorAxisName;
     public String frontWheelAxisName;
     public String rearWheelAxisName;
+    public String dualRadiatorAxisName;
 
     public CylindricalCoordinateSystem frontWheelCoord;
     public CylindricalCoordinateSystem rearWheelCoord;
     public LabCoordinateSystem labCoord;
     public CartesianCoordinateSystem radiatorCoord;
     public CartesianCoordinateSystem rollAxis;
+    public CartesianCoordinateSystem dualRadCoord;
 
     //Scenes and displayers
     public PlaneSection crossSection;
@@ -158,7 +173,6 @@ public class simComponents  {
     public Collection<VisView> utViews;
 
     // Auto mesh
-
     public String autoMeshName;
     public AutoMeshOperation autoMesh;
     public String wingControlName;
@@ -175,7 +189,6 @@ public class simComponents  {
 
 
     // Subtract
-
     public SubtractPartsOperation subtract;
     public String subtractName;
     public MeshOperationPart subtractPart;
@@ -196,7 +209,6 @@ public class simComponents  {
     public Collection<StarPlot> plots;
 
     // Miscellaneous
-
     public double frontTyreRadius;
     public double rearTyreRadius;
     public double radResBig;                    // These define the resistance tensors for the rad region
@@ -225,17 +237,32 @@ public class simComponents  {
     public PhysicsContinuum mainPhysics;
     public String mainPhysicsName;
     public double freestreamVal;
+    public boolean dualRadFlag;
+    public int maxSteps;
+    public String maxStepsName;
+    public StepStoppingCriterion maxStepStop;
 
     // Constructor
-
     public simComponents(Simulation inputSim)
     {
+
         // Surface wrapper names
         aeroWrapName = "Aero wrap (Non-aero wrap, wings, mounts and bodywork)";
         nonAeroWrapName = "Non-aero wrap (Car)";
 
         // Initialize simulation
         activeSim = inputSim;
+
+        // Units
+        frontTyreRadius = 0.228599;
+        rearTyreRadius = 0.228599;
+        radResBig = 10000;
+        radResSmall = 70;
+        wheelBase = 61;
+        noUnit = activeSim.getUnitsManager().getObject("");
+        inches = activeSim.getUnitsManager().getObject("in");
+        degs = activeSim.getUnitsManager().getObject("deg");
+        meters = activeSim.getUnitsManager().getObject("m");
 
         // Initialize surface wrappers
         try {
@@ -244,7 +271,7 @@ public class simComponents  {
         }
         catch (Exception e)
         {
-            activeSim.println("simComponents.simComponents.java - Couldn't find aero or non-aero surface wrappers");
+            activeSim.println(this.getClass().getName() +  " - Couldn't find aero or non-aero surface wrappers");
         }
 
         // Initialize mesher
@@ -263,9 +290,10 @@ public class simComponents  {
         nonAeroPrefixes = new ArrayList<>();
         wheelNames = new ArrayList<>();
         radiatorName = "CFD_RADIATOR";
+        dualRadiatorName = "CFD_DUAL_RADIATOR";
         liftGeneratorPrefixes = new ArrayList<>();
         aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "NS", "MOUNT", "SW", "FC"));
-        nonAeroPrefixes.addAll(Arrays.asList("CFD"));
+        nonAeroPrefixes.addAll(Collections.singletonList("CFD"));
         wheelNames.addAll(Arrays.asList("Front Left", "Front Right", "Rear Left", "Rear Right"));
         liftGeneratorPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "SW", "FC"));
 
@@ -278,6 +306,7 @@ public class simComponents  {
         nonAeroParts = new ArrayList<>();
         wheels = new ArrayList<>();
         radiator = new ArrayList<>();
+        dualRadiator = new ArrayList<>();
         liftGenerators = new ArrayList<>();
 
         for (GeometryPart prt : allParts)
@@ -310,33 +339,43 @@ public class simComponents  {
             if (prtName.startsWith(radiatorName))
                 radiator.add(prt);
 
+            if (prtName.startsWith(dualRadiatorName))
+                dualRadiator.add(prt);
         }
+        dualRadFlag = dualRadiator.size() != 0;
 
         // Set up regions
-
         domainRegionName = "Subtract";
         radiatorRegionName = "Radiator";
+        dualRadRegionName = "Radiator 2";
 
         try{
-            domainRegion = activeSim.getRegionManager().getRegion(domainRegionName);
-            radiatorRegion = activeSim.getRegionManager().getRegion(radiatorRegionName);
+            domainRegion = assignRegion(domainRegionName);
+            radiatorRegion = assignRegion(radiatorRegionName);
             massFlowInterfaceNameInlet = "Inlet interface";
             massFlowInterfaceNameOutlet = "Outlet interface";
+            if (dualRadFlag)
+            {
+                dualRadiatorRegion = assignRegion(dualRadRegionName);
+                dualMassFlowInterfaceNameInlet = "Dual inlet interface";
+                dualMassFlowInterfaceNameOutlet = "Dual outlet interface";
+            }
         }
         catch (Exception e)
         {
-            activeSim.println("simComponents.simComponents.java - Couldn't find domain or radiator region");
+            activeSim.println("simComponents.simComponents.java - Couldn't find/create domain or radiator region");
         }
 
 
         // Set up boundaries
-
         domainBounds = domainRegion.getBoundaryManager().getBoundaries();
+        dualRadBounds = new ArrayList<>();
         radBounds = radiatorRegion.getBoundaryManager().getBoundaries();
+        if (dualRadFlag)
+            dualRadBounds = dualRadiatorRegion.getBoundaryManager().getBoundaries();
         freestreamPrefix = "Freestream";
 
         // Takes all boundaries, filters them into freestream, parts, and wheels.
-
         freestreamBounds = new ArrayList<>();
         wheelBounds = new ArrayList<>();
         partBounds = new ArrayList<>();
@@ -380,14 +419,25 @@ public class simComponents  {
         {
             String boundName = bound.getPresentationName();
             if (boundName.contains("Inlet"))
-                domainRadInlet = bound;
+            {
+                if (boundName.contains(radiatorName))
+                    domainRadInlet = bound;
+                else if (boundName.contains(dualRadiatorName))
+                    domainDualRadInlet = bound;
+            }
             else if (boundName.contains("Outlet"))
-                domainRadOutlet = bound;
+            {
+                if (boundName.contains(radiatorName))
+                    domainRadOutlet = bound;
+                else if (boundName.contains(dualRadiatorName))
+                    domainDualRadOutlet = bound;
+            }
 
             for (String prefix : aeroPrefixes)
             {
                 if (boundName.contains(prefix) && !boundName.toLowerCase().contains("suspension"))      // Janky code so CFD_SUSPENSION doesn't trigger the NS prefix.
-                                                                                                        // I can't add an _ to the prefix because there are other dependencies to consider
+                                                                                                        // I can't add an _ to the prefix because there are other
+                                                                                                        // dependencies to consider
                 {
                     Collection<Boundary> temp = new ArrayList<>();
 
@@ -400,22 +450,32 @@ public class simComponents  {
             }
         }
 
-        for (Boundary bound : radBounds)
-        {
+        for (Boundary bound : radBounds) {
             String boundName = bound.getPresentationName();
+
             if (boundName.contains("Inlet"))
                 radInlet = bound;
             if (boundName.contains("Outlet"))
                 radOutlet = bound;
         }
 
-        // Set up coordinate systems
+        for (Boundary bound: dualRadBounds) {
 
+            String boundName = bound.getPresentationName();
+
+            if (boundName.contains("Inlet"))
+                dualRadInlet = bound;
+            if (boundName.contains("Outlet"))
+                dualRadOutlet = bound;
+        }
+
+        // Set up coordinate systems
         {
             rollAxisName = "Roll axis";
             radiatorAxisName = "Radiator Cartesian";
             frontWheelAxisName = "Front Wheel Cylindrical";
             rearWheelAxisName = "Rear Wheel Cylindrical";
+            dualRadiatorAxisName = "Dual Radiator Cartesian";
             labCoord = activeSim.getCoordinateSystemManager().getLabCoordinateSystem();
 
             try
@@ -423,6 +483,9 @@ public class simComponents  {
                 radiatorCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(radiatorAxisName);
                 frontWheelCoord = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(frontWheelAxisName);
                 rearWheelCoord = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(rearWheelAxisName);
+                if (dualRadFlag)
+                    dualRadCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().
+                            getCoordinateSystem(dualRadiatorAxisName);
 
             }
             catch (Exception e)
@@ -431,17 +494,16 @@ public class simComponents  {
             }
             try {
                 rollAxis = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(rollAxisName);
-                createRollAxisFlag = false;
+                fixRollAxis();
             }
             catch (Exception e)
             {
                 activeSim.println(this.getClass().getName() + " rollAxis not found");
-                createRollAxisFlag = true;
+                createRollAxis();
             }
         }
 
         // Set up the range of values to scan with the cross section scene. Also used for some physics
-
         profileLimits = new double[] {0, 35};
         wingProfileLimits = new double[] {};
         topBottomLimits = new double[] {0, 60};
@@ -457,7 +519,6 @@ public class simComponents  {
         wallYRangeNearWall = new double[] {0.0, 30.0};
 
         // Set up scenes, representations, and views.
-
         {
             try {
                 crossSectionName = "Plane Section";
@@ -532,12 +593,10 @@ public class simComponents  {
         }
 
         // Set up subtract
-
         subtractName = "Subtract";
         subtract = (SubtractPartsOperation) activeSim.get(MeshOperationManager.class).getObject(subtractName);
 
         // Set up mesher
-
         try {
 
             // Get volumetric blocks
@@ -573,7 +632,6 @@ public class simComponents  {
 
 
         // Set up reports
-
         reports = activeSim.getReportManager().getObjects();
         pitchRepName = "Pitch Moment Coefficient";
         massFlowRepName = "Radiator Mass Flow";
@@ -583,21 +641,12 @@ public class simComponents  {
         repTable = (XyzInternalTable) activeSim.getTableManager().getTable(repTableName);
 
         // Miscellaneous constructor things
-
-        frontTyreRadius = 0.228599;
-        rearTyreRadius = 0.228599;
-        radResBig = 10000;
-        radResSmall = 70;
-        wheelBase = 61;
-        noUnit = activeSim.getUnitsManager().getObject("");
-        inches = activeSim.getUnitsManager().getObject("in");
-        degs = activeSim.getUnitsManager().getObject("deg");
-        meters = activeSim.getUnitsManager().getObject("m");
         radPart = (SolidModelPart) activeSim.get(SimulationPartManager.class).getObject(radiatorName);
         subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(subtractName);
+        if (dualRadFlag)
+            dualRadPart = (SolidModelPart) activeSim.get(SimulationPartManager.class).getObject(dualRadiatorName);
 
         // Plots
-
         plots = activeSim.getPlotManager().getPlots();
 
         // Define blocks
@@ -629,30 +678,45 @@ public class simComponents  {
         wakeSize.put(corner2, new double[] {2, 1, 16});
 
         domainName = "Freestream";
-        domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(domainName);
-        wake = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricWakeName);
-        car = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricCarName);
+        try{
+            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(domainName);
+        }
+        catch (Exception e)
+        {
+            activeSim.println(this.getClass().getName() + " - Domain could not be caught");
+        }
+        try {
+            wake = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricWakeName);
+            car = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(volumetricCarName);
+        }
+        catch (Exception e)
+        {
+            activeSim.println(this.getClass().getName() + " - Refinement regions could not be caught");
+        }
 
-        if (createRollAxisFlag)
-            createRollAxis();
 
         // Define physics block
         mainPhysicsName = "Physics 1";
         mainPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum(mainPhysicsName);
+        maxSteps = (int)valEnv("maxSteps");
+        maxStepsName = "Maximum Steps";
+        maxStepStop = (StepStoppingCriterion) activeSim.getSolverStoppingCriterionManager().getSolverStoppingCriterion(maxStepsName);
 
         // Flags
         fullCarFlag = boolEnv("domainSet");
         freestreamVal = valEnv("freestream");
+
     }
 
     public void regionSwap()
     {
         // Removes old regions. Creates new ones. There's some variable casting going on which I don't understand
         // but STAR seems to require it.
-
         try {
             activeSim.getRegionManager().removeRegion(domainRegion);
             activeSim.getRegionManager().removeRegion(radiatorRegion);
+            if (dualRadFlag)
+                activeSim.getRegionManager().removeRegion(dualRadiatorRegion);
         }
         catch (Exception e) {
             activeSim.println("Old regions not found");
@@ -661,34 +725,49 @@ public class simComponents  {
         try {
             radPart = (SolidModelPart) activeSim.get(SimulationPartManager.class).getObject(radiatorName);
             subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(subtractName);
+            if (dualRadFlag)
+                dualRadPart = (SolidModelPart) activeSim.get(SimulationPartManager.class).getObject(dualRadiatorName);
         }
         catch (Exception e)
         {
             activeSim.println("Can't create new regions");
         }
+        try {
+            activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart}),
+                    "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
+                    "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
+        }
+        catch (NullPointerException e)
+        {
+            activeSim.println(this.getClass().getName() + " - Region swap failed");
+        }
 
-        activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[] {radPart, subtractPart}),
-                "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
-                "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
-
-        domainRegion = activeSim.getRegionManager().getRegion(subtractName);
-        domainRegion.setPresentationName(domainRegionName);
-
-        radiatorRegion = activeSim.getRegionManager().getRegion(radiatorName);
+        domainRegion = assignRegion(domainRegionName);
+        radiatorRegion = assignRegion(radiatorName);
         radiatorRegion.setPresentationName(radiatorRegionName);
+        if (dualRadFlag)
+        {
+            dualRadiatorRegion = assignRegion(dualRadiatorName);
+            dualRadiatorRegion.setPresentationName(dualRadRegionName);
+        }
 
     }
     private void createRollAxis()
     {
-
         rollAxis = activeSim.getCoordinateSystemManager().
                 getLabCoordinateSystem().getLocalCoordinateSystemManager().
                 createLocalCoordinateSystem(CartesianCoordinateSystem.class, rollAxisName);
-        rollAxis.setBasis0(new DoubleVector(new double[] {-0.07617, 0, 0.997094}));
-        rollAxis.setBasis1(new DoubleVector(new double[] {0, 1, 0}));
-        inches = activeSim.getUnitsManager().getObject("in");
+        rollAxis.setBasis0(new DoubleVector(new double[] {0.9969535843827344, -0.017250030497470325, 0.07606567579568638}));
+        rollAxis.setBasis1(new DoubleVector(new double[] {0.01760408035593001, 0.9998370890828053, -0.003986433148115837}));
         rollAxis.getOrigin().setCoordinate(inches, inches, inches, new DoubleVector(new double[] {8.41, 0, 0}));
         rollAxis.setPresentationName(rollAxisName);
+    }
+
+    private void fixRollAxis()
+    {
+        activeSim.getCoordinateSystemManager().getLabCoordinateSystem().
+                getLocalCoordinateSystemManager().remove(rollAxis);
+        createRollAxis();
     }
 
     public static double[] vectorScale(double scalar, double [] vect)
@@ -706,19 +785,19 @@ public class simComponents  {
             return Double.parseDouble(System.getenv(env));
         else if (env.equals("freestream"))
                 return 15;
+        else if (env.equals("maxSteps"))
+            return 1100;
         else
             return 0;
     }
 
     public static boolean boolEnv(String env)
     {
+
         // Read the sys environment to figure out if you want a full car or a half car sim
         if (env.equals("domainSet") && System.getenv(env)!=null && System.getenv(env).toLowerCase().equals("full"))
             return true;
-        if (System.getenv(env)!=null && System.getenv(env).toLowerCase().equals("true"))
-            return true;
-        else
-            return false;
+        return System.getenv(env) != null && System.getenv(env).toLowerCase().equals("true");
 
     }
 
@@ -742,6 +821,41 @@ public class simComponents  {
             sim.saveState(sim.getSessionDir() + File.separator + sim.getPresentationName() + ".sim");
     }
 
+    public void killSim()
+    {
+        activeSim.kill();
+    }
 
+    public static void killSim(Simulation sim)
+    {
+        sim.kill();
+    }
+
+    public void clearHistory()
+    {
+        activeSim.getSolution().clearSolution(Solution.Clear.History);
+    }
+
+    public Region assignRegion(String regName)
+    {
+        Region output;
+        if (activeSim.getRegionManager().has(regName))
+            output = activeSim.getRegionManager().getRegion(regName);
+        else
+        {
+            output = activeSim.getRegionManager().createEmptyRegion();
+            output.setPresentationName(regName);
+        }
+        return output;
+    }
+
+    public static void printSystemEnvs()
+    {
+        // Print all system environments
+        for (String x : System.getenv().keySet())
+        {
+            System.out.println(x);
+        }
+    }
 
 }

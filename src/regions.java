@@ -91,9 +91,20 @@ public class regions extends StarMacro {
         activeSim.massFlowInterfaceInlet = activeSim.activeSim.getInterfaceManager().
                 createBoundaryInterface(activeSim.domainRadInlet, activeSim.radInlet,
                         activeSim.massFlowInterfaceNameInlet);
+
         activeSim.massFlowInterfaceOutlet = activeSim.activeSim.getInterfaceManager().
                 createBoundaryInterface(activeSim.domainRadOutlet, activeSim.radOutlet,
                         activeSim.massFlowInterfaceNameOutlet);
+        
+        if (activeSim.dualRadFlag){
+            activeSim.dualMassFlowInterfaceInlet = activeSim.activeSim.getInterfaceManager().
+                    createBoundaryInterface(activeSim.domainDualRadInlet, activeSim.dualRadInlet, 
+                            activeSim.dualMassFlowInterfaceNameInlet);
+            activeSim.dualMassFlowInterfaceOutlet = activeSim.activeSim.getInterfaceManager().
+                    createBoundaryInterface(activeSim.domainDualRadOutlet, activeSim.dualRadOutlet, 
+                            activeSim.dualMassFlowInterfaceNameOutlet);
+            
+        }
 
         activeSim.radiatorRegion.setRegionType(PorousRegion.class);
         activeSim.radiatorRegion.getValues().get(PorousInertialResistance.class).
@@ -109,7 +120,22 @@ public class regions extends StarMacro {
         activeSim.radiatorRegion.getValues().get(PorousInertialResistance.class).
                 getMethod(PrincipalTensorProfileMethod.class).getProfile(2).
                 getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.radResBig);
-
-        activeSim.saveSim();
+        
+        if (activeSim.dualRadFlag){
+            activeSim.dualRadiatorRegion.setRegionType(PorousRegion.class);
+            activeSim.dualRadiatorRegion.getValues().get(PorousInertialResistance.class).
+                    getMethod(PrincipalTensorProfileMethod.class).getYAxis().setCoordinateSystem(activeSim.dualRadCoord);
+            activeSim.dualRadiatorRegion.getValues().get(PorousInertialResistance.class).
+                    getMethod(PrincipalTensorProfileMethod.class).getXAxis().setCoordinateSystem(activeSim.dualRadCoord);
+            activeSim.dualRadiatorRegion.getValues().get(PorousInertialResistance.class).
+                    getMethod(PrincipalTensorProfileMethod.class).getProfile(0).
+                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.radResBig);
+            activeSim.dualRadiatorRegion.getValues().get(PorousInertialResistance.class).
+                    getMethod(PrincipalTensorProfileMethod.class).getProfile(1).
+                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.radResSmall);
+            activeSim.dualRadiatorRegion.getValues().get(PorousInertialResistance.class).
+                    getMethod(PrincipalTensorProfileMethod.class).getProfile(2).
+                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.radResBig);
+        }
     }
 }

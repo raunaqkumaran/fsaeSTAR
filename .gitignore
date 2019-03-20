@@ -1,3 +1,6 @@
-scripts/
+*.cache
 .idea/
+out/
+Macro GUI (Python)/
 .vs/
+.localhistory/

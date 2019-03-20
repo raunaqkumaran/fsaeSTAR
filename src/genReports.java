@@ -74,14 +74,14 @@ public class genReports extends StarMacro {
             if (flag == 0 && repName.contains(activeSim.massFlowRepName))
             {
                 massFlowRep.getParts().setObjects(activeSim.domainRadInlet);
+                if (activeSim.dualRadFlag)
+                    massFlowRep.getParts().addObjects(activeSim.domainDualRadInlet);
             }
 
         }
         activeSim.point.getPointCoordinate().setCoordinate(activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"), new DoubleVector(new double[] {1, 1, 1}));
         activeSim.point.getInputParts().setObjects(activeSim.domainBounds);
         activeSim.point.getInputParts().addObjects(activeSim.radBounds);
-        activeSim.saveSim();
-
     }
 
 }
