@@ -8,97 +8,29 @@ runCommand()
   "$STARLOC" "$SIMPATH"\\"$FILENAME" -batch "$CP"\\"$MACRO" -cpubind -rsh ssh -np "$PROCESSES" -classpath "$CP" -licpath 1999@dock.ecn.purdue.edu
 }
 
-export PODKEY="iOJDZCUKWsPIjut3CFrKXQ"
-export MACRO="macroController.java"
-export PROCESSES="4"
-export CP="C:\Users\rauna\Documents\WIP macros\src"
-export SIMPATH="C:\Users\rauna\Documents\CFD\Yaw series"
-export STARLOC="/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
-export domainSet="full"
-export geometryManip="true"
+setENVWin()
+{
+  export $1="$2"
+  cmd.exe "/C setx $1 "$2""
+}
 
-cmd.exe "set MACRO=$MACRO"
+setENV()
+{
+  export $1="$2"
+}
 
-printenv
+setENVWin PODKEY "iOJDZCUKWsPIjut3CFrKXQ"
+setENVWin MACRO "macroController.java"
+setENVWin PROCESSES "4"
+setENVWin CP "C:\Users\rauna\Documents\WIP macros\src"
+setENVWin SIMPATH "C:\Users\rauna\Documents\CFD\Yaw series"
+setENVWin STARLOC "/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
 
-export FILENAME="BASESIM_24-1.sim"
-export yaw="0.5"
-export newName=""$yaw"_"$FILENAME""
+
+setENVWin domainSet full
+setENVWin geometryManip true
+setENVWin yaw 0.5
+setENVWin FILENAME BASESIM_24-1.sim
+setENVWin newName test_"$yaw"_"$FILENAME"
+
 runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=1
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=1.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=2
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=2.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=3
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=3.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=4
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=4.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=5.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=6
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=6.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=7
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=7.5
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-export FILENAME="BASESIM_24-1.sim"
-export yaw=8
-export newName=""$yaw"_"$FILENAME""
-runCommand
-
-read -p "Press enter to continue"
