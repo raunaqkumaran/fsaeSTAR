@@ -4,23 +4,38 @@ set -e
 
 runCommand()
 {
-  "$STARLOC" "$SIMPATH"\\"$FILENAME" -batch "$CP"\\"$MACRO" -cpubind -rsh ssh -np "$PROCESSES" -classpath "$CP" -licpath 1999@dock.ecn.purdue.edu
+  temp=$(wslpath -w "$FILENAME")
+  FILENAME="$temp"
+  "$STARLOC" "$FILENAME" -batch "$CP"\\"$MACRO" -cpubind -rsh ssh -np "$PROCESSES" -classpath "$CP" -licpath 1999@dock.ecn.purdue.edu
 }
 
-export PODKEY="iOJDZCUKWsPIjut3CFrKXQ"
-export MACRO="macroController.java"
-export PROCESSES="4"
-export CP="C:\Users\rauna\Documents\WIP macros\src"
-export SIMPATH="C:\Users\rauna\Documents\CFD\Yaw series"
-export STARLOC="/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
+setENVWin()
+{
+  export $1="$2"
+  cmd.exe "/C setx $1 """
+  cmd.exe "/C setx $1 "$2""
+}
+
+setENV()
+{
+  export $1="$2"
+}
+
+setENVWin PODKEY "iOJDZCUKWsPIjut3CFrKXQ"
+setENVWin MACRO "macroController.java"
+setENVWin PROCESSES "4"
+setENVWin CP 'C:\Users\rauna\Documents\WIP macros\src'
+setENVWin SIMPATH '/mnt/c/users/rauna/Documents/CFD/Yaw series/'
+setENVWin STARLOC "/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
+setENVWin domainSet half
 
 declare -a arr
 i=0
 
-for FILENAME in $SIMPATH/*.sim; do
+for FILENAME in "$SIMPATH"*.sim; do
   [ -e "$FILENAME" ] || continue
   arr[$i]=$FILENAME
-  ((i++))
+  i=$((i+1))
 done
 
 for ((j=0; j<$i; j++))

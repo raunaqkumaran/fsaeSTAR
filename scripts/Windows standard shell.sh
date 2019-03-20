@@ -11,6 +11,7 @@ runCommand()
 setENVWin()
 {
   export $1="$2"
+  cmd.exe "/C setx $1 """
   cmd.exe "/C setx $1 "$2""
 }
 
@@ -31,6 +32,7 @@ setENVWin domainSet full
 setENVWin geometryManip true
 setENVWin yaw 0.5
 setENVWin FILENAME BASESIM_24-1.sim
-setENVWin newName test_"$yaw"_"$FILENAME"
+newnameVal="$yaw"_"$FILENAME"
+setENVWin newName "$newnameVal"
 
 runCommand
