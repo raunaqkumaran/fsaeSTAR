@@ -28,6 +28,10 @@ setENVWin CP 'C:\Users\rauna\Documents\WIP macros\src'
 setENVWin SIMPATH '/mnt/c/users/rauna/Documents/CFD/Yaw series/'
 setENVWin STARLOC "/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
 setENVWin domainSet half
+setENVWin yaw 0
+setENVWin roll 0
+setENVWin rrh 0
+setENVWin frh 0
 
 declare -a arr
 i=0

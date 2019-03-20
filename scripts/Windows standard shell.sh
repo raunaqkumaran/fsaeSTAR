@@ -26,6 +26,8 @@ setENVWin PROCESSES "4"
 setENVWin CP "C:\Users\rauna\Documents\WIP macros\src"
 setENVWin SIMPATH "C:\Users\rauna\Documents\CFD\Yaw series"
 setENVWin STARLOC "/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
+setENVWin yaw 0
+setENVWin roll 0
 
 
 setENVWin domainSet full
