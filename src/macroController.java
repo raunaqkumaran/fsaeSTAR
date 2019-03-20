@@ -51,12 +51,18 @@ public class macroController extends StarMacro {
                 "domainSet.java",
         };
 
+        String [] postprocessMacros = {
+                "exportReports.java",
+                "exportScenes.java"
+        };
+
         List<String> runMacros = new ArrayList<>();
 
         Boolean preprocess = simComponents.boolEnv("preprocess");
         Boolean process = simComponents.boolEnv("process");
         Boolean geometryManip = simComponents.boolEnv("geometryManip");
         Boolean domainSet = simComponents.boolEnv("domainSet");
+        Boolean postprocess = simComponents.boolEnv("postprocess");
 
         if (domainSet)
             runMacros.addAll(Arrays.asList(domainSetMacros));
@@ -69,6 +75,9 @@ public class macroController extends StarMacro {
 
         if (process)
             runMacros.addAll(Arrays.asList(processMacros));
+
+        if (postprocess)
+            runMacros.addAll(Arrays.asList(postprocessMacros));
 
         runMacros.add("kill.java");
 

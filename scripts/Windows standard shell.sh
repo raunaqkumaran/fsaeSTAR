@@ -38,3 +38,4 @@ newnameVal="$yaw"_"$FILENAME"
 setENVWin newName "$newnameVal"
 
 runCommand
+mv "$FILENAME" "$SIMPATH"/Complete
