@@ -46,8 +46,6 @@ public class meshRepair extends StarMacro {
 
         meshManager_0.removeInvalidCells(new NeoObjectVector(new Object[] {region_0}), NeoProperty.fromString("{\'minimumContiguousFaceArea\': 0.0, \'minimumCellVolumeEnabled\': true, \'minimumVolumeChangeEnabled\': true, \'functionOperator\': 1, \'minimumContiguousFaceAreaEnabled\': true, \'minimumFaceValidityEnabled\': true, \'functionValue\': 2000.0, \'functionEnabled\': false, \'function\': \'Pressure\', \'minimumVolumeChange\': 1.0E-10, \'minimumCellVolume\': 0.0, \'minimumCellQualityEnabled\': true, \'minimumCellQuality\': 1.0E-8, \'minimumDiscontiguousCells\': 100000, \'minimumDiscontiguousCellsEnabled\': true, \'minimumFaceValidity\': 0.51}"));
 
-        simComponents.saveSim(getActiveSimulation());
-
     }
 
 }

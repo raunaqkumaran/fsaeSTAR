@@ -82,8 +82,6 @@ public class genReports extends StarMacro {
         activeSim.point.getPointCoordinate().setCoordinate(activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"), new DoubleVector(new double[] {1, 1, 1}));
         activeSim.point.getInputParts().setObjects(activeSim.domainBounds);
         activeSim.point.getInputParts().addObjects(activeSim.radBounds);
-        activeSim.saveSim();
-
     }
 
 }

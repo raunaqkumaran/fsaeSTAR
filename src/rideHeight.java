@@ -79,6 +79,5 @@ public class rideHeight extends StarMacro {
                 sim.activeSim.println(this.getClass().getName() + " - No roll axis");
             }
         }
-        sim.saveSim();
     }
 }

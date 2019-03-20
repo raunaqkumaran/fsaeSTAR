@@ -68,7 +68,6 @@ public class yawSet extends StarMacro {
             sim.activeSim.println(this.getClass().getName() + " - Yaw change attampted " + Math.toDegrees(yawAngle));
 
         }
-        sim.saveSim();
     }
 
     // Get the env flag for the yaw angle

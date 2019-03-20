@@ -19,8 +19,6 @@ public class subtract extends StarMacro {
         simObject.subtract.getInputGeometryObjects().setObjects(simObject.domain, surfaceWrap);
         simObject.subtract.setTargetPart(simObject.domain);
         simObject.subtract.execute();
-
-        simObject.saveSim();
     }
 
 }

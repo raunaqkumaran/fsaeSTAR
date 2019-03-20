@@ -45,11 +45,5 @@ public class rollSet extends StarMacro {
 
         sim.activeSim.println(this.getClass().getName() + " - Roll change attampted " + Math.toDegrees(rollAngle));
 
-        sim.saveSim();
     }
-
-    // Get the env flag for the yaw angle
-
-
-
 }

@@ -33,8 +33,6 @@ public class exportReports extends StarMacro {
         activeSim.repTable.setRepresentation(activeSim.finiteVol);
         activeSim.repTable.extract();
         activeSim.repTable.export(path + activeSim.separator + "Reports.csv");
-
-        activeSim.saveSim();
     }
 
 }

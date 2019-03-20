@@ -24,7 +24,6 @@ import java.util.*;
 public class simComponents  {
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understnad
-    // but STAR requires
 
     // The Simulation
     public Simulation activeSim;
@@ -174,7 +173,6 @@ public class simComponents  {
     public Collection<VisView> utViews;
 
     // Auto mesh
-
     public String autoMeshName;
     public AutoMeshOperation autoMesh;
     public String wingControlName;
@@ -191,7 +189,6 @@ public class simComponents  {
 
 
     // Subtract
-
     public SubtractPartsOperation subtract;
     public String subtractName;
     public MeshOperationPart subtractPart;
@@ -212,7 +209,6 @@ public class simComponents  {
     public Collection<StarPlot> plots;
 
     // Miscellaneous
-
     public double frontTyreRadius;
     public double rearTyreRadius;
     public double radResBig;                    // These define the resistance tensors for the rad region
@@ -247,7 +243,6 @@ public class simComponents  {
     public StepStoppingCriterion maxStepStop;
 
     // Constructor
-
     public simComponents(Simulation inputSim)
     {
 
@@ -259,7 +254,6 @@ public class simComponents  {
         activeSim = inputSim;
 
         // Units
-
         frontTyreRadius = 0.228599;
         rearTyreRadius = 0.228599;
         radResBig = 10000;
@@ -348,11 +342,9 @@ public class simComponents  {
             if (prtName.startsWith(dualRadiatorName))
                 dualRadiator.add(prt);
         }
-
         dualRadFlag = dualRadiator.size() != 0;
 
         // Set up regions
-
         domainRegionName = "Subtract";
         radiatorRegionName = "Radiator";
         dualRadRegionName = "Radiator 2";
@@ -376,7 +368,6 @@ public class simComponents  {
 
 
         // Set up boundaries
-
         domainBounds = domainRegion.getBoundaryManager().getBoundaries();
         dualRadBounds = new ArrayList<>();
         radBounds = radiatorRegion.getBoundaryManager().getBoundaries();
@@ -385,7 +376,6 @@ public class simComponents  {
         freestreamPrefix = "Freestream";
 
         // Takes all boundaries, filters them into freestream, parts, and wheels.
-
         freestreamBounds = new ArrayList<>();
         wheelBounds = new ArrayList<>();
         partBounds = new ArrayList<>();
@@ -446,7 +436,8 @@ public class simComponents  {
             for (String prefix : aeroPrefixes)
             {
                 if (boundName.contains(prefix) && !boundName.toLowerCase().contains("suspension"))      // Janky code so CFD_SUSPENSION doesn't trigger the NS prefix.
-                                                                                                        // I can't add an _ to the prefix because there are other dependencies to consider
+                                                                                                        // I can't add an _ to the prefix because there are other
+                                                                                                        // dependencies to consider
                 {
                     Collection<Boundary> temp = new ArrayList<>();
 
@@ -479,7 +470,6 @@ public class simComponents  {
         }
 
         // Set up coordinate systems
-
         {
             rollAxisName = "Roll axis";
             radiatorAxisName = "Radiator Cartesian";
@@ -514,7 +504,6 @@ public class simComponents  {
         }
 
         // Set up the range of values to scan with the cross section scene. Also used for some physics
-
         profileLimits = new double[] {0, 35};
         wingProfileLimits = new double[] {};
         topBottomLimits = new double[] {0, 60};
@@ -530,7 +519,6 @@ public class simComponents  {
         wallYRangeNearWall = new double[] {0.0, 30.0};
 
         // Set up scenes, representations, and views.
-
         {
             try {
                 crossSectionName = "Plane Section";
@@ -605,12 +593,10 @@ public class simComponents  {
         }
 
         // Set up subtract
-
         subtractName = "Subtract";
         subtract = (SubtractPartsOperation) activeSim.get(MeshOperationManager.class).getObject(subtractName);
 
         // Set up mesher
-
         try {
 
             // Get volumetric blocks
@@ -646,7 +632,6 @@ public class simComponents  {
 
 
         // Set up reports
-
         reports = activeSim.getReportManager().getObjects();
         pitchRepName = "Pitch Moment Coefficient";
         massFlowRepName = "Radiator Mass Flow";
@@ -662,7 +647,6 @@ public class simComponents  {
             dualRadPart = (SolidModelPart) activeSim.get(SimulationPartManager.class).getObject(dualRadiatorName);
 
         // Plots
-
         plots = activeSim.getPlotManager().getPlots();
 
         // Define blocks
@@ -728,7 +712,6 @@ public class simComponents  {
     {
         // Removes old regions. Creates new ones. There's some variable casting going on which I don't understand
         // but STAR seems to require it.
-
         try {
             activeSim.getRegionManager().removeRegion(domainRegion);
             activeSim.getRegionManager().removeRegion(radiatorRegion);
