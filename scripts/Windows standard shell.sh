@@ -24,18 +24,74 @@ setENVWin PODKEY "iOJDZCUKWsPIjut3CFrKXQ"
 setENVWin MACRO "macroController.java"
 setENVWin PROCESSES "4"
 setENVWin CP "C:\Users\rauna\Documents\WIP macros\src"
-setENVWin SIMPATH "C:\Users\rauna\Documents\CFD\Yaw series"
+setENVWin SIMPATH "C:\Users\rauna\Documents\CFD\Ride height series"
 setENVWin STARLOC "/mnt/c/Program Files/CD-adapco/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+.exe"
-setENVWin yaw 0
-setENVWin roll 0
-
-
-setENVWin domainSet full
+setENVWin domainSet half
 setENVWin geometryManip true
-setENVWin yaw 0.5
-setENVWin FILENAME BASESIM_24-1.sim
-newnameVal="$yaw"_"$FILENAME"
-setENVWin newName "$newnameVal"
+setENVWin FILENAME BASESIM_25-1.sim
 
+setENVWin frh -1
+setENVWin rrh -0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
 runCommand
-mv "$FILENAME" "$SIMPATH"/Complete
+
+setENVWin frh -1
+setENVWin rrh -0.5
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -1
+setENVWin rrh -0.25
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -1
+setENVWin rrh 0.25
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -1
+setENVWin rrh 0.5
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -1
+setENVWin rrh 0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -1
+setENVWin rrh 1
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh -1
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh -0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh -0.25
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh -1
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand

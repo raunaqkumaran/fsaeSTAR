@@ -29,8 +29,8 @@ public class rideHeight extends StarMacro {
         frh = simComponents.valEnv("frh");
         rrh = simComponents.valEnv("rrh");
 
-        frontRot = Math.atan(frh / sim.wheelBase);
-        rearRot = -Math.atan(rrh / sim.wheelBase);
+        frontRot = Math.atan(rrh / sim.wheelBase);
+        rearRot = -Math.atan(frh / sim.wheelBase);
 
         if (frontRot != 0) {
             sim.activeSim.get(SimulationPartManager.class).rotateParts(sim.aeroParts, Arrays.asList(0, 0, 1),
