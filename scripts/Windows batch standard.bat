@@ -6,7 +6,6 @@ set procs=4
 set PODKEY=iOJDZCUKWsPIjut3CFrKXQ
 set fileName=BASESIM_25-1.sim
 set geometryManip=true
-set domainSet=full
 
 set frh=-1
 
