@@ -3,8 +3,6 @@ Code written for Purdue Formula SAE's CFD programme
 
 These macros are meant to be used with batch operations. There are sysenvs the macros look for. I attempted to encapsulate every lookup within an if or a try-catch and have the macros still work or prompt for user input if something's missing, but more often than not things will break if you try using some of these with interactive sessions. Anyway; a list of all the envs the macros may be looking for. You WILL need to add the location of the macros to STAR's class path. The shell scripts automatically do that. The bash scripts are meant to be a template that can be modified to do what you want them to do, rather than ready-made click and run sort of things. When the GUI is ready, they might be.
 
-DON'T USE THE WINDOWS SHELL SCRIPTS UNLESS YOU'RE CAREFUL. I really, really, hate using cmd, so I wrote these as shell scripts. I haven't found a way to get environment variables passed to star that doesn't involve permanently writing them to the Windows registry and running the actual STAR command through a cmd.exe instance within a WSL environment (Ubuntu in this case, powershell bash should work too). It works, but it's disgusting.
-
 For the time being, don't reuse a sim after the macros have done things to it. Always start from a fresh basesim. Certain operations may be destructive, especially when dealing with roll/yaw transformations.
 
 frh - Sets front ride height. (rideHeight.java);
