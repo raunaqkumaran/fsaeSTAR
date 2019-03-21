@@ -91,6 +91,90 @@ setENVWin newName "$newnameVal"
 runCommand
 
 setENVWin frh -0.5
+setENVWin rrh 0.25
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh 0.5
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh 0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh -0.5
+setENVWin rrh 1
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh -1
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh -0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh -0.5
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh -0.25
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh 0.5
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh 0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 0.5
+setENVWin rrh 1
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 1
+setENVWin rrh -0.25
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 1
+setENVWin rrh -0.5
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 1
+setENVWin rrh -0.75
+newnameVal="$frh"_"$rrh".sim
+setENVWin newName "$newnameVal"
+runCommand
+
+setENVWin frh 1
 setENVWin rrh -1
 newnameVal="$frh"_"$rrh".sim
 setENVWin newName "$newnameVal"
