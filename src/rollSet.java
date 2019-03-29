@@ -43,7 +43,7 @@ public class rollSet extends StarMacro {
 
         }
 
-        sim.activeSim.println(this.getClass().getName() + " - Roll change attampted " + Math.toDegrees(rollAngle));
+        sim.activeSim.println(this.getClass().getName() + " - Roll change attempted " + Math.toDegrees(rollAngle));
 
     }
 }
