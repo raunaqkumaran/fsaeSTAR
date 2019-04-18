@@ -11,9 +11,17 @@ public class regions extends StarMacro {
     {
         simComponents activeSim = new simComponents(getActiveSimulation());
         getActiveSimulation().println(activeSim.freestreamVal);
+
         double [] freestreamVector = simComponents.vectorScale(activeSim.freestreamVal, activeSim.foreAftDirection);
         double frontRotationRate = activeSim.freestreamVal * activeSim.frontTyreRadius;
         double rearRotationRate = activeSim.freestreamVal * activeSim.rearTyreRadius;
+
+        if (activeSim.wtFlag)
+        {
+            freestreamVector = new double[] {0,0,0};
+            frontRotationRate = 0;
+            rearRotationRate = 0;
+        }
 
 
         activeSim.regionSwap();     // This is one of the few 'processes'
