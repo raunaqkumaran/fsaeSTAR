@@ -39,6 +39,8 @@ process - Runs the sim and exports reports
 
 postprocess - Exports reports and runs scenes
 
+windTunnel - Set it to 1 to stop wheel rotation and ground travel. 0 for typical real-world/rolling-road
+
 Another note. Sometimes the macros will throw error messages. This is usually okay. It's just to let you know it was expecting something that it didn't find. For example, the rollaxis coordinate system isn't in every sim set up. Sim setups without a solution wont have a finite volume representation, and might throw something in the terminal. That's fine. Sometimes displayers aren't entirely set-up. That's fine too. As long as it doesn't completely shit the bed, it should be okay. If it does shit the bed, hopefully it's in a try-catch and something shows up in the terminal. I'm not entirely confident the code is going to catch every possible exception STAR/Java could possibly throw.
 
 Your parts ****NEED**** to follow a naming convention. Here's the relevant code (aero, non-aero, lift-generators need to start with one of those prefixes, wheel names need to match exactly):

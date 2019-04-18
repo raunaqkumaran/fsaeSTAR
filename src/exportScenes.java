@@ -254,8 +254,6 @@ public class exportScenes extends StarMacro {
 
 
         }
-
-        sim.saveSim();
     }
 
     private int assignFlag(String envName)

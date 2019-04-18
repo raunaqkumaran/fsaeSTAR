@@ -61,6 +61,5 @@ public class autoMesh extends StarMacro {
 
         activeSim.autoMesh.execute();
 
-        activeSim.saveSim();
     }
 }

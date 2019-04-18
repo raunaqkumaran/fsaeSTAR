@@ -10,6 +10,7 @@ import java.util.List;
 public class macroController extends StarMacro {
     public void execute()
     {
+        simComponents sim = new simComponents(getActiveSimulation());
         // Macros run in the order they're defined in this string[]
         String[] macroName = {
                 "domainSet.java",
@@ -90,6 +91,7 @@ public class macroController extends StarMacro {
         for (String macro : runMacros)
         {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath(macro))).play();
+            sim.saveSim();
         }
         
     }

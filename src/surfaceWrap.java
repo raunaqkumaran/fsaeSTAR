@@ -61,8 +61,6 @@ public class surfaceWrap extends StarMacro {
             simObject.aeroWrap.execute();
         }
 
-        simObject.saveSim();
-
     }
 
 }
