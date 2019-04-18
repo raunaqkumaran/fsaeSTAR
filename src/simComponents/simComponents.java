@@ -232,6 +232,7 @@ public class simComponents  {
     public SimpleBlockPart car;
     public boolean createRollAxisFlag;                  // Flip this if you need to make a rollaxis
     public boolean fullCarFlag;
+    public boolean wtFlag;
 
     // Physics
     public PhysicsContinuum mainPhysics;
@@ -705,6 +706,7 @@ public class simComponents  {
         // Flags
         fullCarFlag = boolEnv("domainSet");
         freestreamVal = valEnv("freestream");
+        wtFlag = boolEnv("windTunnel");
 
     }
 
@@ -733,7 +735,7 @@ public class simComponents  {
             activeSim.println("Can't create new regions");
         }
         try {
-            activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart}),
+            activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart, dualRadPart}),
                     "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
                     "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
         }
