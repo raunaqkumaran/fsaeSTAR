@@ -1,8 +1,8 @@
-export SIMPATH="C:\Users\rauna\Documents\CFD"
-export STARLOC="C:\Program Files\CD-adapco\13.04.010-R8\STAR-CCM+13.04.010-R8\star\bin\starccm+.exe"
+export SIMPATH=""/scratch/scholar/rkumaran/Simulation_space""
+export STARLOC=""/home/rkumaran/Desktop/star/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+""
 export PODKEY="iOJDZCUKWsPIjut3CFrKXQ"
 export PROCESSES="20"
-export CP="C:\Users\rauna\Documents\fsaeSTAR\src"
+export CP=""/scratch/scholar/rkumaran/Simulation_space""
 
 
 
