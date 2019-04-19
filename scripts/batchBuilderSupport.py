@@ -27,7 +27,7 @@ def windowsWriteBlanks(file, blankcount):
 
 
 def windowsWriteCommand(file):
-    writestr = '\r\n"%STARLOC%" "%SIMPATH%\%fileName%" -batch "%CP%\%MACRO%" -np %PROCESSES% -power -podkey "%PODKEY% -classpath "%CP%"\r\n'
+    writestr = '\r\n"%STARLOC%" "%SIMPATH%\%FILENAME%" -batch "%CP%\%MACRO%" -np %PROCESSES% -power -podkey "%PODKEY% -classpath "%CP%"\r\n'
     writestr = writestr.encode()
     file.write(writestr)
 

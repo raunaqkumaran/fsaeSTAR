@@ -1,12 +1,12 @@
-export SIMPATH=""/scratch/scholar/rkumaran/Simulation_space""
-export STARLOC=""/home/rkumaran/Desktop/star/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+""
+export SIMPATH="/scratch/scholar/rkumaran/Simulation_space"
+export STARLOC="/home/rkumaran/Desktop/star/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+"
 export PODKEY="iOJDZCUKWsPIjut3CFrKXQ"
 export PROCESSES="20"
-export CP=""/scratch/scholar/rkumaran/Simulation_space""
+export CP="/scratch/scholar/rkumaran/Simulation_space"
 
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_BASELINE_13.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -30,7 +30,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_BASELINE_18.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -54,7 +54,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_BASELINE_27.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -78,7 +78,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_3_18.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -102,7 +102,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_3_27.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -126,7 +126,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_6_18.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -150,7 +150,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_6_27.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -174,7 +174,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_9_18.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -198,7 +198,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_9_27.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -222,7 +222,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_12_18.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -246,7 +246,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_12_27.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -270,7 +270,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_15_18.sim"
 export MACRO="macroController.java"
 export frh="0"
@@ -294,7 +294,7 @@ export windTunnel="true"
 "$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
-export fileName="BASESIM_25-1_WT.sim"
+export FILENAME="BASESIM_25-1_WT.sim"
 export newName="WT_YAW_15_27.sim"
 export MACRO="macroController.java"
 export frh="0"
