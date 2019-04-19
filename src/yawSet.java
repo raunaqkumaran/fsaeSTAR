@@ -47,6 +47,19 @@ public class yawSet extends StarMacro {
                     rotateLocalCoordinateSystems(new ArrayList<CoordinateSystem>(Arrays.asList(sim.radiatorCoord)),
                             new DoubleVector(sim.topBottomDirection),
                             new Vector(Arrays.asList(sim.noUnit, sim.noUnit, sim.noUnit)), yawAngle, sim.labCoord);
+            if (sim.dualRadFlag)
+            {
+                try{
+                    sim.dualRadCoord.getLocalCoordinateSystemManager().
+                            rotateLocalCoordinateSystems(new ArrayList<CoordinateSystem>(Arrays.asList(sim.dualRadCoord)),
+                                    new DoubleVector(sim.topBottomDirection),
+                                    new Vector(Arrays.asList(sim.noUnit, sim.noUnit, sim.noUnit)), yawAngle, sim.labCoord);
+                }
+                catch (Exception e)
+                {
+                    sim.activeSim.println(this.getClass().getName() + "Rad coord rotation failure");
+                }
+            }
             try {
                 sim.rollAxis.getLocalCoordinateSystemManager().
                         rotateLocalCoordinateSystems(new ArrayList<CoordinateSystem>(Arrays.asList(sim.rollAxis)),

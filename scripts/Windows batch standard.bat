@@ -1,6 +1,6 @@
 set macroName=macroController.java
 set fileLoc=C:\Users\rauna\Documents\CFD\
-set macroLoc=C:\Users\rauna\Documents\WIP macros\src\
+set macroLoc=C:\Users\rauna\Documents\fsaeSTAR\src\
 set location=C:\Program Files\CD-adapco\13.04.010-R8\STAR-CCM+13.04.010-R8\star\bin\starccm+.exe
 set procs=4
 set PODKEY=iOJDZCUKWsPIjut3CFrKXQ

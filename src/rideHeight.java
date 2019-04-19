@@ -42,6 +42,20 @@ public class rideHeight extends StarMacro {
                             new DoubleVector(new double[]{0.0, 0.0, 1.0}),
                             new NeoObjectVector(new Units[]{sim.noUnit,
                                     sim.noUnit, sim.noUnit}), frontRot, sim.frontWheelCoord);
+            if (sim.dualRadFlag)
+            {
+                try {
+                    sim.dualRadCoord.getLocalCoordinateSystemManager().
+                            rotateLocalCoordinateSystems(Arrays.asList(sim.dualRadCoord),
+                                    new DoubleVector(new double[]{0.0, 0.0, 1.0}),
+                                    new NeoObjectVector(new Units[]{sim.noUnit,
+                                            sim.noUnit, sim.noUnit}), frontRot, sim.frontWheelCoord);
+                }
+                catch (Exception e)
+                {
+                    sim.activeSim.println(this.getClass().getName() + "Dual rad rotation failure");
+                }
+            }
             try {
                 sim.rollAxis.getLocalCoordinateSystemManager().
                         rotateLocalCoordinateSystems(Arrays.asList(sim.rollAxis),
@@ -67,6 +81,20 @@ public class rideHeight extends StarMacro {
                             new DoubleVector(new double[]{0.0, 0.0, 1.0}),
                             new NeoObjectVector(new Units[]{sim.noUnit,
                                     sim.noUnit, sim.noUnit}), rearRot, sim.rearWheelCoord);
+            if (sim.dualRadFlag)
+            {
+                try {
+                    sim.dualRadCoord.getLocalCoordinateSystemManager().
+                            rotateLocalCoordinateSystems(Arrays.asList(sim.dualRadCoord),
+                                    new DoubleVector(new double[]{0.0, 0.0, 1.0}),
+                                    new NeoObjectVector(new Units[]{sim.noUnit,
+                                            sim.noUnit, sim.noUnit}), rearRot, sim.rearWheelCoord);
+                }
+                catch (Exception e)
+                {
+                    sim.activeSim.println(this.getClass().getName() + "Dual rad rotation failure");
+                }
+            }
             try {
                 sim.rollAxis.getLocalCoordinateSystemManager().
                         rotateLocalCoordinateSystems(Arrays.asList(sim.rollAxis),
