@@ -4,7 +4,7 @@ def linux_write_flag(header, value, file):
 
 
 def linux_write_command(file):
-    writestr = '\n"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power\n'
+    writestr = '\n"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power\n'
     writestr = writestr.encode()
     file.write(writestr)
 

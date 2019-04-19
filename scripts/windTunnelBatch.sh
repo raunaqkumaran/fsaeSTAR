@@ -27,7 +27,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -51,7 +51,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -75,7 +75,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -99,7 +99,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -123,7 +123,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -147,7 +147,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -171,7 +171,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -195,7 +195,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -219,7 +219,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -243,7 +243,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -267,7 +267,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -291,7 +291,7 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
 export fileName="BASESIM_25-1_WT.sim"
@@ -315,6 +315,6 @@ export process="false"
 export postprocess="false"
 export windTunnel="true"
 
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machilefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
 
 
