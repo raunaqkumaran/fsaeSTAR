@@ -2,7 +2,7 @@ export SIMPATH="/scratch/scholar/rkumaran/Simulation_space"
 export STARLOC="/home/rkumaran/Desktop/star/13.04.010-R8/STAR-CCM+13.04.010-R8/star/bin/starccm+"
 export PODKEY="iOJDZCUKWsPIjut3CFrKXQ"
 export PROCESSES="20"
-export CP="/scratch/scholar/rkumaran/Simulation_space"
+export CP="/home/rkumaran/fsaeSTAR/src"
 
 
 
