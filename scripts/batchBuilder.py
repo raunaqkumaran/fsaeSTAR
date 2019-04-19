@@ -55,6 +55,7 @@ while rowCounter in range (rowCounter, totalRows) and not pandas.isnull(simulati
     bbs.writeCommand(outputFile, platform)
     bbs.writeBlanks(2, platform, outputFile)
     rowCounter += 1
+    i = 0
 
 
 print("End here")
