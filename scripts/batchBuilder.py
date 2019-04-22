@@ -2,9 +2,9 @@ import pandas
 import batchBuilderSupport as bbs
 
 ''' INPUTS START '''
-simPlanFile = "simPlan.xlsx"
+simPlanFile = "wt1_run.xlsx"
 sheetName = "Simulation plan"
-batchName = "windTunnelBatch.sh"
+batchName = "wt1_run.sh"
 
 simulationPlan = pandas.read_excel(simPlanFile, sheet_name=sheetName, header=None)
 outputFile = open(batchName, "wb")
