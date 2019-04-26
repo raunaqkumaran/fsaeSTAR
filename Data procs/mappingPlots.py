@@ -33,10 +33,12 @@ dataCount = len(Cl)
 
 x = frh
 y = rrh
-z = Cd
+z = Cl
 
 
 fig, downforcePlot = plt.subplots(nrows=1)
+fig.set_size_inches(10, 6.6)
+fig.subplots_adjust(left=0.1, bottom=0.1, right=0.95, top=0.95)
 
 downforcePlot.tricontour(x, y, z, levels=20, linewidths=0.5, colors='k')
 cntr2 = downforcePlot.tricontourf(x, y, z, levels=14, cmap="RdBu_r")
@@ -47,7 +49,7 @@ downforcePlot.axis((-1, 1, -1, 1))
 plt.subplots_adjust(hspace=0.5)
 plt.xlabel('Front ride height')
 plt.ylabel('Rear ride height')
-plt.title('Drag')
+plt.title('Cl * A (m^2)')
 plt.show()
 
 
