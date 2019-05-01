@@ -2,7 +2,7 @@ import pandas
 import batchBuilderSupport as bbs
 
 ''' INPUTS START '''
-simPlanFile = "1928_190425.xlsx"
+simPlanFile = "1737_010519.xlsx"
 sheetName = "Simulation plan"
 batchName = simPlanFile + ".sh"
 
