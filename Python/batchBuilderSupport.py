@@ -1,3 +1,5 @@
+import os
+
 def linux_write_flag(header, value, file):
     writestr = ("export " + str(header) + "=" + '"' + str(value) + '"' + '\n').encode()
     file.write(writestr)
@@ -9,13 +11,13 @@ def linux_write_command(file):
     file.write(writestr)
 
 
-def linuxWriteBlanks(file, blankcount):
+def linux_write_blanks(file, blankcount):
     for i in range(0, blankcount):
         file.write('\n'.encode())
         i += 1
 
 
-def windowsWriteFlag(header, value, file):
+def windows_write_flag(header, value, file):
     writestr = ("set " + str(header) + "=" + str(value) + '\r\n').encode()
     file.write(writestr)
 
@@ -36,7 +38,7 @@ def writeFlag(header, value, file, platform):
     if platform == "Linux":
         linux_write_flag(header, value, file)
     if platform == "Windows":
-        windowsWriteFlag(header, value, file)
+        windows_write_flag(header, value, file)
 
 
 def writeCommand(file, platform):
@@ -48,6 +50,29 @@ def writeCommand(file, platform):
 
 def writeBlanks(blankcount, platform, file):
     if platform == "Linux":
-        linuxWriteBlanks(file, blankcount)
+        linux_write_blanks(file, blankcount)
     if platform == "Windows":
         windowsWriteBlanks(file, blankcount)
+
+
+def get_file_list(path):
+    file_list = os.listdir(path)
+    sim_list = []
+    for f in file_list:
+        if f.endswith(".sim"):
+            sim_list.append(f)
+    return sim_list
+
+
+def get_config_var(var, file):
+    file.seek(0)
+    lines = file.read()
+    lines = lines.split(";")
+    for line in lines:
+        line = line.strip()
+        if line.startswith(var):
+            split_line = line.split("=")
+            val = split_line[1].strip()
+            return val
+    return ""
+
