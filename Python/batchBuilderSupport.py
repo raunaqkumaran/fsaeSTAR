@@ -109,7 +109,7 @@ def individuals(file_list, config_file):
 
 
 def clumped(file_list, config_file):
-    output_file_name = file_list[0] + ".sh"
+    output_file_name = "clumped_run.sh"
     output_file = open(output_file_name, "wb")
     config_list = get_env_vals(config_file)
     for key, val in config_list.items():

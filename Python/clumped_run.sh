@@ -1,0 +1,6 @@
+export CLUSTER="scholar"
+export PROCS="40"
+export CLUMP="true"
+export WALLTIME="72:00:00"
+export frh="0"
+export rrh="0"

@@ -1,4 +1,3 @@
-import pandas
 import batchBuilderSupport as bbs
 import os
 
@@ -7,8 +6,8 @@ import os
 Get file list - DONE
 Write function to rip command format from a test file - DONE
 Write general functions to rip flags from a configuration file - DONE
-Write function to generate batch file
-Write generic functions to submit commands to a terminal - Not needed
+Write function to generate batch file - DONE
+Write generic functions to submit commands to a terminal 
 Write the logic to move files around once they're done. 
 Build program
 '''
@@ -65,6 +64,7 @@ elif controllerVars['CLUMP'] == "true":
     child_script = bbs.clumped(file_list, configFile)
     outputFile.write((qsubCommand + " " + '"' + child_script + '"').encode())
 
+os.system("./" + outputFileName)
 outputFile.close()
 
 
