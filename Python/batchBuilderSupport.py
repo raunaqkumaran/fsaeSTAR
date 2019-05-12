@@ -103,6 +103,7 @@ def individuals(file_list, config_file):
         for key, val in config_list.items():
             writeFlag(key, val, output_file, "Linux")
         writeFlag("FILENAME", x, output_file, "Linux")
+        writeFlag("newName", + "/Processed/" + x, output_file, "Linux")
         writeCommand(output_file, "Linux")
         output_file.close()
     return output_files
@@ -116,6 +117,7 @@ def clumped(file_list, config_file):
         writeFlag(key, val, output_file, "Linux")
     for x in file_list:
         writeFlag("FILENAME", x, output_file, "Linux")
+        writeFlag("newName", + "/Processed/" + x, output_file, "Linux")
         writeCommand(output_file, "Linux")
     output_file.close()
     return output_file_name
