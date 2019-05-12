@@ -76,3 +76,48 @@ def get_config_var(var, file):
             return val
     return ""
 
+
+def get_env_vals(file):
+    var_dict = dict()
+    file.seek(0)
+    lines = file.read()
+    lines = lines.split(";")
+
+    for line in lines:
+        if line is "":
+            continue
+        line = line.strip()
+        val = line.split("=")[0].strip()
+        var_dict[val] = get_config_var(val, file)
+
+    return var_dict
+
+
+def individuals(file_list, config_file):
+    output_files = []
+    for x in file_list:
+        output_file_name = x + " script.sh"
+        output_files.append(output_file_name)
+        output_file = open(output_file_name, "wb")
+        config_list = get_env_vals(config_file)
+        for key, val in config_list.items():
+            writeFlag(key, val, output_file, "Linux")
+        writeFlag("FILENAME", x, output_file, "Linux")
+        writeCommand(output_file, "Linux")
+        output_file.close()
+    return output_files
+
+
+def clumped(file_list, config_file):
+    output_file_name = file_list[0] + ".sh"
+    output_file = open(output_file_name, "wb")
+    config_list = get_env_vals(config_file)
+    for key, val in config_list.items():
+        writeFlag(key, val, output_file, "Linux")
+    for x in file_list:
+        writeFlag("FILENAME", x, output_file, "Linux")
+        writeCommand(output_file, "Linux")
+    output_file.close()
+    return output_file_name
+
+
