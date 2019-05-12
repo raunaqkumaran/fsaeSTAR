@@ -15,7 +15,7 @@ Build program
 
 # INPUTS HERE
 
-configFileName = "simConfig.config"
+configFileName = "linuxConfig.config"
 configFile = open(configFileName, "r")
 ntCommandFile = "windows_command.txt"
 posixCommandFile = "linux_command.txt"

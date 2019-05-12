@@ -13,6 +13,7 @@ public class run extends StarMacro {
     public void execute0()
     {
         simComponents activeSim = new simComponents(getActiveSimulation());
+        activeSim.clearHistory();
         activeSim.maxStepStop.setMaximumNumberSteps(activeSim.maxSteps);
         activeSim.activeSim.getSimulationIterator().run();
     }
