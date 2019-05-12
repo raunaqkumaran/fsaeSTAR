@@ -1,1 +1,1 @@
-"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power
+"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np PROCS -podkey $PODKEY -classpath "$CP" -power

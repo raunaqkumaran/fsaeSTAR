@@ -17,10 +17,11 @@ Build program
 
 configFileName = "simConfig.config"
 configFile = open(configFileName, "r")
-windowsCommandFile = "windows_command.txt"
-linuxCommandFile = "linux_command.txt"
+ntCommandFile = "windows_command.txt"
+posixCommandFile = "linux_command.txt"
 qsubFile = "qsub.txt"
 path = os.getcwd()
+platform = os.name
 
 # FUNCTION CALLS
 
@@ -28,11 +29,11 @@ path = os.getcwd()
 file_list = bbs.get_file_list(path)
 
 # Get command strings
-File = open(windowsCommandFile, "r")
-windowsCommand = File.read()
+File = open(ntCommandFile, "r")
+ntCommand = File.read()
 File.close()
-File = open(linuxCommandFile, "r")
-linuxCommand = File.read()
+File = open(posixCommandFile, "r")
+posixCommand = File.read()
 File.close()
 File = open(qsubFile, "r")
 qsubCommand = File.read()
@@ -49,7 +50,7 @@ controllerVars['PPN'] = int(int(controllerVars['PROCS']) / controllerVars['NODES
 outputFileName = "controller.sh"
 outputFile = open(outputFileName, "wb")
 for key, value in controllerVars.items():
-    bbs.writeFlag(key, value, outputFile, "Linux")
+    bbs.write_flag(key, value, outputFile, platform)
 
 if 'CLUMP' not in controllerVars:
     print("CLUMP flag missing")
@@ -57,14 +58,18 @@ if 'CLUMP' not in controllerVars:
 
 if controllerVars['CLUMP'] == "false":
     child_scripts = bbs.individuals(file_list, configFile)
-    for x in child_scripts:
-        outputFile.write((qsubCommand + " " + '"' + x + '"').encode())
-        bbs.linux_write_blanks(outputFile, 1)
+    if platform == "posix":
+        for x in child_scripts:
+            outputFile.write((qsubCommand + " " + '"' + x + '"').encode())
+            bbs.writeBlanks(2, platform, outputFile)
+
 elif controllerVars['CLUMP'] == "true":
     child_script = bbs.clumped(file_list, configFile)
-    outputFile.write((qsubCommand + " " + '"' + child_script + '"').encode())
+    if platform == "posix":
+        outputFile.write((qsubCommand + " " + '"' + child_script + '"').encode())
 
-os.system("./" + outputFileName)
+if platform == "posix":
+    os.system("./" + outputFileName)
 outputFile.close()
 
 

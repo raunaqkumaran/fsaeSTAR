@@ -5,3 +5,4 @@ Macro GUI (Python)/
 .vs/
 .localhistory/
 venv/
+*.sim

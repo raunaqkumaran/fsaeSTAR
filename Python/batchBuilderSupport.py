@@ -1,58 +1,61 @@
 import os
 
-def linux_write_flag(header, value, file):
+def posix_write_flag(header, value, file):
     writestr = ("export " + str(header) + "=" + '"' + str(value) + '"' + '\n').encode()
     file.write(writestr)
 
 
-def linux_write_command(file):
-    writestr = '\n"$STARLOC" "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -rsh ssh -np $PROCESSES -podkey $PODKEY -classpath "$CP" -power\n'
+def posix_write_command(file):
+    command_file = open("windows_command.txt")
+    writestr = command_file.read()
     writestr = writestr.encode()
     file.write(writestr)
+    command_file.close()
 
 
-def linux_write_blanks(file, blankcount):
+def posix_write_blanks(file, blankcount):
     for i in range(0, blankcount):
         file.write('\n'.encode())
         i += 1
 
 
-def windows_write_flag(header, value, file):
+def nt_write_flag(header, value, file):
     writestr = ("set " + str(header) + "=" + str(value) + '\r\n').encode()
     file.write(writestr)
 
 
-def windowsWriteBlanks(file, blankcount):
+def ntWriteBlanks(file, blankcount):
     for i in range(0, blankcount):
         file.write('\r\n'.encode())
         i += 1
 
 
-def windowsWriteCommand(file):
-    writestr = '\r\n"%STARLOC%" "%SIMPATH%\%FILENAME%" -batch "%CP%\%MACRO%" -np %PROCESSES% -power -podkey "%PODKEY% -classpath "%CP%"\r\n'
+def nt_write_command(file):
+    command_file = open("windows_command.txt")
+    writestr = command_file.read()
     writestr = writestr.encode()
     file.write(writestr)
 
 
-def writeFlag(header, value, file, platform):
-    if platform == "Linux":
-        linux_write_flag(header, value, file)
-    if platform == "Windows":
-        windows_write_flag(header, value, file)
+def write_flag(header, value, file, platform):
+    if platform == "posix":
+        posix_write_flag(header, value, file)
+    if platform == "nt":
+        nt_write_flag(header, value, file)
 
 
 def writeCommand(file, platform):
-    if platform == "Linux":
-        linux_write_command(file)
-    if platform == "Windows":
-        windowsWriteCommand(file)
+    if platform == "posix":
+        posix_write_command(file)
+    if platform == "nt":
+        nt_write_command(file)
 
 
 def writeBlanks(blankcount, platform, file):
-    if platform == "Linux":
-        linux_write_blanks(file, blankcount)
-    if platform == "Windows":
-        windowsWriteBlanks(file, blankcount)
+    if platform == "posix":
+        posix_write_blanks(file, blankcount)
+    if platform == "nt":
+        ntWriteBlanks(file, blankcount)
 
 
 def get_file_list(path):
@@ -101,10 +104,10 @@ def individuals(file_list, config_file):
         output_file = open(output_file_name, "wb")
         config_list = get_env_vals(config_file)
         for key, val in config_list.items():
-            writeFlag(key, val, output_file, "Linux")
-        writeFlag("FILENAME", x, output_file, "Linux")
-        writeFlag("newName", + "/Processed/" + x, output_file, "Linux")
-        writeCommand(output_file, "Linux")
+            write_flag(key, val, output_file, os.name)
+        write_flag("FILENAME", x, output_file, os.name)
+        write_flag("newName", os.sep + "Processed" + os.sep + x, output_file, os.name)
+        writeCommand(output_file, os.name)
         output_file.close()
     return output_files
 
@@ -114,11 +117,12 @@ def clumped(file_list, config_file):
     output_file = open(output_file_name, "wb")
     config_list = get_env_vals(config_file)
     for key, val in config_list.items():
-        writeFlag(key, val, output_file, "Linux")
+        write_flag(key, val, output_file, os.name)
     for x in file_list:
-        writeFlag("FILENAME", x, output_file, "Linux")
-        writeFlag("newName", + "/Processed/" + x, output_file, "Linux")
-        writeCommand(output_file, "Linux")
+        write_flag("FILENAME", x, output_file, os.name)
+        write_flag("newName", os.sep + "Processed" + os.sep + x, output_file, os.name)
+        writeCommand(output_file, os.name)
+        writeBlanks(2, os.name, output_file)
     output_file.close()
     return output_file_name
 

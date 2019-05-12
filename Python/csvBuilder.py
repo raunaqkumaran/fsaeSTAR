@@ -23,7 +23,7 @@ while simulationPlan.iloc[rowCounter, 0] != "LOCALS":
     header = simulationPlan.iloc[rowCounter, 0]
     value = simulationPlan.iloc[rowCounter, 1]
     if not pandas.isnull(header):
-        bbs.writeFlag(header, value, outputFile, platform)
+        bbs.write_flag(header, value, outputFile, platform)
         print("written")
     rowCounter += 1
 
@@ -50,7 +50,7 @@ while rowCounter in range (rowCounter, totalRows) and not pandas.isnull(simulati
     while i in range(0, totalColumns) and not pandas.isnull(simulationPlan.iloc[rowCounter, i]):
         header = headerVals[i]
         val = simulationPlan.iloc[rowCounter, i]
-        bbs.writeFlag(header, val, outputFile, platform)
+        bbs.write_flag(header, val, outputFile, platform)
         i += 1
     bbs.writeCommand(outputFile, platform)
     bbs.writeBlanks(2, platform, outputFile)
