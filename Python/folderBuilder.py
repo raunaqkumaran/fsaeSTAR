@@ -20,13 +20,10 @@ configFile = open(configFileName, "r")
 ntCommandFile = "windows_command.txt"
 posixCommandFile = "linux_command.txt"
 qsubFile = "qsub.txt"
-path = os.getcwd()
 platform = os.name
 
 # FUNCTION CALLS
 
-# Get file list
-file_list = bbs.get_file_list(path)
 
 # Get command strings
 File = open(ntCommandFile, "r")
@@ -43,6 +40,10 @@ File.close()
 controllerVars = bbs.get_env_vals(configFile)
 controllerVars['NODES'] = int(int(controllerVars['PROCS']) / 20)
 controllerVars['PPN'] = int(int(controllerVars['PROCS']) / controllerVars['NODES'])
+path = controllerVars['SIMPATH']
+
+# Get file list
+file_list = bbs.get_file_list(path)
 
 
 # Set up output files
