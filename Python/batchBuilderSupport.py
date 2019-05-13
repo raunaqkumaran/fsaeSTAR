@@ -6,7 +6,7 @@ def posix_write_flag(header, value, file):
 
 
 def posix_write_command(file):
-    command_file = open("windows_command.txt")
+    command_file = open("linux_command.txt")
     writestr = command_file.read()
     writestr = writestr.encode()
     file.write(writestr)

@@ -66,8 +66,6 @@ if controllerVars['CLUMP'] == "false":
 
 elif controllerVars['CLUMP'] == "true":
     child_script = bbs.clumped(file_list, configFile)
-    if platform == "posix":
-        outputFile.write((qsubCommand + " " + '"' + child_script + '"').encode())
 
 outputFile.close()
 
