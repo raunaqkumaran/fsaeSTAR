@@ -1,1 +1,1 @@
-"$STARLOC" -rsh ssh -power -licpath 1999@flex.cd-adapco.com -podkey $PODKEY "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -np $PROCS -classpath "$CP"
+"$STARLOC" -rsh ssh -licpath 1999@dock.ecn.purdue.edu "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -np $PROCS -classpath "$CP"
