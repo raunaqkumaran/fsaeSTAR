@@ -70,6 +70,7 @@ elif controllerVars['CLUMP'] == "true":
         outputFile.write((qsubCommand + " " + '"' + child_script + '"').encode())
 
 if platform == "posix":
+    os.system("chmod +x " + outputFileName)
     os.system("./" + outputFileName)
 outputFile.close()
 
