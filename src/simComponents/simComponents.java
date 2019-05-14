@@ -735,9 +735,16 @@ public class simComponents  {
             activeSim.println("Can't create new regions");
         }
         try {
-            activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart, dualRadPart}),
-                    "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
-                    "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
+            if (dualRadFlag) {
+                activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart, dualRadPart}),
+                        "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
+                        "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
+            }
+            else {
+                activeSim.getRegionManager().newRegionsFromParts(new NeoObjectVector(new Object[]{radPart, subtractPart}),
+                        "OneRegionPerPart", null, "OneBoundaryPerPartSurface", null,
+                        "OneFeatureCurve", null, RegionManager.CreateInterfaceMode.BOUNDARY);
+            }
         }
         catch (NullPointerException e)
         {
