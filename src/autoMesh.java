@@ -25,7 +25,10 @@ public class autoMesh extends StarMacro {
 
 
         // Populate controls
-        activeSim.autoMesh.getInputGeometryObjects().setObjects(activeSim.radPart, activeSim.subtractPart, activeSim.dualRadPart);
+        if (activeSim.dualRadFlag)
+            activeSim.autoMesh.getInputGeometryObjects().setObjects(activeSim.radPart, activeSim.subtractPart, activeSim.dualRadPart);
+        else
+            activeSim.autoMesh.getInputGeometryObjects().setObjects(activeSim.radPart, activeSim.subtractPart);
 
         activeSim.wingControl.getGeometryObjects().setObjects();                // Clears current population
 
