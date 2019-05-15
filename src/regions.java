@@ -13,8 +13,8 @@ public class regions extends StarMacro {
         getActiveSimulation().println(activeSim.freestreamVal);
 
         double [] freestreamVector = simComponents.vectorScale(activeSim.freestreamVal, activeSim.foreAftDirection);
-        double frontRotationRate = activeSim.freestreamVal * activeSim.frontTyreRadius;
-        double rearRotationRate = activeSim.freestreamVal * activeSim.rearTyreRadius;
+        double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
+        double rearRotationRate = activeSim.freestreamVal / activeSim.rearTyreRadius;
 
         if (activeSim.wtFlag)
         {
