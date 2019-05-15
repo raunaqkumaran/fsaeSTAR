@@ -235,13 +235,19 @@ public class simComponents  {
     public boolean wtFlag;
 
     // Physics
-    public PhysicsContinuum mainPhysics;
-    public String mainPhysicsName;
+    public PhysicsContinuum kePhysics;
+    public PhysicsContinuum kwPhysics;
+    public PhysicsContinuum saPhysics;
+    public String kePhysicsName;
+    public String kwPhysicsName;
+    public String saPhysicsName;
     public double freestreamVal;
     public boolean dualRadFlag;
     public int maxSteps;
     public String maxStepsName;
     public StepStoppingCriterion maxStepStop;
+    public boolean saFlag;
+    public boolean kwFlag;
 
     // Constructor
     public simComponents(Simulation inputSim)
@@ -697,8 +703,12 @@ public class simComponents  {
 
 
         // Define physics block
-        mainPhysicsName = "Physics 1";
-        mainPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum(mainPhysicsName);
+        kePhysicsName = "K-e physics";
+        kePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum(kePhysicsName);
+        kwPhysicsName = "K-w physics";
+        kwPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum(kwPhysicsName);
+        saPhysicsName = "S-a physics";
+        saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum(saPhysicsName);
         maxSteps = (int)valEnv("maxSteps");
         maxStepsName = "Maximum Steps";
         maxStepStop = (StepStoppingCriterion) activeSim.getSolverStoppingCriterionManager().getSolverStoppingCriterion(maxStepsName);
@@ -707,6 +717,8 @@ public class simComponents  {
         fullCarFlag = boolEnv("domainSet");
         freestreamVal = valEnv("freestream");
         wtFlag = boolEnv("windTunnel");
+        kwFlag = boolEnv("KW");
+        saFlag = boolEnv("SA");
 
     }
 

@@ -12,20 +12,10 @@ public class macroController extends StarMacro {
     {
         simComponents sim = new simComponents(getActiveSimulation());
         // Macros run in the order they're defined in this string[]
-        String[] macroName = {
-                "domainSet.java",
-                "rideHeight.java",
-                "yawSet.java",
-                "rollSet.java",
-                "surfaceWrap.java",
-                "subtract.java",
-                "regions.java",
-                "autoMesh.java",
-                "meshRepair.java",
-                "genReports.java",
+        String[] twoPhase = {
+                "secondPhasePhysics.java",
                 "run.java",
-                "exportReports.java",
-                "kill.java"
+                "exportReports.java"
         };
 
         String [] preprocessMacros = {
@@ -64,6 +54,8 @@ public class macroController extends StarMacro {
         Boolean geometryManip = simComponents.boolEnv("geometryManip");
         Boolean domainSet = simComponents.boolEnv("domainSet");
         Boolean postprocess = simComponents.boolEnv("postprocess");
+        Boolean kw = simComponents.boolEnv("KW");
+        Boolean sa = simComponents.boolEnv("SA");
 
         if (domainSet)
             runMacros.addAll(Arrays.asList(domainSetMacros));
@@ -79,6 +71,9 @@ public class macroController extends StarMacro {
 
         if (postprocess)
             runMacros.addAll(Arrays.asList(postprocessMacros));
+
+        if (kw || sa)
+            runMacros.addAll(Arrays.asList(twoPhase));
 
         runMacros.add("kill.java");
 
