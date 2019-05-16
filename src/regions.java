@@ -90,8 +90,17 @@ public class regions extends StarMacro {
         }
 
         // Set up initial conditions
-        activeSim.mainPhysics.getInitialConditions().get(VelocityProfile.class).
+        activeSim.kePhysics.getInitialConditions().get(VelocityProfile.class).
                 getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(freestreamVector);
+
+        try {
+            activeSim.kePhysics.erase(activeSim.domainRegion);
+        }
+        catch (Exception e)
+        {
+
+        }
+        activeSim.kePhysics.add(activeSim.domainRegion);
 
         // These function calls are fucking nasty. But that's Java for you.
         // Some of these calls will need to be modified if coordinate systems change in the future.
