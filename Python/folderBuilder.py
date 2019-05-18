@@ -44,7 +44,8 @@ path = controllerVars['SIMPATH']
 
 # Get file list
 file_list = bbs.get_file_list(path)
-
+if controllerVars['CLUSTER'] == "LOCAL":
+    qsubCommand = ""
 
 # Set up output files
 
