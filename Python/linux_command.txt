@@ -1,0 +1,1 @@
+"$STARLOC" -rsh ssh -licpath 1999@dock.ecn.purdue.edu "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -machinefile $PBS_NODEFILE -cpubind -np $PROCS -classpath "$CP"

@@ -1,0 +1,20 @@
+*.cache
+.idea/
+out/
+Macro GUI (Python)/
+.vs/
+.localhistory/
+venv/
+*.sim
+*.iml
+*.nfs*
+*.sh*
+*.config*
+*.Config*
+NX/
+Macro GUI*/
+starRecs/
+intellIJSettings*
+Libs/
+scripts/
+Python/__pycache__/

@@ -1,0 +1,1 @@
+"$STARLOC" -power -podkey $PODKEY -licpath 1999@flex.cd-adapco.com "$SIMPATH/$FILENAME" -batch "$CP/$MACRO" -np $PROCS -classpath "$CP"
