@@ -3,7 +3,7 @@
 * STARLOC - Location of your star installation
 * CP - Classpath. This is the working directory for the java macros.
 * PODKEY - Podkey
-* LICPATH - pick a license server. 1999@dock.ecn.purdue.edu for a power session. 1999@flex.cd-adapco.com for a PoD
+* LICPATH - pick a license server. 1999@xxxx.xxx.purdue.edu for a power session. 1999@flex.cd-adapco.com for a PoD
 * MACRO - Name of the macro to run (99% of the time it’ll be macroController)
 * CLUSTER - sets the cluster to use (scholar, long)
 * WALLTIME - maximum wall time (4:00:00 for scholar, 72:00:00 for long)
@@ -15,41 +15,3 @@
 * postprocess - Exports reports and runs scenes (true or false)
 * windTunnel - Set it to true to stop wheel rotation and ground travel. false for typical real-world/rolling-road
 * DES - set to true for DES
- 
-OLD Flaglist Setup:
-* frh - Sets front ride height (inches delta from baseline)
-* rrh - Sets rear ride height (inches delta from baseline)
-* newName - Sets new file name (must end with .sim) (folderBuilder.py sets this for you)
-* rws - Enter 1 if you want to sweep through rear wing scenes. 0 if not. 
-* fws - Front wing scenes. See above
-* uts - Undertray scenes. See above
-* cs - Car scenes. See above
-* ps - Plot scenes. See above
-* sceneMultiplier - Multiplies scene dimension steps by the input. Use 1 to use default (very fine)
-* yaw - Yaw angle in degrees. 
-* roll - Roll angle in degrees.
-* domainSet - "true" or "false". True sets the domain to be full-car and false sets it to half-car. Only works if geometryManip is also set to true
-* freestream - set freestream velocity in m/s
-* maxSteps - Maximum steps for stopping criteria. Defaults to 1100
-* surfaceWrap - Runs surface wrapper, subtract, regions. 
-* autoMesh - Runs automesh, genReports, meshRepair
-* LIC - Set to true for LIC scenes to be exported with the post proc
-* process - Runs the sim and exports reports
-* postprocess - Exports reports and runs scenes
-* windTunnel - Set it to true to stop wheel rotation and ground travel. false for typical real-world/rolling-road
-* geometryManip - Set to true to run domainSet, roll, yaw, ride height macros. 
-* CLUSTER - sets the cluster to use (scholar, long)
-* PROCS - number of processors to use. 1 automatically changes the command to serial. 
-* CLUMP - Tells the python scheduler whether to bundle all the sims into a single job, or submit a separate job for each sim
-* WALLTIME - maximum wall time (4:00:00 for scholar, 72:00:00 for long)
-* PODKEY - Podkey
-* STARLOC - Location of your star installation
-* SIMPATH - Location of your simulation folder
-* MACRO - Name of the macro to run (99% of the time it’ll be macroController)
-* KW - set to true for kw sim
-* SA - set to true for SA sim
-* DES - set to true for DES
-* clearMesh - set to true to clear mesh prior to kill.java
-* CP - Classpath. This is the working directory for the java macros. 
-* FILENAME - file name for your simulation file (don’t need this for folderBuilder.py, since it picks files out from a folder inputted in the Python script)
-* LICPATH - pick a license server. 1999@dock.ecn.purdue.edu for a power session. 1999@flex.cd-adapco.com for a PoD
