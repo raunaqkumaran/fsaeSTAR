@@ -32,6 +32,7 @@ file_list = bbs.get_file_list(path)
 
 outputFileName = "controller.sh"
 outputFile = open(outputFileName, "wb")
+outputFile.write("#!/bin/sh\n".encode())
 for key, value in controllerVars.items():
     bbs.posix_write_flag(key, value, outputFile)
 

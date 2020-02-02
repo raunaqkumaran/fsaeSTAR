@@ -64,6 +64,7 @@ def individuals(file_list, config_file, command):
         output_file_name = x + "_script.sh"
         output_files.append(output_file_name)
         output_file = open(output_file_name, "wb")
+        output_file.write("#!/bin/sh\n".encode())
         config_list = get_env_vals(config_file)
         for key, val in config_list.items():
             posix_write_flag(key, val, output_file)
@@ -90,7 +91,8 @@ def clumped(file_list, config_file, command):
 
 
 def generatecommand(config_list):
-    command = ""
+    command = "srun hostname | sort -u > nodefile.$SLURM_JOBID"
+    command = command + "\n"
     command = command + '"' + "$STARLOC" + '"'
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
@@ -102,9 +104,9 @@ def generatecommand(config_list):
         command = command + " -power -podkey " + "$PODKEY"
     command = command + " -batch " + '"' + "$CP" + os.sep + "$MACRO" + '"'
     if config_list['CLUSTER'] != "LOCAL":
-        command = command + " -machinefile $PBS_NODEFILE"
+        command = command 
 
-    command = command + " -hardwarebatch"
+    command = command + " -hardwarebatch -machinefile nodefile.$SLURM_JOB_ID"
     command = command + " -batch-report"
     return command
 
@@ -113,13 +115,12 @@ def parseWalltime(walltime):
 
     walltimeArr = walltime.split(":")
     totalTime = float(walltimeArr[0]) * 3600 + float(walltimeArr[1]) * 60 + float(walltimeArr[2])
-
     return totalTime
 
 
 def generateqsub(config_list):
     if config_list['CLUSTER'] != "LOCAL":
-        qsub = 'sbatch --partition=$CLUSTER --ntasks=$PROCS --time=$WALLTIME'
+        qsub = 'sbatch -A $CLUSTER --ntasks=$PROCS --time=$WALLTIME '
     else:
         qsub = "sh ./"
 
