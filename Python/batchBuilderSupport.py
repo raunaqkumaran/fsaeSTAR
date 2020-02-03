@@ -1,4 +1,5 @@
 import os
+import sys
 
 
 def posix_write_flag(header, value, file):
@@ -121,6 +122,11 @@ def parseWalltime(walltime):
 def generateqsub(config_list):
     if config_list['CLUSTER'] != "LOCAL":
         qsub = 'sbatch -A $CLUSTER --ntasks=$PROCS --time=$WALLTIME --exclusive '
+        if len(sys.argv) > 1:
+            qsub = qsub + ' --dependency=afterany'
+            for i in range (1, len(sys.argv)):
+                qsub = qsub + ':' + sys.argv[i]
+            qsub = qsub + ' '
     else:
         qsub = "sh ./"
 
