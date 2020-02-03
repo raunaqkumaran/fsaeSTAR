@@ -39,7 +39,7 @@ public class run extends StarMacro {
     {
         int currentIteration = activeSim.activeSim.getSimulationIterator().getCurrentIteration();
         ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxStepStop.getCriterionType()).getLimit().setValue(currentIteration + activeSim.maxSteps);
-        activeSim.maxStepStop.setInnerIterationCriterion(false);
+        activeSim.maxStepStop.setInnerIterationCriterion(true);
         activeSim.maxStepStop.setIsUsed(true);
         activeSim.abortFile.setAbortFilePath(simComponents.valEnvString("PBS_O_WORKDIR") + File.separator + simComponents.valEnvString("PBS_JOBID"));
 
