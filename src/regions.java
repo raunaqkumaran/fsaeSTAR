@@ -123,13 +123,7 @@ public class regions extends StarMacro {
             activeSim.activeSim.println("Setting boundary conditions for yaw");
             if (activeSim.activeSim.getInterfaceManager().has("Yaw interface"))
             {
-                if (activeSim.activeSim.getSimulationIterator().getCurrentIteration() > 0 && activeSim.activeSim.getInterfaceManager().getInterface("Yaw interface") instanceof BoundaryInterface)
-                    activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface("Yaw interface");
-                else
-                {
                     activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.activeSim.getInterfaceManager().getInterface("Yaw interface"));
-                    activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, "Yaw interface");
-                }
             }
             else
                 activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, "Yaw interface");
