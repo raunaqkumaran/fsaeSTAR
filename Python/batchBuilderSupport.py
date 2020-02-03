@@ -120,7 +120,7 @@ def parseWalltime(walltime):
 
 def generateqsub(config_list):
     if config_list['CLUSTER'] != "LOCAL":
-        qsub = 'sbatch -A $CLUSTER --ntasks=$PROCS --time=$WALLTIME '
+        qsub = 'sbatch -A $CLUSTER --ntasks=$PROCS --time=$WALLTIME --exclusive '
     else:
         qsub = "sh ./"
 
