@@ -25,6 +25,8 @@ public class simComponents {
     //I'm not going to comment everything. I'm hoping the variable name is usually obvious enough. Some of them aren't
     //obvious. At some point i'll make docstrings. But that's not going to happen until i'm literally dying of boredom/1 week away from graduating.
 
+    //Version check
+    private double version = 1.1;
     // The Simulation
     public Simulation activeSim;
 
@@ -114,6 +116,7 @@ public class simComponents {
     private String maxVelName;
     public Units degs;
     public SurfaceWrapperAutoMeshOperation surfaceWrapOperation;
+    public SurfaceCustomMeshControl aeroSurfaceWrapper;
     public GeometryPart dualRadPart;
     public GeometryPart radPart;
     public GeometryPart volumetricWake;
@@ -243,6 +246,7 @@ public class simComponents {
 
         // Initialize surface wrappers
         surfaceWrapOperation = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject(surfaceWrap));
+        aeroSurfaceWrapper = (SurfaceCustomMeshControl) surfaceWrapOperation.getCustomMeshControls().getObject("Aero Control");
 
 
         // Part management. Define naming convention here so STAR knows what's what
@@ -859,7 +863,7 @@ public class simComponents {
             return;
         }
         double val = versionParam.getQuantity().getRawValue();
-        if (val != 1)
+        if (val != version)
         {
             throw new IllegalStateException("You're using the wrong macro + sim combination. Don't be surprised if something strange happens if you try forcing this macro to work");
         }
