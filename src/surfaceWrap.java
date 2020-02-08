@@ -1,4 +1,5 @@
 import simComponents.simComponents;
+import star.common.GeometryPart;
 import star.common.Simulation;
 import star.common.StarMacro;
 
@@ -29,6 +30,11 @@ public class surfaceWrap extends StarMacro {
         simObject.surfaceWrapOperation.getInputGeometryObjects().setObjects(simObject.nonAeroParts);
         simObject.surfaceWrapOperation.getInputGeometryObjects().addObjects(simObject.wheels);
         simObject.surfaceWrapOperation.getInputGeometryObjects().addObjects(simObject.aeroParts);
+        simObject.aeroSurfaceWrapper.getGeometryObjects().setObjects(simObject.aeroParts);
+        for (GeometryPart x : simObject.aeroParts)
+        {
+            simObject.aeroSurfaceWrapper.getGeometryObjects().addObjects(x.getPartSurfaces());
+        }
 
         // Set up the wing custom control parts AND surfaces
 
