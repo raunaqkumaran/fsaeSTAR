@@ -11,6 +11,7 @@ venv/
 *.sh*
 *.config*
 *.Config*
+*.out
 NX/
 Macro GUI*/
 starRecs/
