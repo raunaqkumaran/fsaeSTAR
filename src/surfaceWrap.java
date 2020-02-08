@@ -31,6 +31,7 @@ public class surfaceWrap extends StarMacro {
         simObject.surfaceWrapOperation.getInputGeometryObjects().addObjects(simObject.wheels);
         simObject.surfaceWrapOperation.getInputGeometryObjects().addObjects(simObject.aeroParts);
         simObject.aeroSurfaceWrapper.getGeometryObjects().setObjects(simObject.aeroParts);
+        simObject.aeroSurfaceWrapper.setEnableControl(true);
         for (GeometryPart x : simObject.aeroParts)
         {
             simObject.aeroSurfaceWrapper.getGeometryObjects().addObjects(x.getPartSurfaces());
