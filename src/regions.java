@@ -125,8 +125,8 @@ public class regions extends StarMacro {
             {
                     activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.activeSim.getInterfaceManager().getInterface("Yaw interface"));
             }
-            else
-                activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, "Yaw interface");
+
+            activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, "Yaw interface");
             activeSim.yawInterface.setPresentationName("Yaw interface");
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);
             double yawVal = simComponents.valEnv("yaw");
