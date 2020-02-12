@@ -22,11 +22,8 @@ public class macroController extends StarMacro {
                 "meshRepair.java"
         };
 
-        String [] setYaw = {
-                "yawSet.java",
-        };
-
         String [] processMacros = {
+                "yawSet.java",
                 "genReports.java",
                 "softRun.java",                         //I'm actually super proud of this one it's actually beautiful. Don't get rid of this pls.
                 "meshRepair.java",
@@ -50,9 +47,6 @@ public class macroController extends StarMacro {
 
         if (preprocess)
             runMacros.addAll(Arrays.asList(meshMacros));
-
-        if (yawSet)
-            runMacros.addAll(Arrays.asList(setYaw));
 
         if (process)
             runMacros.addAll(Arrays.asList(processMacros));
