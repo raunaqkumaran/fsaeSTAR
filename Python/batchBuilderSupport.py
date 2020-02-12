@@ -105,7 +105,7 @@ def generatecommand(config_list):
         command = command + " -power -podkey " + "$PODKEY"
     command = command + " -batch " + '"' + "$CP" + os.sep + "$MACRO" + '"'
     if config_list['CLUSTER'] != "LOCAL":
-        command = command 
+        command = command
 
     command = command + " -hardwarebatch -machinefile nodefile.$SLURM_JOB_ID"
     command = command + " -batch-report"
@@ -127,6 +127,8 @@ def generateqsub(config_list):
             for i in range (1, len(sys.argv)):
                 qsub = qsub + ':' + sys.argv[i]
             qsub = qsub + ' '
+        if config_list['CLUSTER'] =="gpu":
+            qsub = qsub + ' --gres=gpu:1 '
     else:
         qsub = "sh ./"
 
