@@ -1,1 +1,0 @@
-qsub -q "$CLUSTER" -l nodes=$NODES:ppn=$PPN,walltime=$WALLTIME

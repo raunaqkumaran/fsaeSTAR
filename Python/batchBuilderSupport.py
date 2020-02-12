@@ -6,15 +6,6 @@ def posix_write_flag(header, value, file):
     writestr = ("export " + str(header) + "=" + '"' + str(value) + '"' + '\n').encode()
     file.write(writestr)
 
-
-def posix_write_command(file):
-    command_file = open("linux_command.txt")
-    writestr = command_file.read()
-    writestr = writestr.encode()
-    file.write(writestr)
-    command_file.close()
-
-
 def posix_write_blanks(file, blankcount):
     for i in range(0, blankcount):
         file.write('\n'.encode())

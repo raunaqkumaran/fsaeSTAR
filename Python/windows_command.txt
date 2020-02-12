@@ -1,1 +1,0 @@
-"%STARLOC%" "%SIMPATH%\%FILENAME%" -batch "%CP%\%MACRO%" -np %PROCS% -power -podkey "%PODKEY% -classpath "%CP%"
