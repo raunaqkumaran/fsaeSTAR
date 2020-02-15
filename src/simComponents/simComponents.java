@@ -363,6 +363,9 @@ public class simComponents {
         //Blow up if it's the wrong version
         checkVersion();
 
+        //No autosave
+        activeSim.getSimulationIterator().getAutoSave().getStarUpdate().setEnabled(false);
+
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
 
