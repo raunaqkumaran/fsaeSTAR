@@ -365,6 +365,7 @@ public class simComponents {
 
         //No autosave
         activeSim.getSimulationIterator().getAutoSave().getStarUpdate().setEnabled(false);
+        activeSim.getSimulationIterator().getAutoSave().setAutoSaveMesh(false);
 
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
