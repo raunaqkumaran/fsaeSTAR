@@ -853,6 +853,7 @@ public class simComponents {
 
     private void checkVersion()
     {
+        activeSim.println("Trying");
         ScalarGlobalParameter versionParam;
         if (activeSim.get(GlobalParameterManager.class).has("Version checker"))
         {
@@ -865,7 +866,8 @@ public class simComponents {
         double val = versionParam.getQuantity().getRawValue();
         if (val != version)
         {
-            throw new IllegalStateException("You're using the wrong macro + sim combination. Don't be surprised if something strange happens if you try forcing this macro to work");
+            activeSim.println("Version: " + version);
+            throw new IllegalStateException("You're using the wrong macro + sim combination.");
         }
     }
 
