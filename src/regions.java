@@ -68,6 +68,7 @@ public class regions extends StarMacro {
     }
 
     private void setTyreRotation(simComponents activeSim) {
+
         for (Boundary wheelBound : activeSim.wheelBounds) {
             double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
             double rearRotationRate = activeSim.freestreamVal / activeSim.rearTyreRadius;
@@ -83,12 +84,14 @@ public class regions extends StarMacro {
             try {
 
                 if (boundName.contains("Front")) {
+                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + frontRotationRate);
                     wheelBound.getValues().
                             get(ReferenceFrame.class).setCoordinateSystem(activeSim.frontWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
                             getMethod(ConstantScalarProfileMethod.class).getQuantity().
                             setValue(frontRotationRate);
                 } else if (boundName.contains("Rear")) {
+                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rearRotationRate);
                     wheelBound.getValues().get(ReferenceFrame.class).
                             setCoordinateSystem(activeSim.rearWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
