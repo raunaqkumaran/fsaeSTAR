@@ -57,6 +57,7 @@ public class macroController extends StarMacro {
         runMacros.add("kill.java");
 
         getActiveRootObject().println(runMacros);
+        new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
 
         // Run the macros
         for (String macro : runMacros)
