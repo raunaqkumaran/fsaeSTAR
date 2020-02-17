@@ -853,7 +853,6 @@ public class simComponents {
 
     private void checkVersion()
     {
-        activeSim.println("Trying");
         ScalarGlobalParameter versionParam;
         if (activeSim.get(GlobalParameterManager.class).has("Version checker"))
         {
