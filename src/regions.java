@@ -5,8 +5,6 @@ import star.flow.*;
 
 public class regions extends StarMacro {
 
-    public static final String YAW_INTERFACE_NAME = "Yaw interface";
-
     public void execute() {
         execute0();
     }
@@ -131,18 +129,18 @@ public class regions extends StarMacro {
 
         if (activeSim.fullCarFlag) {
             activeSim.activeSim.println("Setting boundary conditions for yaw");
-            if (activeSim.activeSim.getInterfaceManager().has(YAW_INTERFACE_NAME) && activeSim.activeSim.getInterfaceManager().getInterface(YAW_INTERFACE_NAME) instanceof BoundaryInterface)
+            if (activeSim.activeSim.getInterfaceManager().has(simComponents.YAW_INTERFACE_NAME) && activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME) instanceof BoundaryInterface)
             {
                 activeSim.activeSim.println("Found yaw interface");
-                    activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(YAW_INTERFACE_NAME);
+                    activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME);
             }
             else
             {
                 activeSim.activeSim.println("Creating yaw interface");
-                activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, YAW_INTERFACE_NAME);
+                activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);
             }
 
-            activeSim.yawInterface.setPresentationName(YAW_INTERFACE_NAME);
+            activeSim.yawInterface.setPresentationName(simComponents.YAW_INTERFACE_NAME);
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);
             double yawVal = simComponents.valEnv("yaw");
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).

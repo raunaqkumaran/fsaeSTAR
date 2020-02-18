@@ -20,6 +20,7 @@ import java.util.*;
 
 
 public class simComponents {
+    public static final String YAW_INTERFACE_NAME = "Yaw interface";
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understand
     //I'm not going to comment everything. I'm hoping the variable name is usually obvious enough. Some of them aren't
