@@ -143,6 +143,7 @@ public class regions extends StarMacro {
             FlowAnglesProfile yawAngleControl = activeSim.fsInlet.getValues().get(FlowAnglesProfile.class);
             yawAngleControl.getMethod(ConstantAnglesProfileMethod.class).getQuantity().setUnits(activeSim.degs);
             yawAngleControl.getMethod(ConstantAnglesProfileMethod.class).getQuantity().setRotationAngles(new DoubleVector(new double[]{yawVal, 0, 0}));
+            activeSim.activeSim.println("Yaw set to " + yawVal + " attempted");
         } else {
             activeSim.activeSim.println("Can't set boundary conditions for yaw with fullCarFlag set to false");
         }
