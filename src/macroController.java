@@ -42,8 +42,6 @@ public class macroController extends StarMacro {
         boolean process = simComponents.boolEnv("process");
         boolean postprocess = simComponents.boolEnv("postprocess");
         boolean preprocess = simComponents.boolEnv("preprocess");
-        boolean yawSet;
-        if (simComponents.valEnv("yaw") != 0) yawSet = true; else yawSet = false;
 
         if (preprocess)
             runMacros.addAll(Arrays.asList(meshMacros));
