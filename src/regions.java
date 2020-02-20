@@ -124,7 +124,6 @@ public class regions extends StarMacro {
     }
 
     public void yawInterfaces(simComponents activeSim) {
-        setDomainBoundaries(activeSim);
         setTyreRotation(activeSim);
 
         if (activeSim.fullCarFlag) {
