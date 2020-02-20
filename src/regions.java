@@ -141,6 +141,8 @@ public class regions extends StarMacro {
 
             activeSim.yawInterface.setPresentationName(simComponents.YAW_INTERFACE_NAME);
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);
+            activeSim.symPlane.setBoundaryType(InternalBoundary.class);
+            activeSim.leftPlane.setBoundaryType(InternalBoundary.class);
             double yawVal = simComponents.valEnv("yaw");
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
                     getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.freestreamVal / Math.cos(Math.toRadians(yawVal)));
