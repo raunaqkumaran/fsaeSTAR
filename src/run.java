@@ -16,10 +16,10 @@ public class run extends StarMacro {
         activeSim.activeSim.println("--- RUNNING SIMULATION ---");
         regions.setPhysics(activeSim);
         initial(activeSim);
-        execute0(activeSim);
+        continueRun(activeSim);
     }
 
-    private void execute0(simComponents activeSim)
+    private void continueRun(simComponents activeSim)
     {
 
         activeSim.maxVel.setIsUsed(false);
@@ -32,7 +32,7 @@ public class run extends StarMacro {
         if (activeSim.maxVel.getIsSatisfied())
         {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath("meshRepair.java"))).play();
-            execute0(activeSim);
+            continueRun(activeSim);
         }
 
         activeSim.saveSim();
