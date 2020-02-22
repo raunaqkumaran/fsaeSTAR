@@ -131,18 +131,16 @@ public class regions extends StarMacro {
             if (activeSim.activeSim.getInterfaceManager().has(simComponents.YAW_INTERFACE_NAME) && activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME) instanceof BoundaryInterface)
             {
                 activeSim.activeSim.println("Found yaw interface");
-                    activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME);
+                activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME);
+                activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.yawInterface);
+                setDomainBoundaries(activeSim);
             }
-            else
-            {
-                activeSim.activeSim.println("Creating yaw interface");
-                activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);
-            }
+
+            activeSim.activeSim.println("Creating yaw interface");
+            activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);
 
             activeSim.yawInterface.setPresentationName(simComponents.YAW_INTERFACE_NAME);
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);
-            activeSim.symPlane.setBoundaryType(InternalBoundary.class);
-            activeSim.leftPlane.setBoundaryType(InternalBoundary.class);
             double yawVal = simComponents.valEnv("yaw");
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
                     getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.freestreamVal / Math.cos(Math.toRadians(yawVal)));

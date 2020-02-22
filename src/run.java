@@ -34,6 +34,8 @@ public class run extends StarMacro {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath("meshRepair.java"))).play();
             execute0(activeSim);
         }
+
+        activeSim.saveSim();
     }
     private void initial(simComponents activeSim)
     {
