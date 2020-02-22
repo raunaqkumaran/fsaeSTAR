@@ -467,9 +467,9 @@ public class simComponents {
         for (Boundary fsBound : freestreamBounds)
         {
             String boundName = fsBound.getPresentationName();
-            if (boundName.contains("Left"))
+            if (boundName.contains("Left") && !boundName.contains(simComponents.YAW_INTERFACE_NAME))
                 leftPlane = fsBound;
-            else if (boundName.contains("Symmetry"))
+            else if (boundName.contains("Symmetry") && !boundName.contains(simComponents.YAW_INTERFACE_NAME))
                 symPlane = fsBound;
             else if (boundName.contains("Top"))
                 topPlane = fsBound;
