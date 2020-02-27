@@ -36,7 +36,11 @@ outputFile.write("#!/bin/sh\n".encode())
 for key, value in controllerVars.items():
     bbs.posix_write_flag(key, value, outputFile)
 
-child_scripts = bbs.individuals(file_list, configFile, posixCommand)
+if controllerVars['CLUMPED'] == "true":
+    child_scripts = bbs.clumped(file_list, configFile, posixCommand)
+
+else:
+    child_scripts = bbs.individuals(file_list, configFile, posixCommand)
 for x in child_scripts:
     outputFile.write((qsubCommand + '"' + x + '"').encode())
     bbs.posix_write_blanks(outputFile, 2)
