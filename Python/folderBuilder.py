@@ -40,7 +40,7 @@ if controllerVars['CLUMPED'] == "true":
     child_scripts = bbs.clumped(file_list, configFile, posixCommand)
     outputFile.write((qsubCommand + '"' + child_scripts + '"').encode())
     bbs.posix_write_blanks(outputFile, 2)
-    os.system("chmod +x " + '"' + x + '"')
+    os.system("chmod +x " + '"' + child_scripts + '"')
 
 else:
     child_scripts = bbs.individuals(file_list, configFile, posixCommand)
