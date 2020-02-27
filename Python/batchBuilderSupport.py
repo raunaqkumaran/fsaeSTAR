@@ -70,6 +70,7 @@ def individuals(file_list, config_file, command):
 def clumped(file_list, config_file, command):
     output_file_name = "clumped_run.sh"
     output_file = open(output_file_name, "wb")
+    output_file.write("#!/bin/sh\n".encode())
     config_list = get_env_vals(config_file)
     for key, val in config_list.items():
         posix_write_flag(key, val, output_file)
