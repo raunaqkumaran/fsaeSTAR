@@ -486,9 +486,7 @@ public class simComponents {
         // Flags
         freestreamVal = valEnv("freestream");
         wtFlag = boolEnv("windTunnel");
-        freestreamParameterName = "Freestream";
-        freestreamParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(freestreamParameterName);
-        freestreamParameter.getQuantity().setValue(freestreamVal);
+        setFreestreamParameterValue();
 
         //Stopping criteria
         maxSteps = (int) valEnv("maxSteps");
@@ -498,6 +496,12 @@ public class simComponents {
         abortFile = (AbortFileStoppingCriterion) activeSim.getSolverStoppingCriterionManager().getSolverStoppingCriterion("Stop File");
         monitorWaypoint = activeSim.getUpdateEventManager().getUpdateEvent("Monitor Waypoint");
 
+    }
+
+    public void setFreestreamParameterValue() {
+        freestreamParameterName = "Freestream";
+        freestreamParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(freestreamParameterName);
+        freestreamParameter.getQuantity().setValue(freestreamVal);
     }
 
     private void tagContinua() {
