@@ -1,5 +1,4 @@
 import star.common.StarMacro;
-import simComponents.simComponents;
 
 public class softRun extends StarMacro
 {

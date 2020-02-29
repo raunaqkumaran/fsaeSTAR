@@ -1,5 +1,3 @@
-package simComponents;
-
 /*
     Class to instantiate frequently used simulation components. Largely to act as a support library / API for other
     macros to interact with objects in our simulation environment, and handle basic simulation operations too menial
@@ -483,20 +481,7 @@ public class simComponents {
     }
 
     private void physicsSet() {
-        // Define physics block
-        desPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("DES");
-
-        if (activeSim.getContinuumManager().has("Steady state"))
-            saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("Steady state");
-        else if (activeSim.getContinuumManager().has("S-a physics"))
-        {
-            saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("S-a physics");
-            saPhysics.setPresentationName("Steady state");
-        }
-        else
-        {
-            throw new RuntimeException("No physics continuum found for steady state. Check physicsSet() in simComponents.java for logic");
-        }
+        tagContinua();
 
         // Flags
         freestreamVal = valEnv("freestream");
@@ -513,6 +498,23 @@ public class simComponents {
         abortFile = (AbortFileStoppingCriterion) activeSim.getSolverStoppingCriterionManager().getSolverStoppingCriterion("Stop File");
         monitorWaypoint = activeSim.getUpdateEventManager().getUpdateEvent("Monitor Waypoint");
 
+    }
+
+    private void tagContinua() {
+        // Define physics block
+        desPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("DES");
+
+        if (activeSim.getContinuumManager().has("Steady state"))
+            saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("Steady state");
+        else if (activeSim.getContinuumManager().has("S-a physics"))
+        {
+            saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("S-a physics");
+            saPhysics.setPresentationName("Steady state");
+        }
+        else
+        {
+            throw new RuntimeException("No physics continuum found for steady state. Check physicsSet() in simComponents.java for logic");
+        }
     }
 
     private void domainCatch() {
@@ -646,7 +648,7 @@ public class simComponents {
             rwViews.addAll(Arrays.asList(rwProfile, rwBottom, rwTop, rwRear));
 
         } catch (Exception e) {
-            activeSim.println("simComponents.simComponents.java - View lookup failed");
+            activeSim.println("simComponents.java - View lookup failed");
         }
     }
 
@@ -696,7 +698,7 @@ public class simComponents {
                         getCoordinateSystem(dualRadiatorAxisName);
 
         } catch (Exception e) {
-            activeSim.println("simComponents.simComponents.java - Coordinate system lookup failed");
+            activeSim.println("simComponents.java - Coordinate system lookup failed");
         }
         try {
             rollAxis = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(rollAxisName);
@@ -718,7 +720,7 @@ public class simComponents {
                 dualMassFlowInterfaceNameOutlet = "Dual outlet interface";
             }
         } catch (Exception e) {
-            activeSim.println("simComponents.simComponents.java - Couldn't find/create domain or radiator region");
+            activeSim.println("simComponents.java - Couldn't find/create domain or radiator region");
         }
     }
 

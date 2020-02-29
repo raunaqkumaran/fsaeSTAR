@@ -1,5 +1,4 @@
 import star.common.StarMacro;
-import simComponents.*;
 
 public class clearMesh extends StarMacro
 {

@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.common.StarMacro;
 
 public class walltimeKill extends StarMacro

@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.common.StarMacro;
 import star.common.StarScript;
 import java.util.ArrayList;

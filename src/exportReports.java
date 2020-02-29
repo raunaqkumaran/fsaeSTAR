@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.base.report.Report;
 import star.common.StarMacro;
 

@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.common.PartSurface;
 import star.common.StarMacro;
 

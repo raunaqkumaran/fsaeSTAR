@@ -4,7 +4,6 @@
 // There may be some oddities with some of the logic operations here because of that.
 
 
-import simComponents.simComponents;
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
 import star.common.MonitorPlot;

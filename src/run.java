@@ -1,6 +1,5 @@
 // You NEED to run these via batch
 
-import simComponents.simComponents;
 import star.common.MonitorIterationStoppingCriterionMaxLimitType;
 import star.common.StarMacro;
 import star.common.StarScript;
@@ -14,7 +13,7 @@ public class run extends StarMacro {
 
         simComponents activeSim = new simComponents(getActiveSimulation());
         activeSim.activeSim.println("--- RUNNING SIMULATION ---");
-        regions.setPhysics(activeSim);
+        regions.setTurbulence(activeSim);
         initial(activeSim);
         continueRun(activeSim);
     }

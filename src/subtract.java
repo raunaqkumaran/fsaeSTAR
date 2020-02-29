@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.common.*;
 import star.meshing.MeshOperationPart;
 

@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.common.GeometryPart;
 import star.common.Simulation;
 import star.common.StarMacro;
@@ -14,7 +13,7 @@ public class surfaceWrap extends StarMacro {
     private void execute0()
     {
 
-        // Instantiate simComponents.simComponents object
+        // Instantiate simComponents object
         Simulation simFile = getActiveSimulation();
         simComponents simObject = new simComponents(simFile);
 

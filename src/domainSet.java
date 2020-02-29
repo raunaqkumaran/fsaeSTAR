@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.base.neo.DoubleVector;
 import star.common.StarMacro;
 

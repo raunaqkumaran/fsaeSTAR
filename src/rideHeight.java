@@ -4,7 +4,6 @@
 // -rrh = rear ride height
 
 
-import simComponents.simComponents;
 import star.base.neo.DoubleVector;
 import star.base.neo.NeoObjectVector;
 import star.common.SimulationPartManager;

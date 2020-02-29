@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.base.neo.NeoObjectVector;
 import star.base.neo.NeoProperty;
 import star.common.*;
@@ -56,7 +55,7 @@ public class meshRepair extends StarMacro {
         {
             reg.setPhysicsContinuum(null);
         }
-        regions.setPhysics(activeSim);
+        regions.setTurbulence(activeSim);
         //activeSim.clearSoln();
     }
 

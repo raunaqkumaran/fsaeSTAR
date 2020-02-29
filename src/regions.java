@@ -1,4 +1,3 @@
-import simComponents.simComponents;
 import star.base.neo.DoubleVector;
 import star.common.*;
 import star.flow.*;
@@ -179,7 +178,7 @@ public class regions extends StarMacro {
                 getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.radResBig);
     }
 
-    public static void setPhysics(simComponents activeSim) {
+    public static void setTurbulence(simComponents activeSim) {
 
         activeSim.domainRegion.setPhysicsContinuum(activeSim.saPhysics);
         activeSim.radiatorRegion.setPhysicsContinuum(activeSim.saPhysics);
