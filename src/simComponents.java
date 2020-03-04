@@ -25,7 +25,7 @@ public class simComponents {
     //obvious. At some point i'll make docstrings. But that's not going to happen until i'm literally dying of boredom/1 week away from graduating.
 
     //Version check
-    private double version = 1.1;
+    private double version = 1.2;
     // The Simulation
     public Simulation activeSim;
 

@@ -4,7 +4,7 @@ sim files I have less massive. '''
 import batchBuilderSupport as bbs
 import os
 import sys
-path = r"D:\Archive\Formula\2018 3D\To be compressed"
+path = r"D:\Archive\Formula\2019\3D\To be compressed"
 fileList = bbs.get_file_list(path)
 starPath = r'"C:\Program Files\Siemens\14.06.013-R8\STAR-CCM+14.06.013-R8\star\bin\starccm+.exe"'
 macroPath = r"C:\Users\rauna\Documents\fsaeSTAR\src\universalMeshClear.java"
