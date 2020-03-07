@@ -25,7 +25,7 @@ public class simComponents {
     //obvious. At some point i'll make docstrings. But that's not going to happen until i'm literally dying of boredom/1 week away from graduating.
 
     //Version check
-    private double version = 1.3;
+    private double version = 1.4;
     // The Simulation
     public Simulation activeSim;
 
@@ -204,7 +204,7 @@ public class simComponents {
     public VolumeCustomMeshControl volControlFrontWing;
     public VolumeCustomMeshControl volControlUnderbody;
     public MeshOperationPart subtractPart;
-    public GeometryPart domain;
+    public SimpleBlockPart domain;
     // Boundaries
     private Collection<Boundary> dualRadBounds;
     private String crossSectionName;
@@ -358,7 +358,7 @@ public class simComponents {
 
         //Define domain sizes
         domainCatch();
-        fullCarFlag = boolEnv("FullCar");
+        fullCarFlag = domainSizing();
 
         //Set physics objects
         physicsSet();
@@ -523,7 +523,7 @@ public class simComponents {
 
     private void domainCatch() {
         try {
-            domain = activeSim.get(SimulationPartManager.class).getPart("Freestream");
+            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart("Freestream");
         } catch (NullPointerException e) {
             activeSim.println(this.getClass().getName() + " - Domain could not be caught");
         }
@@ -531,7 +531,7 @@ public class simComponents {
 
     //Returns true for full car. False for half car. The whole first 70% of this is legacy code that isn't used for much any more.
 
-    /*
+
     private boolean domainSizing() {
         // Define blocks
         corner1 = "Corner 1";
@@ -545,7 +545,7 @@ public class simComponents {
         freestreamSize.put(corner1, new double[]{-16, 6, 0.009});
         freestreamSize.put(corner2, new double[]{32, -6, 6});
 
-        double[] domainCorner = domain;
+        double[] domainCorner = domain.getCorner1().evaluate().toDoubleArray();
         if (domainCorner[1] > 0.5) {
             activeSim.println("Full car domain detected");
             return true;
@@ -554,7 +554,7 @@ public class simComponents {
             return false;
         }
     }
-     */
+
 
     private void mesherSetup() {
         // Set up mesher
