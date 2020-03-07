@@ -6,11 +6,11 @@ Macro GUI (Python)/
 .localhistory/
 venv/
 *.sim
+*.html
 *.iml
 *.nfs*
 *.sh*
-*.config*
-*.Config*
+linuxConfig.config
 *.out
 NX/
 Macro GUI*/
