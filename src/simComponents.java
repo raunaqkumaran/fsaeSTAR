@@ -227,6 +227,9 @@ public class simComponents {
 
         long startTime = System.currentTimeMillis();
 
+        //Blow up if it's the wrong version
+        checkVersion();
+
         // Surface wrapper names
         surfaceWrap = "Surface wrapper";
 
@@ -362,9 +365,6 @@ public class simComponents {
 
         //Set physics objects
         physicsSet();
-
-        //Blow up if it's the wrong version
-        checkVersion();
 
         //No autosave
         activeSim.getSimulationIterator().getAutoSave().getStarUpdate().setEnabled(false);
