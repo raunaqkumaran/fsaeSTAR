@@ -227,14 +227,14 @@ public class simComponents {
 
         long startTime = System.currentTimeMillis();
 
-        //Blow up if it's the wrong version
-        checkVersion();
-
         // Surface wrapper names
         surfaceWrap = "Surface wrapper";
 
         // Initialize simulation
         activeSim = inputSim;
+
+        //Blow up if it's the wrong version
+        checkVersion();
 
         // Units
         frontTyreRadius = 0.228599;
