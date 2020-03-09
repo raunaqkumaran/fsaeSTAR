@@ -607,7 +607,7 @@ public class simComponents {
             crossSection = (PlaneSection) activeSim.getPartManager().getObject(crossSectionName);
             planeSectionName = "Plane section scenes";
             planeSectionScene = activeSim.getSceneManager().getScene(planeSectionName);
-            planeSectionScene.setAdvancedRenderingEnabled(true);
+            planeSectionScene.setAdvancedRenderingEnabled(false);
             planeSectionScene.setMeshOverrideMode(SceneMeshOverride.USE_DISPLAYER_PROPERTY);
             scene3DName = "3D scenes";
             scene3D = activeSim.getSceneManager().getScene(scene3DName);
