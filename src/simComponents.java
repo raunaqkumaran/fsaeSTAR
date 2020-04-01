@@ -260,8 +260,8 @@ public class simComponents {
         radiatorName = "CFD_RADIATOR";
         dualRadiatorName = "CFD_DUAL_RADIATOR";
         liftGeneratorPrefixes = new ArrayList<>();
-        aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "NS", "MOUNT", "SW", "FC"));
-        nonAeroPrefixes.addAll(Arrays.asList("CFD", "DONTGIVE"));
+        aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "MOUNT", "SW", "FC"));
+        nonAeroPrefixes.addAll(Arrays.asList("CFD", "DONTGIVE", "NS"));
         wheelNames.addAll(Arrays.asList("Front Left", "Front Right", "Rear Left", "Rear Right"));
         liftGeneratorPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "SW", "FC"));
 
