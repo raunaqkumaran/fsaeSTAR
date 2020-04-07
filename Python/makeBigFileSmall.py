@@ -6,7 +6,7 @@ import os
 import sys
 path = r"D:\Archive\Formula\2019\3D\To be compressed"
 fileList = bbs.get_file_list(path)
-starPath = r'"C:\Program Files\Siemens\14.06.013-R8\STAR-CCM+14.06.013-R8\star\bin\starccm+.exe"'
+starPath = r'"C:\Program Files\Siemens\15.02.007-R8\STAR-CCM+15.02.007-R8\star\bin\starccm+.exe"'
 macroPath = r"C:\Users\rauna\Documents\fsaeSTAR\src\universalMeshClear.java"
 outputFile = "deleteEverything.bat"
 output = open(outputFile, "w")
