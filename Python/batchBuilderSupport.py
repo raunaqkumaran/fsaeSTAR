@@ -2,6 +2,10 @@ import os
 import sys
 import datetime
 
+def get_timestamp():
+    timeStamp = datetime.datetime.now()
+    timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
+    return timeStampString
 
 def posix_write_flag(header, value, file):
     writestr = ("export " + str(header) + "=" + '"' + str(value) + '"' + '\n').encode()
@@ -54,8 +58,7 @@ def get_env_vals(file):
 
 def individuals(file_list, config_file, command):
     output_files = []
-    timeStamp = datetime.datetime.now()
-    timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
+    timeStampString = get_timestamp()
     for x in file_list:
         output_file_name = x + "_" + timeStampString + "_script.sh"
         output_files.append(output_file_name)
@@ -72,8 +75,7 @@ def individuals(file_list, config_file, command):
 
 
 def clumped(file_list, config_file, command):
-    timeStamp = datetime.datetime.now()
-    timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
+    timeStampString = get_timestamp()
     output_file_name = timeStampString + "_" + "clumped_run.sh"
     output_file = open(output_file_name, "wb")
     output_file.write("#!/bin/sh\n".encode())
