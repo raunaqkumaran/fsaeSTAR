@@ -1,10 +1,12 @@
 import os
 import sys
+import datetime
 
 
 def posix_write_flag(header, value, file):
     writestr = ("export " + str(header) + "=" + '"' + str(value) + '"' + '\n').encode()
     file.write(writestr)
+
 
 def posix_write_blanks(file, blankcount):
     for i in range(0, blankcount):
@@ -52,8 +54,10 @@ def get_env_vals(file):
 
 def individuals(file_list, config_file, command):
     output_files = []
+    timeStamp = datetime.datetime.now()
+    timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
     for x in file_list:
-        output_file_name = x + "_script.sh"
+        output_file_name = x + "_" + timeStampString + "_script.sh"
         output_files.append(output_file_name)
         output_file = open(output_file_name, "wb")
         output_file.write("#!/bin/sh\n".encode())
@@ -68,7 +72,9 @@ def individuals(file_list, config_file, command):
 
 
 def clumped(file_list, config_file, command):
-    output_file_name = "clumped_run.sh"
+    timeStamp = datetime.datetime.now()
+    timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
+    output_file_name = timeStampString + "_" + "clumped_run.sh"
     output_file = open(output_file_name, "wb")
     output_file.write("#!/bin/sh\n".encode())
     config_list = get_env_vals(config_file)
@@ -105,7 +111,6 @@ def generatecommand(config_list):
 
 
 def parseWalltime(walltime):
-
     walltimeArr = walltime.split(":")
     totalTime = float(walltimeArr[0]) * 3600 + float(walltimeArr[1]) * 60 + float(walltimeArr[2])
     return totalTime
@@ -116,10 +121,10 @@ def generateqsub(config_list):
         qsub = 'sbatch -A $CLUSTER --ntasks=$PROCS --time=$WALLTIME --exclusive '
         if len(sys.argv) > 1:
             qsub = qsub + ' --dependency=afterany'
-            for i in range (1, len(sys.argv)):
+            for i in range(1, len(sys.argv)):
                 qsub = qsub + ':' + sys.argv[i]
             qsub = qsub + ' '
-        if config_list['CLUSTER'] =="gpu":
+        if config_list['CLUSTER'] == "gpu":
             qsub = qsub + ' --gres=gpu:1 '
     else:
         qsub = "sh ./"
