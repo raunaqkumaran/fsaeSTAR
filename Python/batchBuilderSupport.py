@@ -2,10 +2,12 @@ import os
 import sys
 import datetime
 
+
 def get_timestamp():
     timeStamp = datetime.datetime.now()
     timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
     return timeStampString
+
 
 def posix_write_flag(header, value, file):
     writestr = ("export " + str(header) + "=" + '"' + str(value) + '"' + '\n').encode()
@@ -19,11 +21,19 @@ def posix_write_blanks(file, blankcount):
 
 
 def get_file_list(path):
-    file_list = os.listdir(path)
     sim_list = []
+    file_list = os.listdir(path)
     for f in file_list:
+        filePath = path + os.sep + f
+        if os.path.isdir(filePath):
+            print("Quick adventure, in and out.")
+            subList = get_file_list(filePath)
+            for y in subList:
+                sim_list.append(y)
         if f.endswith(".sim"):
-            sim_list.append(f)
+            fileSize = os.path.getsize(filePath)
+            if fileSize >= 400e6:
+                sim_list.append(filePath)
     return sim_list
 
 
