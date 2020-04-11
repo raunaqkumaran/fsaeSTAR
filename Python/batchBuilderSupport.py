@@ -26,7 +26,6 @@ def get_file_list(path):
     for f in file_list:
         filePath = path + os.sep + f
         if os.path.isdir(filePath):
-            print("Quick adventure, in and out.")
             subList = get_file_list(filePath)
             for y in subList:
                 sim_list.append(y)
