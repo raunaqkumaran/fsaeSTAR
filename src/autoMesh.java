@@ -69,6 +69,5 @@ public class autoMesh extends StarMacro {
         activeSim.autoMesh.execute();
         activeSim.clearHistory();
         activeSim.saveSim();
-        exportScenes.exportMesh(activeSim);
     }
 }

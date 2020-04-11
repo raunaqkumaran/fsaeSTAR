@@ -18,7 +18,8 @@ public class macroController extends StarMacro {
                 "autoMesh.java",
                 "meshRepair.java",
                 "meshRepair.java",
-                "meshRepair.java"
+                "meshRepair.java",
+                "exportMesh.java"
         };
 
         String [] processMacros = {
