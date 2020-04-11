@@ -160,6 +160,7 @@ public class simComponents {
     //Scenes and displayers
     public PlaneSection crossSection;
     public Scene planeSectionScene;
+    public PartDisplayer meshDisplayer;
     public Scene scene3D;
     public String separator;
     public FvRepresentation finiteVol;
@@ -259,8 +260,8 @@ public class simComponents {
         radiatorName = "CFD_RADIATOR";
         dualRadiatorName = "CFD_DUAL_RADIATOR";
         liftGeneratorPrefixes = new ArrayList<>();
-        aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "NS", "MOUNT", "SW", "FC"));
-        nonAeroPrefixes.addAll(Arrays.asList("CFD", "DONTGIVE"));
+        aeroPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "EC", "MOUNT", "SW", "FC"));
+        nonAeroPrefixes.addAll(Arrays.asList("CFD", "DONTGIVE", "NS"));
         wheelNames.addAll(Arrays.asList("Front Left", "Front Right", "Rear Left", "Rear Right"));
         liftGeneratorPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "SW", "FC"));
 
@@ -362,6 +363,8 @@ public class simComponents {
         //Define domain sizes
         domainCatch();
         fullCarFlag = domainSizing();
+        if (fullCarFlag)
+            profileLimits = new double[]{-35, 35};
 
         //Set physics objects
         physicsSet();
@@ -607,6 +610,7 @@ public class simComponents {
             planeSectionName = "Plane section scenes";
             planeSectionScene = activeSim.getSceneManager().getScene(planeSectionName);
             planeSectionScene.setAdvancedRenderingEnabled(false);
+            planeSectionScene.setMeshOverrideMode(SceneMeshOverride.USE_DISPLAYER_PROPERTY);
             scene3DName = "3D scenes";
             scene3D = activeSim.getSceneManager().getScene(scene3DName);
             scene3D.setAdvancedRenderingEnabled(false);
@@ -622,7 +626,7 @@ public class simComponents {
             pressureScalar3DName = "Pressure";
             pressure2D = (ScalarDisplayer) planeSectionScene.getDisplayerManager().getDisplayer(pressureScalar2DName);
             pressure3D = (ScalarDisplayer) scene3D.getDisplayerManager().getDisplayer(pressureScalar3DName);
-
+            meshDisplayer = (PartDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Mesh");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Scene or displayer lookup failed, or volume mesh not found");
         }

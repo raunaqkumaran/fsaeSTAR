@@ -30,7 +30,8 @@ file_list = bbs.get_file_list(path)
 
 # Set up output files
 
-outputFileName = "controller.sh"
+timeStamp = bbs.get_timestamp()
+outputFileName = timeStamp + "_" + "controller.sh"
 outputFile = open(outputFileName, "wb")
 outputFile.write("#!/bin/sh\n".encode())
 for key, value in controllerVars.items():

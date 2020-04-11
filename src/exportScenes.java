@@ -7,14 +7,30 @@
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
 import star.common.MonitorPlot;
+import star.common.Simulation;
 import star.common.StarMacro;
 import star.common.StarPlot;
 import star.vis.*;
+import java.nio.file.Path;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collection;
 
 public class exportScenes extends StarMacro {
+
+    simComponents sim;
+    int rws;            // Rear wing sweep flag
+    int fws;            // Front wing sweep flag
+    int cs;             // Car sweep flag
+    int uts;            // UT sweep flag
+    int ps;             // Plot sweep flag
+    boolean lic;        // LIC flag
+    String ScalarPath;
+    String velocityPath;
+    String nearWallPath;
+    String farWallPath;
+    double multiplier;
 
     public void execute()
     {
@@ -23,24 +39,12 @@ public class exportScenes extends StarMacro {
 
     private void execute0()
     {
-        simComponents sim;
+
         sim = new simComponents(getActiveSimulation());
 
         sim.activeSim.println("--- POST PROCESSING ---");
         sim.activeSim.getSceneManager().setVerbose(true);
         sim.activeSim.getPlotManager().setVerbose(true);
-
-        int rws;            // Rear wing sweep flag
-        int fws;            // Front wing sweep flag
-        int cs;             // Car sweep flag
-        int uts;            // UT sweep flag
-        int ps;             // Plot sweep flag
-        boolean lic;        // LIC flag
-        String ScalarPath;
-        String velocityPath;
-        String nearWallPath;
-        String farWallPath;
-        double multiplier;
 
 
         //Stop letting users pick their own settings. Still keep the old infrastructure in case we want to bring it back.
@@ -76,8 +80,7 @@ public class exportScenes extends StarMacro {
 
             // Start exporting pressures
 
-            ScalarPath = sim.dir + sim.separator
-                    + sim.simName + sim.separator + "Scalar";
+            ScalarPath = getFolderPath("Scalar", sim);
             makeDir(ScalarPath);
             sim.pressure3D.setRepresentation(sim.finiteVol);
             sim.pressure3D.getInputParts().setObjects();
@@ -89,13 +92,11 @@ public class exportScenes extends StarMacro {
             sweep3D(cs, rws, uts, fws, ScalarPath, sim);
             sim.pressure3D.
                     setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
-            sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
-            sim.crossSection.getSingleValue().getValueQuantity().setValue(0);
+            setCrossSectionParts(sim);
 
             // Export Wall Y+ for far wall ranges
 
-            farWallPath = sim.dir + sim.separator + sim.simName
-                    + sim.separator + "Wall Y+ far wall";
+            farWallPath = getFolderPath("Wall Y+ far wall", sim);
             makeDir(farWallPath);
             sim.wallY.getInputParts().setObjects();
             sim.wallY.getInputParts().addParts(sim.domainBounds);
@@ -106,8 +107,8 @@ public class exportScenes extends StarMacro {
             sweep3D(cs, rws, uts, fws, farWallPath, sim);
 
             // Export Wall Y+ for near wall ranges
-            nearWallPath = sim.dir + sim.separator + sim.simName
-                    + sim.separator + "Wall Y+ near wall";
+            String folderName = "Wall Y+ near wall";
+            nearWallPath = getFolderPath(folderName, sim);
             makeDir(nearWallPath);
             sim.wallY.getScalarDisplayQuantity().setRange(sim.wallYRangeNearWall);
             sweep3D(cs, rws, uts, fws, nearWallPath, sim);
@@ -127,7 +128,7 @@ public class exportScenes extends StarMacro {
             sim.pressure2D.setRepresentation(sim.finiteVol);
             sim.pressure2D.setDisplayMeshBoolean(true);
             double i = sim.utTopBottom[0];
-            velocityPath = sim.dir + sim.separator + sim.simName + sim.separator + "Velocity";
+            velocityPath = getFolderPath("Velocity", sim);
             makeDir(velocityPath);
 
             // Push i above the range for fine ut increments
@@ -176,11 +177,7 @@ public class exportScenes extends StarMacro {
 
             while (i <= sim.profileLimits[1])
             {
-                double [] loc = simComponents.vectorScale(i, sim.profileDirection);
-                sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
-                        sim.inches, sim.inches, new DoubleVector(loc));
-                sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches,
-                        sim.inches, sim.inches, new DoubleVector(sim.profileDirection));
+                setSectionToProfile(i, sim);
 
                 // Export all LIC scenes
 
@@ -271,6 +268,24 @@ public class exportScenes extends StarMacro {
         }
     }
 
+    private static void setCrossSectionParts(simComponents sim) {
+        sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
+        sim.crossSection.getSingleValue().getValueQuantity().setValue(0);
+    }
+
+    private static void setSectionToProfile(double i, simComponents sim) {
+        double [] loc = simComponents.vectorScale(i, sim.profileDirection);
+        sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
+                sim.inches, sim.inches, new DoubleVector(loc));
+        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches,
+                sim.inches, sim.inches, new DoubleVector(sim.profileDirection));
+    }
+
+    private static String getFolderPath(String folderName, simComponents sim) {
+        return sim.dir + sim.separator + sim.simName
+                + sim.separator + folderName;
+    }
+
     public void exportPlots(simComponents sim) {
         String plotsPath;
         for (StarPlot plot : sim.plots)
@@ -281,7 +296,7 @@ public class exportScenes extends StarMacro {
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Iteration"));
             String plotName = plot.getPresentationName().replaceAll("[\\/]", "");
             String plotsImagePath;
-            plotsPath = sim.dir + sim.separator + sim.simName + sim.separator + "Plots";
+            plotsPath = getFolderPath("Plots", sim);
             makeDir(plotsPath);
             plotsImagePath = plotsPath + sim.separator + plotName + ".png";
             plotsPath = plotsPath + sim.separator + plotName + ".txt";
@@ -310,6 +325,32 @@ public class exportScenes extends StarMacro {
             return 1;
     }
 
+    public static void exportMesh(simComponents sim)
+    {
+        String meshPath = getFolderPath("Mesh", sim);
+        hideDisps(sim.planeSectionScene);
+        exportScenes obj = new exportScenes();
+        obj.makeDir(meshPath);
+        sim.meshDisplayer.setRepresentation(sim.finiteVol);
+        sim.meshDisplayer.setMesh(true);
+        setCrossSectionParts(sim);
+        sim.meshDisplayer.getInputParts().setObjects(sim.crossSection);
+        sim.meshDisplayer.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
+        double i = sim.profileLimits[0];
+
+        while (i <= sim.profileLimits[1])
+        {
+            setSectionToProfile(i, sim);
+            saveFile(sim.fwProfile, sim.planeSectionScene, sim, meshPath, String.valueOf(i));
+            saveFile(sim.utProfile, sim.planeSectionScene, sim, meshPath, String.valueOf(i));
+            saveFile(sim.rwProfile, sim.planeSectionScene, sim, meshPath, String.valueOf(i));
+            i++;
+        }
+
+        sim.meshDisplayer.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
+
+    }
+
     private void makeDir(String pathName)
     {
         File newFol = new File(resolvePath(pathName));
@@ -319,7 +360,7 @@ public class exportScenes extends StarMacro {
 
     // Hide all the displayers associated with the scene, so you only get what the macro is programmed for.
 
-    private void hideDisps(Scene scn)
+    private static void hideDisps(Scene scn)
     {
         Collection<Displayer> disps = scn.getDisplayerManager().getNonDummyObjects();
         for (Displayer dis : disps)
@@ -328,12 +369,12 @@ public class exportScenes extends StarMacro {
 
     // Give it a scene, a displayer, an i index (useful for planar sections), and it'll save the scene
 
-    private void saveFile (VisView view, Scene scn, simComponents sim, String folPath, String i)
+    private static void saveFile (VisView view, Scene scn, simComponents sim, String folPath, String i)
     {
         String filePath = folPath + sim.separator + view.getPresentationName() + " " + i + ".png";
 
         scn.setCurrentView(view);
-        scn.printAndWait(resolvePath(filePath), 1, 4000, 2000, true, false);
+        scn.printAndWait((new exportScenes()).resolvePath(filePath), 1, 4000, 2000, true, false);
 
     }
 

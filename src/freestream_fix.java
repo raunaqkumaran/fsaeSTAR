@@ -1,0 +1,29 @@
+import java.io.File;
+import java.util.*;
+
+import star.common.*;
+import star.base.neo.*;
+import star.meshing.*;
+
+public class freestream_fix extends StarMacro {
+
+    public void execute() {
+
+
+        Simulation simulation_0 =
+                getActiveSimulation();
+
+        simComponents sim = new simComponents(simulation_0);
+
+        SimpleBlockPart simpleBlockPart_0 =
+                ((SimpleBlockPart) simulation_0.get(SimulationPartManager.class).getPart("Freestream"));
+
+        Units units_0 =
+                ((Units) simulation_0.getUnitsManager().getObject("m"));
+
+        simpleBlockPart_0.getCorner1().setCoordinate(units_0, units_0, units_0, new DoubleVector(new double[]{-16.0, 0.0, 0.00889}));
+
+        sim.saveSim();
+
+    }
+}
