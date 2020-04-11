@@ -77,7 +77,6 @@ def individuals(file_list, config_file, command):
         for key, val in config_list.items():
             posix_write_flag(key, val, output_file)
         posix_write_flag("FILENAME", x, output_file)
-        posix_write_flag("newName", x, output_file)
         output_file.write(command.encode())
         output_file.close()
     return output_files
@@ -93,7 +92,6 @@ def clumped(file_list, config_file, command):
         posix_write_flag(key, val, output_file)
     for x in file_list:
         posix_write_flag("FILENAME", x, output_file)
-        posix_write_flag("newName", x, output_file)
         output_file.write(command.encode())
         posix_write_blanks(output_file, 2)
     output_file.close()
