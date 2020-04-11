@@ -106,7 +106,7 @@ def generatecommand(config_list):
     command = command + '"' + "$STARLOC" + '"'
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
-    command = command + '"' + "$SIMPATH" + os.sep + "$FILENAME" + '"'
+    command = command + '"' + "$FILENAME" + '"'
     if 'PROCS' in config_list:
         if float(config_list['PROCS']) != 1:
             command = command + " -np " + "$PROCS"
