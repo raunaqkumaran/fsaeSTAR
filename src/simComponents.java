@@ -823,7 +823,7 @@ public class simComponents {
         String newName = System.getenv("newName");
 
         if (newName != null)
-            activeSim.saveState(activeSim.getSessionDir() + File.separator + newName);
+            activeSim.saveState(newName);
         else
             activeSim.saveState(activeSim.getSessionDir() + File.separator + activeSim.getPresentationName() + ".sim");
     }
