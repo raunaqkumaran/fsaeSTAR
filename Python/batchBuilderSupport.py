@@ -31,8 +31,7 @@ def get_file_list(path):
                 sim_list.append(y)
         if f.endswith(".sim"):
             fileSize = os.path.getsize(filePath)
-            if fileSize >= 400e6:
-                sim_list.append(filePath)
+            sim_list.append(filePath)
     return sim_list
 
 
