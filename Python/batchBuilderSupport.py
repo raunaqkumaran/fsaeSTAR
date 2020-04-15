@@ -26,7 +26,7 @@ def get_file_list(path, size=0):
     for f in file_list:
         filePath = path + os.sep + f
         if os.path.isdir(filePath):
-            subList = get_file_list(filePath)
+            subList = get_file_list(filePath, size)
             for y in subList:
                 sim_list.append(y)
         if f.endswith(".sim"):
@@ -100,7 +100,7 @@ def clumped(file_list, config_file, command):
 
 def generatecommand(config_list):
     command = "srun hostname | sort -u > nodefile.$SLURM_JOBID"
-    command = command + "\n"
+    command += "\n"
     command = command + '"' + "$STARLOC" + '"'
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
@@ -114,8 +114,8 @@ def generatecommand(config_list):
     if config_list['CLUSTER'] != "LOCAL":
         command = command
 
-    command = command + " -hardwarebatch -machinefile nodefile.$SLURM_JOB_ID"
-    command = command + " -batch-report"
+    command += " -hardwarebatch -machinefile nodefile.$SLURM_JOB_ID"
+    command += " -batch-report"
     return command
 
 
@@ -129,12 +129,12 @@ def generateqsub(config_list):
     if config_list['CLUSTER'] != "LOCAL":
         qsub = 'sbatch -A $CLUSTER --ntasks=$PROCS --time=$WALLTIME --exclusive '
         if len(sys.argv) > 1:
-            qsub = qsub + ' --dependency=afterany'
+            qsub += ' --dependency=afterany'
             for i in range(1, len(sys.argv)):
                 qsub = qsub + ':' + sys.argv[i]
-            qsub = qsub + ' '
+            qsub += ' '
         if config_list['CLUSTER'] == "gpu":
-            qsub = qsub + ' --gres=gpu:1 '
+            qsub += ' --gres=gpu:1 '
     else:
         qsub = "sh ./"
 
