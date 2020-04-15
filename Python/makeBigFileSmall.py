@@ -5,7 +5,8 @@ import batchBuilderSupport as bbs
 import os
 import sys
 path = r"D:\Archive\Formula\2019"
-fileList = bbs.get_file_list(path)
+sizeLimit = 400e6
+fileList = bbs.get_file_list(path, sizeLimit)
 starPath = r'"C:\Program Files\Siemens\15.02.007-R8\STAR-CCM+15.02.007-R8\star\bin\starccm+.exe"'
 macroPath = r"C:\Users\rauna\Documents\fsaeSTAR\src\universalMeshClear.java"
 outputFile = "deleteEverything.bat"

@@ -20,7 +20,7 @@ def posix_write_blanks(file, blankcount):
         i += 1
 
 
-def get_file_list(path):
+def get_file_list(path, size=0):
     sim_list = []
     file_list = os.listdir(path)
     for f in file_list:
@@ -31,7 +31,8 @@ def get_file_list(path):
                 sim_list.append(y)
         if f.endswith(".sim"):
             fileSize = os.path.getsize(filePath)
-            sim_list.append(filePath)
+            if fileSize >= size:
+                sim_list.append(filePath)
     return sim_list
 
 
