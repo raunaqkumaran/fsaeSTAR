@@ -16,6 +16,7 @@ public class run extends StarMacro {
         regions.setTurbulence(activeSim);
         initial(activeSim);
         continueRun(activeSim);
+        activeSim.saveSim();
     }
 
     private void continueRun(simComponents activeSim)
@@ -33,8 +34,6 @@ public class run extends StarMacro {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath("meshRepair.java"))).play();
             continueRun(activeSim);
         }
-
-        activeSim.saveSim();
     }
     private void initial(simComponents activeSim)
     {
