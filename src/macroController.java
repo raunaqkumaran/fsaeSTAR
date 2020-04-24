@@ -52,20 +52,16 @@ public class macroController extends StarMacro {
         if (postprocess)
             runMacros.addAll(Arrays.asList(postprocessMacros));
 
-        runMacros.add("kill.java");
-
         getActiveRootObject().println(runMacros);
-        new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
 
         // Run the macros
         for (String macro : runMacros)
         {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath(macro))).play();
-            if (!Arrays.asList(postprocessMacros).contains(macro))
-            {
-                new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
-            }
         }
+
+        new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
+        new StarScript(getActiveRootObject(), new java.io.File(resolvePath("kill.java"))).play();
 
        
         
