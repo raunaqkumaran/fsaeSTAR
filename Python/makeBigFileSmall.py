@@ -4,7 +4,7 @@ sim files I have less massive. '''
 import batchBuilderSupport as bbs
 import os
 import sys
-path = r"D:\Archive\Formula\2019"
+path = r"D:\Archive\Formula\2020"
 sizeLimit = 400e6
 fileList = bbs.get_file_list(path, sizeLimit)
 starPath = r'"C:\Program Files\Siemens\15.02.007-R8\STAR-CCM+15.02.007-R8\star\bin\starccm+.exe"'

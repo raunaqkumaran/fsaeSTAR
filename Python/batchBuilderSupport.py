@@ -5,7 +5,7 @@ import datetime
 
 def get_timestamp():
     timeStamp = datetime.datetime.now()
-    timeStampString = timeStamp.strftime("%Y%m%d_%H:%M:%S")
+    timeStampString = timeStamp.strftime("%Y%m%d_%H_%M_%S")
     return timeStampString
 
 
