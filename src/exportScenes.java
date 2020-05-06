@@ -59,9 +59,9 @@ public class exportScenes extends StarMacro {
 
         rws = fws = cs = uts = ps = 1;
         multiplier = 1;
-        lic = false;
-        /*
-        if (simComponents.valEnvString("CLUSTER").equals("gpu") || simComponents.valEnvString("CLUSTER") == null)
+        
+
+        if (simComponents.valEnvString("CLUSTER") == null)
         {
             lic = true;
             sim.activeSim.println("Using LIC for velocity");
@@ -71,7 +71,7 @@ public class exportScenes extends StarMacro {
             lic = false;
             sim.activeSim.println("Skipping LIC for velocity");
         }
-        */
+
 
         // Exports all plots to a folder
         if (ps == 1)
