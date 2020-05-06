@@ -125,6 +125,10 @@ public class exportScenes extends StarMacro {
             sim.pressure2D.getScalarDisplayQuantity().setRange(sim.pressRange);
             sim.pressure2D.setRepresentation(sim.finiteVol);
             sim.pressure2D.setDisplayMeshBoolean(true);
+            sim.totalPressure2D.getScalarDisplayQuantity().setRange(sim.pressRange);
+            sim.totalPressure2D.setRepresentation(sim.finiteVol);
+            sim.totalPressure2D.setDisplayMeshBoolean(true);
+
             double i = sim.utTopBottom[0];
             velocityPath = getFolderPath("Velocity", sim);
             makeDir(velocityPath);
@@ -158,6 +162,10 @@ public class exportScenes extends StarMacro {
                     saveFile(sim.utBottom, sim.planeSectionScene, sim,
                             ScalarPath, i + " Pressure");
                     sim.pressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
+                    sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
+                    saveFile(sim.utBottom, sim.planeSectionScene, sim,
+                            ScalarPath, i + " Total Pressure");
+                    sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
                 }
 
                 // Iterate i counter. End loop after fine UT increments if car flag is off
@@ -218,6 +226,17 @@ public class exportScenes extends StarMacro {
                     saveFile(sim.utProfile, sim.planeSectionScene, sim,
                             ScalarPath, i + " Pressure");
                 sim.pressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
+                sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
+                if (fws != 0)
+                    saveFile(sim.fwProfile, sim.planeSectionScene, sim,
+                            ScalarPath, i + " Total Pressure");
+                if (rws != 0)
+                    saveFile(sim.rwProfile, sim.planeSectionScene, sim,
+                            ScalarPath, i + " Total Pressure");
+                if (uts != 0)
+                    saveFile(sim.utProfile, sim.planeSectionScene, sim,
+                            ScalarPath, i + " Total Pressure");
+                sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
                 i += (1 * multiplier);
             }
 
@@ -258,6 +277,14 @@ public class exportScenes extends StarMacro {
                     saveFile(sim.utRear, sim.planeSectionScene, sim, ScalarPath,
                             i - sim.aftForeLimits[0] + " Pressure" );
                 sim.pressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
+                sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
+                if (cs != 0)
+                    saveFile(sim.carRear, sim.planeSectionScene, sim, ScalarPath,
+                            i - sim.aftForeLimits[0] + " Total Pressure");
+                if (uts != 0)
+                    saveFile(sim.utRear, sim.planeSectionScene, sim, ScalarPath,
+                            i - sim.aftForeLimits[0] + " Total Pressure" );
+                sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
 
                 i += (1 * multiplier);
             }

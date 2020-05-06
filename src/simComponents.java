@@ -169,6 +169,7 @@ public class simComponents {
     public ScalarDisplayer wallY;
     public VectorDisplayer velVector2D;
     public ScalarDisplayer pressure2D;
+    public ScalarDisplayer totalPressure2D;
     public ScalarDisplayer pressure3D;
     public String dir;
     public String simName;
@@ -628,10 +629,9 @@ public class simComponents {
             wallY = (ScalarDisplayer) scene3D.getDisplayerManager().getDisplayer(wallYSceneName);
             velVectorName = "Velocity vector";
             velVector2D = (VectorDisplayer) planeSectionScene.getDisplayerManager().getDisplayer(velVectorName);
-            pressureScalar2DName = "Pressure";
-            pressureScalar3DName = "Pressure";
-            pressure2D = (ScalarDisplayer) planeSectionScene.getDisplayerManager().getDisplayer(pressureScalar2DName);
-            pressure3D = (ScalarDisplayer) scene3D.getDisplayerManager().getDisplayer(pressureScalar3DName);
+            pressure2D = (ScalarDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Pressure");
+            pressure3D = (ScalarDisplayer) scene3D.getDisplayerManager().getDisplayer("Pressure");
+            totalPressure2D = (ScalarDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Total Pressure");
             meshDisplayer = (PartDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Mesh");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Scene or displayer lookup failed, or volume mesh not found");
