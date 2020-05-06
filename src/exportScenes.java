@@ -59,16 +59,19 @@ public class exportScenes extends StarMacro {
 
         rws = fws = cs = uts = ps = 1;
         multiplier = 1;
-        if (simComponents.valEnvString("CLUSTER").equals("gpu"))
+        lic = false;
+        /*
+        if (simComponents.valEnvString("CLUSTER").equals("gpu") || simComponents.valEnvString("CLUSTER") == null)
         {
             lic = true;
-            sim.activeSim.println("GPU detected, using LIC for velocity");
+            sim.activeSim.println("Using LIC for velocity");
         }
         else
         {
             lic = false;
-            sim.activeSim.println("GPU not detected, skipping LIC for velocity");
+            sim.activeSim.println("Skipping LIC for velocity");
         }
+        */
 
         // Exports all plots to a folder
         if (ps == 1)
