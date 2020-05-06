@@ -59,7 +59,16 @@ public class exportScenes extends StarMacro {
 
         rws = fws = cs = uts = ps = 1;
         multiplier = 1;
-        lic = false;
+        if (simComponents.valEnvString("CLUSTER").equals("gpu"))
+        {
+            lic = true;
+            sim.activeSim.println("GPU detected, using LIC for velocity");
+        }
+        else
+        {
+            lic = false;
+            sim.activeSim.println("GPU not detected, skipping LIC for velocity");
+        }
 
         // Exports all plots to a folder
         if (ps == 1)
@@ -125,7 +134,7 @@ public class exportScenes extends StarMacro {
             sim.pressure2D.getScalarDisplayQuantity().setRange(sim.pressRange);
             sim.pressure2D.setRepresentation(sim.finiteVol);
             sim.pressure2D.setDisplayMeshBoolean(true);
-            sim.totalPressure2D.getScalarDisplayQuantity().setRange(sim.pressRange);
+            sim.totalPressure2D.getScalarDisplayQuantity().setRange(sim.totalPressRange);
             sim.totalPressure2D.setRepresentation(sim.finiteVol);
             sim.totalPressure2D.setDisplayMeshBoolean(true);
 

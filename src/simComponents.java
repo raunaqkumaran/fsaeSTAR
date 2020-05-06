@@ -53,6 +53,7 @@ public class simComponents {
     public double[] topBottomDirection;
     public double[] utTopBottom;
     public double[] pressRange;
+    public double[] totalPressRange;
     public double[] wallYRange;
     public double[] wallYRangeNearWall;
     // Subtract
@@ -321,13 +322,14 @@ public class simComponents {
 
         // Set up the range of values to scan with the cross section scene. Also used for some physics
         profileLimits = new double[]{0, 35};
-        topBottomLimits = new double[]{0, 60};
+        topBottomLimits = new double[]{0.35, 60};
         aftForeLimits = new double[]{-70, 50};
         foreAftDirection = new double[]{1, 0, 0};
         profileDirection = new double[]{0, -1, 0};
         topBottomDirection = new double[]{0, 0, 1};
-        utTopBottom = new double[]{0, 10};
+        utTopBottom = new double[]{0.35, 10};
         pressRange = new double[]{-2.5, 1.5};
+        totalPressRange = new double[]{-2, 2};
         velRange = new double[]{0.0, 2};
         wallYRange = new double[]{5, 30};
         wallYRangeNearWall = new double[]{0.0, 5};
@@ -616,11 +618,9 @@ public class simComponents {
             crossSection = (PlaneSection) activeSim.getPartManager().getObject(crossSectionName);
             planeSectionName = "Plane section scenes";
             planeSectionScene = activeSim.getSceneManager().getScene(planeSectionName);
-            planeSectionScene.setAdvancedRenderingEnabled(false);
             planeSectionScene.setMeshOverrideMode(SceneMeshOverride.USE_DISPLAYER_PROPERTY);
             scene3DName = "3D scenes";
             scene3D = activeSim.getSceneManager().getScene(scene3DName);
-            scene3D.setAdvancedRenderingEnabled(false);
             separator = File.separator;
             dir = activeSim.getSessionDir();
             simName = activeSim.getPresentationName();
