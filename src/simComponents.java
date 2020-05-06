@@ -10,6 +10,7 @@ import star.base.neo.NeoObjectVector;
 import star.base.report.MaxReport;
 import star.base.report.Report;
 import star.common.*;
+import star.flow.AccumulatedForceTable;
 import star.meshing.*;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
@@ -25,7 +26,7 @@ public class simComponents {
     //obvious. At some point i'll make docstrings. But that's not going to happen until i'm literally dying of boredom/1 week away from graduating.
 
     //Version check
-    private double version = 1.4;
+    private double version = 1.5;
     // The Simulation
     public Simulation activeSim;
 
@@ -61,6 +62,7 @@ public class simComponents {
     public String pitchRepName;
     public PointPart point;
     public XyzInternalTable repTable;
+    public Map<String, AccumulatedForceTable> forceTables;
     public Collection<StarPlot> plots;
     // Miscellaneous
     public double frontTyreRadius;
@@ -348,8 +350,12 @@ public class simComponents {
         massFlowRepName = "Radiator Mass Flow";
         pointName = "Point";
         point = (PointPart) activeSim.getPartManager().getObject(pointName);
-        repTableName = "Reports table";
-        repTable = (XyzInternalTable) activeSim.getTableManager().getTable(repTableName);
+        repTable = (XyzInternalTable) activeSim.getTableManager().getTable("Reports table");
+        // THESE KEYS MUST MATCH THE CONVENTION USED IN AERO PREFIXES
+        forceTables = new HashMap<>();
+        forceTables.put("FW", (AccumulatedForceTable) activeSim.getTableManager().getTable("FW Force Histogram"));
+        forceTables.put("RW", (AccumulatedForceTable) activeSim.getTableManager().getTable("RW Force Histogram"));
+
 
         // Miscellaneous constructor things
         radPart = activeSim.get(SimulationPartManager.class).getObject(radiatorName);

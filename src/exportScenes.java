@@ -6,10 +6,8 @@
 
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
-import star.common.MonitorPlot;
-import star.common.Simulation;
-import star.common.StarMacro;
-import star.common.StarPlot;
+import star.common.*;
+import star.flow.AccumulatedForceTable;
 import star.vis.*;
 import java.nio.file.Path;
 
@@ -288,11 +286,13 @@ public class exportScenes extends StarMacro {
 
     public void exportPlots(simComponents sim) {
         String plotsPath;
+        for (AccumulatedForceTable x : sim.forceTables.values())
+            x.extract();
         for (StarPlot plot : sim.plots)
         {
             if (simComponents.boolEnv("DES") && !plot.getPresentationName().contains("Residuals"))
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Physical Time"));
-            else
+            else if (plot instanceof MonitorPlot)
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Iteration"));
             String plotName = plot.getPresentationName().replaceAll("[\\/]", "");
             String plotsImagePath;

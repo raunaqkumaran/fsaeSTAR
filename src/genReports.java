@@ -1,6 +1,7 @@
 import star.base.neo.DoubleVector;
 import star.base.report.*;
 import star.common.*;
+import star.flow.AccumulatedForceTable;
 import star.flow.ForceCoefficientReport;
 import star.flow.MassFlowReport;
 import star.flow.MomentCoefficientReport;
@@ -17,6 +18,15 @@ public class genReports extends StarMacro {
     {
         simComponents activeSim = new simComponents(getActiveSimulation());
         activeSim.activeSim.println("--- SETTING UP REPORTS ---");
+
+        for (String x: activeSim.forceTables.keySet())
+        {
+            AccumulatedForceTable temp = activeSim.forceTables.get(x);
+            temp.setRepresentation(activeSim.finiteVol);
+            temp.getParts().setObjects(activeSim.partSpecBounds.get(x));
+            temp.extract();
+        }
+
         for (Report rep : activeSim.reports)
         {
             if (rep instanceof StatisticsReport)
