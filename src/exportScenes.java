@@ -59,7 +59,7 @@ public class exportScenes extends StarMacro {
 
         rws = fws = cs = uts = ps = 1;
         multiplier = 1;
-        
+
 
         if (simComponents.valEnvString("CLUSTER") == null)
         {
