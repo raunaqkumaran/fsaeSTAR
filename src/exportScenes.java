@@ -93,6 +93,7 @@ public class exportScenes extends StarMacro {
             ScalarPath = getFolderPath("Scalar", sim);
             makeDir(ScalarPath);
             sim.pressure3D.setRepresentation(sim.finiteVol);
+            sim.pressure3D.setDisplayMeshBoolean(true);
             sim.pressure3D.getInputParts().setObjects();
             sim.pressure3D.getInputParts().addParts(sim.domainBounds);
             sim.pressure3D.getInputParts().removeParts(sim.freestreamBounds);
