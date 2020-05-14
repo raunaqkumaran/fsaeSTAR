@@ -53,7 +53,8 @@ public class meshRepair extends StarMacro {
         meshManager_0.splitNonContiguousRegions(contigSplitVector);
         for (Region reg : activeSim.activeSim.getRegionManager().getRegions())
         {
-            reg.setPhysicsContinuum(null);
+            if (!(reg == activeSim.domainRegion || reg == activeSim.radiatorRegion || (activeSim.dualRadFlag && reg == activeSim.dualRadiatorRegion)))
+                reg.setPhysicsContinuum(null);
         }
         regions.setTurbulence(activeSim);
         //activeSim.clearSoln();

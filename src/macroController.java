@@ -25,7 +25,7 @@ public class macroController extends StarMacro {
         String [] processMacros = {
                 "yawSet.java",
                 "genReports.java",
-                "softRun.java",                         //I'm actually super proud of this one it's actually beautiful. Don't get rid of this pls.
+                "softRun.java",                         //Sometimes STAR will find negative volume cells after first iteration, not before. If this happens, the macro crashes. I'd rather crash this sacrificial macro than crash the whole chain.
                 "meshRepair.java",
                 "run.java",
                 "exportReports.java",
