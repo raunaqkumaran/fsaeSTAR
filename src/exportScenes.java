@@ -268,16 +268,12 @@ public class exportScenes extends StarMacro {
                 sim.velVector2D.setDisplayMode(VectorDisplayMode.VECTOR_DISPLAY_MODE_GLYPH);
                 if (cs != 0)
                     saveFile(sim.carRear, sim.planeSectionScene, sim, velocityPath, i - sim.aftForeLimits[0]  + " Glyph");
-                if (uts != 0)
-                    saveFile(sim.utRear, sim.planeSectionScene, sim, velocityPath, i - sim.aftForeLimits[0] + " Glyph" );
 
                 if (lic) {
                     sim.velVector2D.setDisplayMode(VectorDisplayMode.VECTOR_DISPLAY_MODE_LIC);
 
                     if (cs != 0)
                         saveFile(sim.carRear, sim.planeSectionScene, sim, velocityPath, i - sim.aftForeLimits[0] + " LIC");
-                    if (uts != 0)
-                        saveFile(sim.utRear, sim.planeSectionScene, sim, velocityPath, i - sim.aftForeLimits[0] + " LIC");
                 }
 
                 sim.velVector2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
@@ -286,17 +282,11 @@ public class exportScenes extends StarMacro {
                 if (cs != 0)
                     saveFile(sim.carRear, sim.planeSectionScene, sim, ScalarPath,
                             i - sim.aftForeLimits[0] + " Pressure");
-                if (uts != 0)
-                    saveFile(sim.utRear, sim.planeSectionScene, sim, ScalarPath,
-                            i - sim.aftForeLimits[0] + " Pressure" );
                 sim.pressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
                 sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
                 if (cs != 0)
                     saveFile(sim.carRear, sim.planeSectionScene, sim, ScalarPath,
                             i - sim.aftForeLimits[0] + " Total Pressure");
-                if (uts != 0)
-                    saveFile(sim.utRear, sim.planeSectionScene, sim, ScalarPath,
-                            i - sim.aftForeLimits[0] + " Total Pressure" );
                 sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
 
                 i += (1 * multiplier);

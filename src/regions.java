@@ -23,8 +23,7 @@ public class regions extends StarMacro {
 
         // Assign boundary conditions to freestream/domain block.
         // Please don't change these domain names. I tried to set things up so it's somewhat easy to change set-up
-        // and update the macros accordingly, but there's zero reason to fuck with these.
-        // Some of the function calls are ugly. But that's STAR'S API being what it is...
+        // and update the macros
 
         setDomainBoundaries(activeSim);
 
@@ -39,7 +38,7 @@ public class regions extends StarMacro {
                 getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(initialVector);
 
 
-        // These function calls are fucking nasty. This can be made much cleaner by using vars for some of these object returns.
+        // This can be made much cleaner by using vars for some of these object returns.
         // Some of these calls will need to be modified if coordinate systems change in the future.
 
         activeSim.massFlowInterfaceInlet = activeSim.activeSim.getInterfaceManager().

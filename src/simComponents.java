@@ -23,7 +23,7 @@ public class simComponents {
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understand
     //I'm not going to comment everything. I'm hoping the variable name is usually obvious enough. Some of them aren't
-    //obvious. At some point i'll make docstrings. But that's not going to happen until i'm literally dying of boredom/1 week away from graduating.
+    //obvious. At some point i'll make docstrings.
 
     //Version check
     private double version = 1.5;
@@ -269,10 +269,6 @@ public class simComponents {
         wheelNames.addAll(Arrays.asList("Front Left", "Front Right", "Rear Left", "Rear Right"));
         liftGeneratorPrefixes.addAll(Arrays.asList("RW", "FW", "UT", "SW", "FC"));
 
-        // This is probably a terrible way to iterate, but there aren't that many parts. It's fine for now and looks
-        // prettier than the other alternative that I could think of at the time. I couldn't find a way to check if
-        // a given string startsWith any of the string in the prefix collection without iterating through the collection
-        // and running startsWith with each element of the collection.
 
         aeroParts = new ArrayList<>();
         nonAeroParts = new ArrayList<>();
