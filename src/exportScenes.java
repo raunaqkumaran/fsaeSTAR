@@ -298,6 +298,8 @@ public class exportScenes extends StarMacro {
 
     private static void setCrossSectionParts(simComponents sim) {
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
+        if (sim.dualRadFlag)
+            sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
         sim.crossSection.getSingleValue().getValueQuantity().setValue(0);
     }
 
