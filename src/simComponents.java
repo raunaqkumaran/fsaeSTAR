@@ -325,7 +325,7 @@ public class simComponents {
         topBottomDirection = new double[]{0, 0, 1};
         utTopBottom = new double[]{0.35, 10};
         pressRange = new double[]{-2.5, 1.5};
-        totalPressRange = new double[]{-2, 2};
+        totalPressRange = new double[]{-2.5, 1.5};
         velRange = new double[]{0.0, 2};
         wallYRange = new double[]{5, 30};
         wallYRangeNearWall = new double[]{0.0, 5};
