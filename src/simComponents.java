@@ -26,7 +26,7 @@ public class simComponents {
     //obvious. At some point i'll make docstrings.
 
     //Version check
-    private double version = 1.5;
+    private double version = 1.6;
     // The Simulation
     public Simulation activeSim;
 
@@ -204,6 +204,7 @@ public class simComponents {
     public VolumeCustomMeshControl volControlCar;
     public VolumeCustomMeshControl volControlWake;
     public VolumeCustomMeshControl farWakeControl;
+    public VolumeCustomMeshControl radiatorControl;
     public VolumeCustomMeshControl volControlWingWake;
     public VolumeCustomMeshControl volControlRearWing;
     public VolumeCustomMeshControl volControlFrontWing;
@@ -599,6 +600,7 @@ public class simComponents {
             volControlFrontWing = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Front Wing");
             volControlUnderbody = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Underbody");
             farWakeControl = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Far Wake");
+            radiatorControl = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Radiator");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Mesh initializer error");
         }

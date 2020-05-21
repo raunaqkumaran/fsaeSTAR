@@ -29,6 +29,7 @@ public class autoMesh extends StarMacro {
         activeSim.rearWingControl.getGeometryObjects().setObjects();
         activeSim.undertrayControl.getGeometryObjects().setObjects();
         activeSim.frontWingControl.getGeometryObjects().setObjects();
+        activeSim.radiatorControl.getGeometryObjects().setObjects();
 
         // There shouldn't be any reason to mess with the next few loops
 
@@ -62,11 +63,12 @@ public class autoMesh extends StarMacro {
         activeSim.volControlFrontWing.getGeometryObjects().setObjects(activeSim.volumetricFrontWing);
         activeSim.volControlUnderbody.getGeometryObjects().setObjects(activeSim.volumetricUnderbody);
         activeSim.volControlRearWing.getGeometryObjects().setObjects(activeSim.volumetricRearWing);
-        activeSim.volControlCar.getGeometryObjects().setObjects(activeSim.volumetricCar, activeSim.radPart);
-        if (activeSim.dualRadFlag) activeSim.volControlCar.getGeometryObjects().addObjects(activeSim.dualRadPart);
+        activeSim.volControlCar.getGeometryObjects().setObjects(activeSim.volumetricCar);
+        activeSim.radiatorControl.getGeometryObjects().setObjects(activeSim.radPart);
+        if (activeSim.dualRadFlag) activeSim.radiatorControl.getGeometryObjects().add(activeSim.dualRadPart);
         activeSim.farWakeControl.getGeometryObjects().setObjects(activeSim.farWakePart);
         activeSim.autoMesh.setVerboseOutput(true);
-        activeSim.autoMesh.execute();
+        //activeSim.autoMesh.execute();
         activeSim.clearHistory();
         activeSim.saveSim();
     }
