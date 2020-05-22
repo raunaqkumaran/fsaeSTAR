@@ -104,6 +104,7 @@ public class regions extends StarMacro {
     }
 
     private void setDomainBoundaries(simComponents activeSim) {
+            String yVal = String.valueOf(activeSim.calculateSideslip());
             activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
             activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
             activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
@@ -117,7 +118,7 @@ public class regions extends StarMacro {
                         getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
             else
                 activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}, 0, 0]");
+                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
             activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
     }
 

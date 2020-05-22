@@ -24,6 +24,8 @@ public class simComponents {
     public static final String USER_YAW = "User Yaw";
     public static final String USER_FRONT_RIDE_HEIGHT = "User Front Ride Height";
     public static final String USER_REAR_RIDE_HEIGHT = "User Rear Ride Height";
+    public static final String SIDESLIP = "Sideslip";
+    public static final String CONFIGSIDESLIP = "sideslip";
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understand
     //I'm not going to comment everything. I'm hoping the variable name is usually obvious enough. Some of them aren't
@@ -88,6 +90,7 @@ public class simComponents {
     private ScalarGlobalParameter userFreestream;
     private ScalarGlobalParameter frontRide;
     private ScalarGlobalParameter rearRide;
+    private ScalarGlobalParameter sideSlip;
     public String freestreamParameterName;
     //Stopping criteria
     public MonitorIterationStoppingCriterion maxVel;
@@ -404,6 +407,7 @@ public class simComponents {
         userYaw = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_YAW);
         frontRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FRONT_RIDE_HEIGHT);
         rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
+        sideSlip = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(SIDESLIP);
     }
 
     private void boundarySet() {
@@ -712,6 +716,10 @@ public class simComponents {
         {
             return rearRide.getQuantity().getRawValue();
         }
+        else if (env.equals(CONFIGSIDESLIP))
+        {
+            return sideSlip.getQuantity().getRawValue();
+        }
         else if (env.equals("maxSteps"))
             return 1100;
         else
@@ -918,6 +926,13 @@ public class simComponents {
             activeSim.println("Version: " + version);
             throw new IllegalStateException("You're using the wrong macro + sim combination.");
         }
+    }
+
+    public double calculateSideslip()
+    {
+        double sideslipAngle = valEnv(CONFIGSIDESLIP);
+        double yVal = freestreamVal * Math.tan(Math.toRadians(sideslipAngle));
+        return yVal;
     }
 
 }
