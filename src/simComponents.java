@@ -24,7 +24,7 @@ public class simComponents {
     public static final String USER_YAW = "User Yaw";
     public static final String USER_FRONT_RIDE_HEIGHT = "User Front Ride Height";
     public static final String USER_REAR_RIDE_HEIGHT = "User Rear Ride Height";
-    public static final String SIDESLIP = "Sideslip";
+    public static final String SIDESLIP = "User Sideslip";
     public static final String CONFIGSIDESLIP = "sideslip";
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understand
