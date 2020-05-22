@@ -22,6 +22,8 @@ public class simComponents {
     public static final String YAW_INTERFACE_NAME = "Yaw interface";
     public static final String USER_FREESTREAM = "User Freestream";
     public static final String USER_YAW = "User Yaw";
+    public static final String USER_FRONT_RIDE_HEIGHT = "User Front Ride Height";
+    public static final String USER_REAR_RIDE_HEIGHT = "User Rear Ride Height";
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understand
     //I'm not going to comment everything. I'm hoping the variable name is usually obvious enough. Some of them aren't
@@ -84,6 +86,8 @@ public class simComponents {
     private ScalarGlobalParameter freestreamParameter;
     private ScalarGlobalParameter userYaw;
     private ScalarGlobalParameter userFreestream;
+    private ScalarGlobalParameter frontRide;
+    private ScalarGlobalParameter rearRide;
     public String freestreamParameterName;
     //Stopping criteria
     public MonitorIterationStoppingCriterion maxVel;
@@ -398,6 +402,8 @@ public class simComponents {
     {
         userFreestream = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FREESTREAM);
         userYaw = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_YAW);
+        frontRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FRONT_RIDE_HEIGHT);
+        rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
     }
 
     private void boundarySet() {
@@ -697,6 +703,14 @@ public class simComponents {
         else if (env.equals("yaw"))
         {
             return userYaw.getQuantity().getRawValue();
+        }
+        else if (env.equals("frh"))
+        {
+            return frontRide.getQuantity().getRawValue();
+        }
+        else if (env.equals("rrh"))
+        {
+            return rearRide.getQuantity().getRawValue();
         }
         else if (env.equals("maxSteps"))
             return 1100;
