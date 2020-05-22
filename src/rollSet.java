@@ -19,7 +19,7 @@ public class rollSet extends StarMacro {
         double rollAngle;
         simComponents sim = new simComponents(getActiveSimulation());
 
-        rollAngle = Math.toRadians(simComponents.valEnv("roll"));
+        rollAngle = Math.toRadians(sim.valEnv("roll"));
 
         //Debug
         //rollAngle = Math.toRadians(0);
