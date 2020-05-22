@@ -28,8 +28,8 @@ public class rideHeight extends StarMacro {
         double frh;
         double rrh;
 
-        frh = sim.valEnv("frh");
-        rrh = sim.valEnv("rrh");
+        frh = simComponents.valEnv("frh");
+        rrh = simComponents.valEnv("rrh");
 
         //DEBUG
         /*

@@ -12,7 +12,7 @@ public class regions extends StarMacro {
         simComponents activeSim = new simComponents(getActiveSimulation());
 
         activeSim.activeSim.println("--- Setting up regions ---");
-        double[] initialVector = simComponents.vectorRotate(activeSim.valEnv("Yaw"), simComponents.vectorScale(activeSim.freestreamVal * 0.1, activeSim.foreAftDirection));
+        double[] initialVector = simComponents.vectorRotate(simComponents.valEnv("Yaw"), simComponents.vectorScale(activeSim.freestreamVal * 0.1, activeSim.foreAftDirection));
 
         activeSim.regionSwap();     // This is one of the few 'processes'
         // done within simComponents. Recreates the two main regions.
@@ -104,7 +104,6 @@ public class regions extends StarMacro {
     }
 
     private void setDomainBoundaries(simComponents activeSim) {
-            String yVal = String.valueOf(activeSim.calculateSideslip());
             activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
             activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
             activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
@@ -118,7 +117,7 @@ public class regions extends StarMacro {
                         getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
             else
                 activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
+                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}, 0, 0]");
             activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
     }
 
@@ -140,7 +139,7 @@ public class regions extends StarMacro {
 
             activeSim.yawInterface.setPresentationName(simComponents.YAW_INTERFACE_NAME);
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);
-            double yawVal = activeSim.valEnv("yaw");
+            double yawVal = simComponents.valEnv("yaw");
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
                     getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.freestreamVal / Math.cos(Math.toRadians(yawVal)));
             activeSim.fsInlet.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.ANGLES);

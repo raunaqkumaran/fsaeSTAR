@@ -68,7 +68,7 @@ public class autoMesh extends StarMacro {
         if (activeSim.dualRadFlag) activeSim.radiatorControl.getGeometryObjects().add(activeSim.dualRadPart);
         activeSim.farWakeControl.getGeometryObjects().setObjects(activeSim.farWakePart);
         activeSim.autoMesh.setVerboseOutput(true);
-        activeSim.autoMesh.execute();
+        //activeSim.autoMesh.execute();
         activeSim.clearHistory();
         activeSim.saveSim();
     }

@@ -20,19 +20,13 @@ import java.util.*;
 
 public class simComponents {
     public static final String YAW_INTERFACE_NAME = "Yaw interface";
-    public static final String USER_FREESTREAM = "User Freestream";
-    public static final String USER_YAW = "User Yaw";
-    public static final String USER_FRONT_RIDE_HEIGHT = "User Front Ride Height";
-    public static final String USER_REAR_RIDE_HEIGHT = "User Rear Ride Height";
-    public static final String SIDESLIP = "User Sideslip";
-    public static final String CONFIGSIDESLIP = "sideslip";
 
     //Declarations. There may be 'repeated' parts. Some of this is because of typecasting that I don't understand
     //I'm not going to comment everything. I'm hoping the variable name is usually obvious enough. Some of them aren't
     //obvious. At some point i'll make docstrings.
 
     //Version check
-    private double version = 1.7;
+    private double version = 1.6;
     // The Simulation
     public Simulation activeSim;
 
@@ -86,11 +80,6 @@ public class simComponents {
     public boolean fullCarFlag;
     public boolean wtFlag;
     private ScalarGlobalParameter freestreamParameter;
-    private ScalarGlobalParameter userYaw;
-    private ScalarGlobalParameter userFreestream;
-    private ScalarGlobalParameter frontRide;
-    private ScalarGlobalParameter rearRide;
-    private ScalarGlobalParameter sideSlip;
     public String freestreamParameterName;
     //Stopping criteria
     public MonitorIterationStoppingCriterion maxVel;
@@ -253,9 +242,6 @@ public class simComponents {
         //Blow up if it's the wrong version
         checkVersion();
 
-        //Define user parameters
-        userParameters();
-
         // Units
         frontTyreRadius = 0.228599;
         rearTyreRadius = 0.228599;
@@ -399,15 +385,6 @@ public class simComponents {
         activeSim.println("Time taken to generate simComponents : " + totalTime + " ms");
 
 
-    }
-
-    private void userParameters()
-    {
-        userFreestream = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FREESTREAM);
-        userYaw = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_YAW);
-        frontRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FRONT_RIDE_HEIGHT);
-        rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
-        sideSlip = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(SIDESLIP);
     }
 
     private void boundarySet() {
@@ -697,29 +674,11 @@ public class simComponents {
         return vect;
     }
 
-    public double valEnv(String env) {
+    public static double valEnv(String env) {
         if (System.getenv(env) != null && !System.getenv(env).isEmpty())
             return Double.parseDouble(System.getenv(env));
         else if (env.equals("freestream"))
-        {
-            return userFreestream.getQuantity().getRawValue();
-        }
-        else if (env.equals("yaw"))
-        {
-            return userYaw.getQuantity().getRawValue();
-        }
-        else if (env.equals("frh"))
-        {
-            return frontRide.getQuantity().getRawValue();
-        }
-        else if (env.equals("rrh"))
-        {
-            return rearRide.getQuantity().getRawValue();
-        }
-        else if (env.equals(CONFIGSIDESLIP))
-        {
-            return sideSlip.getQuantity().getRawValue();
-        }
+            return 15;
         else if (env.equals("maxSteps"))
             return 1100;
         else
@@ -926,13 +885,6 @@ public class simComponents {
             activeSim.println("Version: " + version);
             throw new IllegalStateException("You're using the wrong macro + sim combination.");
         }
-    }
-
-    public double calculateSideslip()
-    {
-        double sideslipAngle = valEnv(CONFIGSIDESLIP);
-        double yVal = freestreamVal * Math.tan(Math.toRadians(sideslipAngle));
-        return yVal;
     }
 
 }

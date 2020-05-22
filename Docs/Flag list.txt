@@ -1,19 +1,17 @@
-﻿SIMPATH = Folder to run sims from
-STARLOC = Location of starccm executable
-CP = location of java macros
-PODKEY = PoD key 
-LICPATH = 1999@flex.cd-adapco.com; 
-MACRO = macro to run. generally macroController
-CLUSTER = cluster to submit job to (scholar, gpu, or long)
-PROCS = total procs to use
-WALLTIME = length of job in minutes
-yaw = yaw angle in degrees
-sideslip = sideslip angle in degrees
-freestream = freestream in m/s
-maxSteps = total steps to run
-preprocess = true to surface wrap and mesh. false to skip
-process = true to run solver. false to skip
-postprocess = true to generate post processed data. false to skip
-windTunnel = setting to true sets ground velocity and wheel rotations to zero
-CLUMPED = setting to true puts every sim in SIMPATH in a single job. false gives each sim its own job
-DES = setting to true runs a transient DES sim (been a while since i checked if it works)
+﻿NEW Flaglist Setup:
+* SIMPATH - Location of your simulation folder
+* STARLOC - Location of your star installation
+* CP - Classpath. This is the working directory for the java macros.
+* PODKEY - Podkey
+* LICPATH - pick a license server. 1999@xxxx.xxx.purdue.edu for a power session. 1999@flex.cd-adapco.com for a PoD
+* MACRO - Name of the macro to run (99% of the time it’ll be macroController)
+* CLUSTER - sets the cluster to use (scholar, long)
+* WALLTIME - maximum wall time (4:00:00 for scholar, 72:00:00 for long)
+* yaw - Yaw angle in degrees.
+* freestream - set freestream velocity in m/s
+* maxSteps - Maximum steps for stopping criteria. Defaults to 1100
+* preprocess - Wraps and meshes the geometery (true or false)
+* process - Runs the sim and exports reports (true or false)
+* postprocess - Exports reports and runs scenes (true or false)
+* windTunnel - Set it to true to stop wheel rotation and ground travel. false for typical real-world/rolling-road
+* DES - set to true for DES
