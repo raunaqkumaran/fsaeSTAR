@@ -32,7 +32,7 @@ public class simComponents {
     //obvious. At some point i'll make docstrings.
 
     //Version check
-    private double version = 1.7;
+    private double version = 1.8;
     // The Simulation
     public Simulation activeSim;
 
