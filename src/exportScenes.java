@@ -44,6 +44,9 @@ public class exportScenes extends StarMacro {
         sim.activeSim.getSceneManager().setVerbose(true);
         sim.activeSim.getPlotManager().setVerbose(true);
 
+        String dispEnv = simComponents.valEnvString("DISPLAY");
+        sim.activeSim.println("Display env variable: " + dispEnv);
+
 
         //Stop letting users pick their own settings. Still keep the old infrastructure in case we want to bring it back.
 
