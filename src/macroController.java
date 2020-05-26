@@ -12,6 +12,7 @@ public class macroController extends StarMacro {
         // Macros run in the order they're defined in this string[]
 
         String [] meshMacros = {
+                "rideHeight.java",
                 "surfaceWrap.java",
                 "subtract.java",
                 "regions.java",
