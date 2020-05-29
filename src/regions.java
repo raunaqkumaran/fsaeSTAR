@@ -110,7 +110,7 @@ public class regions extends StarMacro {
             activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
             activeSim.fsInlet.setBoundaryType(InletBoundary.class);
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
-                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.freestreamParameterName + "}");
+                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
             activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
                     setSelected(WallSlidingOption.Type.VECTOR);
             if (activeSim.wtFlag)
