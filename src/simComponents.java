@@ -12,6 +12,8 @@ import star.base.report.Report;
 import star.common.*;
 import star.flow.AccumulatedForceTable;
 import star.meshing.*;
+import star.screenplay.Screenplay;
+import star.screenplay.ScreenplayManager;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
 import java.io.File;
@@ -192,6 +194,9 @@ public class simComponents {
     public String dir;
     public String simName;
     public Scene meshScene;
+    public Screenplay aftFore;
+    public Screenplay profile;
+    public Screenplay topBottom;
     //Views
     public VisView carRear;
     public VisView carStd;
@@ -629,6 +634,9 @@ public class simComponents {
             dir = activeSim.getSessionDir();
             simName = activeSim.getPresentationName();
             finiteVol = (FvRepresentation) activeSim.getRepresentationManager().getObject("Volume Mesh");
+            aftFore = activeSim.get(ScreenplayManager.class).getObject("Screenplay 1");
+            profile = activeSim.get(ScreenplayManager.class).getObject("Screenplay 2");
+            topBottom = activeSim.get(ScreenplayManager.class).getObject("Screenplay 3");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Scene or displayer lookup failed, or volume mesh not found");
         }

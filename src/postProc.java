@@ -4,10 +4,10 @@ import star.common.MonitorPlot;
 import star.common.StarMacro;
 import star.common.StarPlot;
 import star.flow.AccumulatedForceTable;
-import star.vis.Displayer;
-import star.vis.DisplayerVisibilityOverride;
-import star.vis.Scene;
-import star.vis.VisView;
+import star.screenplay.Screenplay;
+import star.screenplay.ScreenplayDirector;
+import star.screenplay.ScreenplaySelectorDescriptor;
+import star.vis.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,13 +18,55 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
+        sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
+        if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
         exportPlots(sim);
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
+        Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
         Collection<VisView> views3D = getViews("3D", sim);
         Collection<VisView> views2D = getViews("2D", sim);
 
-        postProc3D(sim, displayers3D, views3D);
+        //postProc3D(sim, displayers3D, views3D);
+        sim.crossSection.getOrientation().set(0, 1.0);
+        sim.crossSection.getOrientation().set(1, 0.0);
+        sim.crossSection.getOrientation().set(2, 0.0);
+        String orientation = "Profile";
+        Screenplay screenplayObj = sim.profile;
+        postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
 
+        sim.crossSection.getOrientation().set(0, 0.0);
+        sim.crossSection.getOrientation().set(1, -1.0);
+        sim.crossSection.getOrientation().set(2, 0.0);
+        orientation = "AftFore";
+        screenplayObj = sim.aftFore;
+        postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
+
+        sim.crossSection.getOrientation().set(0, 0.0);
+        sim.crossSection.getOrientation().set(1, 0.0);
+        sim.crossSection.getOrientation().set(2, 1.0);
+        orientation = "TopBottom";
+        screenplayObj = sim.topBottom;
+        postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
+
+    }
+
+    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, String orientation, Screenplay screenplayObj) {
+        for (Displayer disp : displayers2D)
+        {
+            hideDisps(sim.scene2D);
+            disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
+            String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
+            makeDir(displayerPath);
+            for (VisView view : views2D)
+            {
+                if (!getSecondKey(view)[0].contains(orientation))
+                    continue;
+                sim.scene2D.setCurrentView(view);
+                String filePath = generateFileName(displayerPath, sim.scene2D, disp, view, "", ".avi");
+                sim.activeSim.println("Saving screenplay to : " + filePath);
+                screenplayObj.getScreenplayDirector().record(4000, 2000, 20, 0.0, 10.0, resolvePath(filePath), 0, true, false, VideoEncodingQualityEnum.Q1);
+            }
+        }
     }
 
     private void postProc3D(simComponents sim, Collection<Displayer> displayers3D, Collection<VisView> views3D) {
@@ -39,22 +81,22 @@ public class postProc extends StarMacro {
                 sim.scene3D.setCurrentView(view);
                 disp.getInputParts().setObjects(sim.partBounds);
                 disp.getInputParts().addObjects(sim.wheelBounds);
-                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, ""), sim.scene3D);
+                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, "", ".png"), sim.scene3D);
             }
 
             for (VisView view : views3D)        //Filtered exports
             {
                 sim.scene3D.setCurrentView(view);
                 disp.getInputParts().setObjects(getParts(sim, view));
-                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, "Filtered"), sim.scene3D);
+                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, "Filtered",".png"), sim.scene3D);
             }
         }
     }
 
-    public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, String append)
+    public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, String append, String ext)
     {
         Double offset = null;
-        return generateFileName(folder, scn, disp, view, offset, append);
+        return generateFileName(folder, scn, disp, view, offset, append, ext);
     }
 
     private void saveFile (String filePath, Scene scn)
@@ -63,13 +105,13 @@ public class postProc extends StarMacro {
 
     }
 
-    public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, Double offset, String append)
+    public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, Double offset, String append, String ext)
     {
         String output = folder + File.separator + scn.getPresentationName() + "_" + disp.getPresentationName() + "_" + view.getPresentationName();
         if (offset != null)
             output = output + "_" + String.valueOf(offset);
         if (append.length() > 0) output = output + "_" + append;
-        output = output + ".png";
+        output = output + ext;
         return output;
     }
 
