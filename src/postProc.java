@@ -26,7 +26,7 @@ public class postProc extends StarMacro {
         Collection<VisView> views3D = getViews("3D", sim);
         Collection<VisView> views2D = getViews("2D", sim);
 
-        //postProc3D(sim, displayers3D, views3D);
+        postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientation().set(0, 1.0);
         sim.crossSection.getOrientation().set(1, 0.0);
         sim.crossSection.getOrientation().set(2, 0.0);
@@ -62,7 +62,7 @@ public class postProc extends StarMacro {
                 if (!getSecondKey(view)[0].contains(orientation))
                     continue;
                 sim.scene2D.setCurrentView(view);
-                String filePath = generateFileName(displayerPath, sim.scene2D, disp, view, "", ".avi");
+                String filePath = generateFileName(displayerPath, sim.scene2D, disp, view, orientation, ".avi");
                 sim.activeSim.println("Saving screenplay to : " + filePath);
                 screenplayObj.getScreenplayDirector().record(4000, 2000, 20, 0.0, 10.0, resolvePath(filePath), 0, true, false, VideoEncodingQualityEnum.Q1);
             }
