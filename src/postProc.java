@@ -1,4 +1,5 @@
 import star.base.report.PlotableMonitor;
+import star.common.Boundary;
 import star.common.MonitorPlot;
 import star.common.StarMacro;
 import star.common.StarPlot;
@@ -6,8 +7,10 @@ import star.flow.AccumulatedForceTable;
 import star.vis.Displayer;
 import star.vis.DisplayerVisibilityOverride;
 import star.vis.Scene;
+import star.vis.VisView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class postProc extends StarMacro {
@@ -15,6 +18,94 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
+        exportPlots(sim);
+        Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
+        Collection<VisView> views3D = getViews("3D", sim);
+        Collection<VisView> views2D = getViews("2D", sim);
+
+        postProc3D(sim, displayers3D, views3D);
+
+    }
+
+    private void postProc3D(simComponents sim, Collection<Displayer> displayers3D, Collection<VisView> views3D) {
+        for (Displayer disp :  displayers3D)
+        {
+            hideDisps(sim.scene3D);
+            disp.setRepresentation(sim.finiteVol);
+            disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
+            String displayerPath = getFolderPath(sim.scene3D.getPresentationName(), sim);
+            for (VisView view : views3D)            //Unfiltered exports
+            {
+                sim.scene3D.setCurrentView(view);
+                disp.getInputParts().setObjects(sim.partBounds);
+                disp.getInputParts().addObjects(sim.wheelBounds);
+                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, ""), sim.scene3D);
+            }
+
+            for (VisView view : views3D)        //Filtered exports
+            {
+                sim.scene3D.setCurrentView(view);
+                disp.getInputParts().setObjects(getParts(sim, view));
+                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, "Filtered"), sim.scene3D);
+            }
+        }
+    }
+
+    public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, String append)
+    {
+        Double offset = null;
+        return generateFileName(folder, scn, disp, view, offset, append);
+    }
+
+    private void saveFile (String filePath, Scene scn)
+    {
+        scn.printAndWait((resolvePath(filePath)), 1, 4000, 2000, true, false);
+
+    }
+
+    public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, Double offset, String append)
+    {
+        String output = folder + File.separator + scn.getPresentationName() + "_" + disp.getPresentationName() + "_" + view.getPresentationName();
+        if (offset != null)
+            output = output + "_" + String.valueOf(offset);
+        if (append.length() > 0) output = output + "_" + append;
+        output = output + ".png";
+        return output;
+    }
+
+
+    public Collection<Boundary> getParts(simComponents sim, VisView view)
+    {
+        Collection<Boundary> desiredParts = new ArrayList<>();
+        String[] partArray = getSecondKey(view);
+        for (String part : partArray)
+        {
+            if (sim.partSpecBounds.containsKey(part))
+                desiredParts.addAll(sim.partSpecBounds.get(part));
+        }
+
+        return desiredParts;
+    }
+
+    private String[] getSecondKey(VisView view) {
+        String viewName = view.getPresentationName();
+        String partSegment = viewName.split("]", 0)[1];
+        return partSegment.replaceAll("\\[", "").strip().split("[ ]");
+    }
+
+    public Collection<VisView> getViews (String key, simComponents sim)
+    {
+        Collection<VisView> desiredViews = new ArrayList<>();
+        Collection<VisView> allViews = sim.activeSim.getViewManager().getViews();
+        for (VisView x : allViews)
+        {
+            String[] splitString = x.getPresentationName().split("]", 0);
+            String sceneType = splitString[0].strip().replaceAll("\\[", "");
+            if (sceneType.equals(key))
+                desiredViews.add(x);
+        }
+
+        return desiredViews;
     }
 
     public void exportPlots(simComponents sim) {

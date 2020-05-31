@@ -20,7 +20,6 @@ public class macroController extends StarMacro {
                 "meshRepair.java",
                 "meshRepair.java",
                 "meshRepair.java",
-                "exportMesh.java"
         };
 
         String [] processMacros = {
@@ -35,7 +34,7 @@ public class macroController extends StarMacro {
 
         String [] postprocessMacros = {
                 "exportReports.java",
-                "exportScenes.java"
+                "postProc.java"
         };
 
         List<String> runMacros = new ArrayList<>();

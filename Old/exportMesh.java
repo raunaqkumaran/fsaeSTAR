@@ -1,5 +1,7 @@
 import star.common.StarMacro;
 
+@Deprecated
+
 public class exportMesh extends StarMacro {
 
     public void execute()
