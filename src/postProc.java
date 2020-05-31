@@ -63,8 +63,12 @@ public class postProc extends StarMacro {
                     continue;
                 sim.scene2D.setCurrentView(view);
                 String filePath = generateFileName(displayerPath, sim.scene2D, disp, view, orientation, ".avi");
+                long startTime = System.currentTimeMillis();
                 sim.activeSim.println("Saving screenplay to : " + filePath);
                 screenplayObj.getScreenplayDirector().record(4000, 2000, 20, 0.0, 10.0, resolvePath(filePath), 0, true, false, VideoEncodingQualityEnum.Q1);
+                long endTime = System.currentTimeMillis();
+                long elapsedTime = (endTime - startTime) / 1000;
+                sim.activeSim.println("Time to generate screenplay: " + elapsedTime);
             }
         }
     }
