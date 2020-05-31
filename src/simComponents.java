@@ -37,7 +37,7 @@ public class simComponents {
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later. This needs to match the version parameter in STAR.
-    private double version = 1.7;
+    private double version = 2.0;
 
     // Simulation object
     public Simulation activeSim;
@@ -179,7 +179,7 @@ public class simComponents {
     private Collection<Boundary> domainRadBounds;
     //Scenes and displayers
     public PlaneSection crossSection;
-    public Scene planeSectionScene;
+    public Scene scene2D;
     public PartDisplayer meshDisplayer;
     public Scene scene3D;
     public String separator;
@@ -191,6 +191,7 @@ public class simComponents {
     public ScalarDisplayer pressure3D;
     public String dir;
     public String simName;
+    public Scene meshScene;
     //Views
     public VisView carRear;
     public VisView carStd;
@@ -619,25 +620,15 @@ public class simComponents {
 
     private void sceneSetup() {
         try {
-            String crossSectionName = "Plane Section";
-            crossSection = (PlaneSection) activeSim.getPartManager().getObject(crossSectionName);
-            String planeSectionName = "Plane section scenes";
-            planeSectionScene = activeSim.getSceneManager().getScene(planeSectionName);
-            planeSectionScene.setMeshOverrideMode(SceneMeshOverride.USE_DISPLAYER_PROPERTY);
-            String scene3DName = "3D scenes";
-            scene3D = activeSim.getSceneManager().getScene(scene3DName);
+            crossSection = (PlaneSection) activeSim.getPartManager().getObject("Plane Section");
+            scene2D = activeSim.getSceneManager().getScene("2D scenes");
+            scene2D.setMeshOverrideMode(SceneMeshOverride.USE_DISPLAYER_PROPERTY);
+            scene3D = activeSim.getSceneManager().getScene("3D scenes");
+            meshScene = activeSim.getSceneManager().getScene("Mesh");
             separator = File.separator;
             dir = activeSim.getSessionDir();
             simName = activeSim.getPresentationName();
             finiteVol = (FvRepresentation) activeSim.getRepresentationManager().getObject("Volume Mesh");
-            String wallYSceneName = "Y+";
-            wallY = (ScalarDisplayer) scene3D.getDisplayerManager().getDisplayer(wallYSceneName);
-            String velVectorName = "Velocity vector";
-            velVector2D = (VectorDisplayer) planeSectionScene.getDisplayerManager().getDisplayer(velVectorName);
-            pressure2D = (ScalarDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Pressure");
-            pressure3D = (ScalarDisplayer) scene3D.getDisplayerManager().getDisplayer("Pressure");
-            totalPressure2D = (ScalarDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Total Pressure");
-            meshDisplayer = (PartDisplayer) planeSectionScene.getDisplayerManager().getDisplayer("Mesh");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Scene or displayer lookup failed, or volume mesh not found");
         }
