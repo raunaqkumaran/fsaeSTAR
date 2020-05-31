@@ -253,7 +253,7 @@ public class exportScenes extends StarMacro {
                     saveFile(sim.utProfile, sim.planeSectionScene, sim,
                             ScalarPath, i + " Total Pressure");
                 sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
-                i += (1 * multiplier);
+                i += 1;
             }
 
             i = sim.aftForeLimits[0];
@@ -292,7 +292,7 @@ public class exportScenes extends StarMacro {
                             i - sim.aftForeLimits[0] + " Total Pressure");
                 sim.totalPressure2D.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
 
-                i += (1 * multiplier);
+                i += 1.4;
             }
 
 
