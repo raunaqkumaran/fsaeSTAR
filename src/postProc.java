@@ -73,10 +73,17 @@ public class postProc extends StarMacro {
                 for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
-                    saveFile(filename, sim.scene2D);
+                    if (!fileExists(filename)) saveFile(filename, sim.scene2D);
                 }
             }
         }
+    }
+
+    private boolean fileExists(String filepath)
+    {
+        String resolved = resolvePath(filepath);
+        File f = new File(resolved);
+        return f.exists();
     }
 
     private void postProc3D(simComponents sim, Collection<Displayer> displayers3D, Collection<VisView> views3D) {
@@ -91,14 +98,16 @@ public class postProc extends StarMacro {
                 sim.scene3D.setCurrentView(view);
                 disp.getInputParts().setObjects(sim.partBounds);
                 disp.getInputParts().addObjects(sim.wheelBounds);
-                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, "", ".png"), sim.scene3D);
+                String filepath = generateFileName(displayerPath, sim.scene3D, disp, view, "", ".png");
+                if (!fileExists(filepath)) saveFile(filepath, sim.scene3D);
             }
 
             for (VisView view : views3D)        //Filtered exports
             {
                 sim.scene3D.setCurrentView(view);
                 disp.getInputParts().setObjects(getParts(sim, view));
-                saveFile(generateFileName(displayerPath, sim.scene3D, disp, view, "Filtered",".png"), sim.scene3D);
+                String filepath = generateFileName(displayerPath, sim.scene3D, disp, view, "Filtered",".png");
+                if (!fileExists(filepath)) saveFile(filepath, sim.scene3D);
             }
         }
     }
