@@ -1,3 +1,4 @@
+import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
 import star.common.Boundary;
 import star.common.MonitorPlot;
@@ -27,23 +28,20 @@ public class postProc extends StarMacro {
         Collection<VisView> views2D = getViews("2D", sim);
 
         postProc3D(sim, displayers3D, views3D);
-        sim.crossSection.getOrientation().set(0, 1.0);
-        sim.crossSection.getOrientation().set(1, 0.0);
-        sim.crossSection.getOrientation().set(2, 0.0);
+        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
+            sim.inches, new DoubleVector(sim.profileDirection));
         String orientation = "Profile";
         Screenplay screenplayObj = sim.profile;
         postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
 
-        sim.crossSection.getOrientation().set(0, 0.0);
-        sim.crossSection.getOrientation().set(1, -1.0);
-        sim.crossSection.getOrientation().set(2, 0.0);
+        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
+                sim.inches, new DoubleVector(sim.foreAftDirection));
         orientation = "AftFore";
         screenplayObj = sim.aftFore;
         postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
 
-        sim.crossSection.getOrientation().set(0, 0.0);
-        sim.crossSection.getOrientation().set(1, 0.0);
-        sim.crossSection.getOrientation().set(2, 1.0);
+        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
+                sim.inches, new DoubleVector(sim.topBottomDirection));
         orientation = "TopBottom";
         screenplayObj = sim.topBottom;
         postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
@@ -65,7 +63,7 @@ public class postProc extends StarMacro {
                 String filePath = generateFileName(displayerPath, sim.scene2D, disp, view, orientation, ".avi");
                 long startTime = System.currentTimeMillis();
                 sim.activeSim.println("Saving screenplay to : " + filePath);
-                screenplayObj.getScreenplayDirector().record(4000, 2000, 20, 0.0, 10.0, resolvePath(filePath), 0, true, false, VideoEncodingQualityEnum.Q1);
+                screenplayObj.getScreenplayDirector().record(4000, 2000, 10, 0.0, 10.0, resolvePath(filePath), 0, true, false, VideoEncodingQualityEnum.Q1);
                 long endTime = System.currentTimeMillis();
                 long elapsedTime = (endTime - startTime) / 1000;
                 sim.activeSim.println("Time to generate screenplay: " + elapsedTime);
