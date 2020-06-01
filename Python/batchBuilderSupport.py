@@ -101,6 +101,8 @@ def clumped(file_list, config_file, command):
 def generatecommand(config_list):
     command = "srun hostname | sort -u > nodefile.$SLURM_JOBID"
     command += "\n"
+    command += "ssh -Y $HOSTNAME"
+    command += "\n"
     command = command + '"' + "$STARLOC" + '"'
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
@@ -116,6 +118,8 @@ def generatecommand(config_list):
 
     command += " -hardwarebatch -machinefile nodefile.$SLURM_JOB_ID"
     command += " -batch-report"
+    if config_list['CLUSTER'] == "gpu":
+        command += " -rgraphics egl"
     return command
 
 
