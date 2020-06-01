@@ -373,8 +373,8 @@ public class simComponents {
         //Define domain sizes
         domainCatch();
         fullCarFlag = domainSizing();
-        if (fullCarFlag)
-            profileLimits = new double[]{-35, 35};
+        if (!fullCarFlag)
+            profileLimits[1] = 0;
 
         //Set physics objects
         physicsSet();
