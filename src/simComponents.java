@@ -80,7 +80,7 @@ public class simComponents {
 
     //These define the vector direction for cross section scenes.
     public double[] foreAftDirection = {1, 0, 0};
-    public double[] profileDirection = {0, -1, 0};
+    public double[] profileDirection = {0, 1, 0};
     public double[] topBottomDirection = {0, 0, 1};
 
 

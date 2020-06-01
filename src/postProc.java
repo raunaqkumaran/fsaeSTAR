@@ -66,9 +66,11 @@ public class postProc extends StarMacro {
             disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
             String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
             makeDir(displayerPath);
-            for (VisView view : views2D)
+            for (double i = limits[0]; i <= limits[1]; i += increment)
             {
-                for (double i = limits[0]; i <= limits[1]; i += increment)
+                sim.crossSection.getSingleValue().setUnits(sim.inches);
+                sim.crossSection.getSingleValue().setValue(i);
+                for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
                     saveFile(filename, sim.scene2D);
