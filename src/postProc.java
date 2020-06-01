@@ -68,12 +68,12 @@ public class postProc extends StarMacro {
             makeDir(displayerPath);
             for (double i = limits[0]; i <= limits[1]; i += increment)
             {
-                sim.crossSection.getSingleValue().setUnits(sim.inches);
-                sim.crossSection.getSingleValue().setValue(i);
                 for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
                     if (!fileExists(filename)) {
+                        sim.crossSection.getSingleValue().setUnits(sim.inches);
+                        sim.crossSection.getSingleValue().setValue(i);
                         sim.scene2D.setCurrentView(view);
                         saveFile(filename, sim.scene2D);
                     }
@@ -98,10 +98,10 @@ public class postProc extends StarMacro {
             String displayerPath = getFolderPath(sim.scene3D.getPresentationName(), sim);
             for (VisView view : views3D)            //Unfiltered exports
             {
-                disp.getInputParts().setObjects(sim.partBounds);
-                disp.getInputParts().addObjects(sim.wheelBounds);
                 String filepath = generateFileName(displayerPath, sim.scene3D, disp, view, "", ".png");
                 if (!fileExists(filepath)) {
+                    disp.getInputParts().setObjects(sim.partBounds);
+                    disp.getInputParts().addObjects(sim.wheelBounds);
                     sim.scene3D.setCurrentView(view);
                     saveFile(filepath, sim.scene3D);
                 }
@@ -109,9 +109,9 @@ public class postProc extends StarMacro {
 
             for (VisView view : views3D)        //Filtered exports
             {
-                disp.getInputParts().setObjects(getParts(sim, view));
                 String filepath = generateFileName(displayerPath, sim.scene3D, disp, view, "Filtered",".png");
                 if (!fileExists(filepath)) {
+                    disp.getInputParts().setObjects(getParts(sim, view));
                     sim.scene3D.setCurrentView(view);
                     saveFile(filepath, sim.scene3D);
                 }
