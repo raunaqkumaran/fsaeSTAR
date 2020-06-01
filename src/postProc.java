@@ -32,12 +32,11 @@ public class postProc extends StarMacro {
         for (VisView view : views2D)
         {
             String key = getSecondKey(view)[0];
-            if (key.equals("Profile"))
-                profileViews.add(view);
-            else if (key.equals("AftFore"))
-                aftForeViews.add(view);
-            else if (key.equals("TopBottom"))
-                topBottomViews.add(view);
+            switch (key) {
+                case "Profile" -> profileViews.add(view);
+                case "AftFore" -> aftForeViews.add(view);
+                case "TopBottom" -> topBottomViews.add(view);
+            }
         }
 
         postProc3D(sim, displayers3D, views3D);
