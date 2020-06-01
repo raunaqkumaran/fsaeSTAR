@@ -67,9 +67,10 @@ public class simComponents {
     private Collection<Boundary> liftGeneratorBounds;
 
     //Double arrays to hold ranges for scenes and plane section sweeps. Limits are in inches, and control how far the cross sections will go. Pressures are Cps.
-    public double[] profileLimits = {0, 29};
+    public double[] profileLimits = {-29, 29};
     public double[] aftForeLimits = {-70, 55};
-    public double[] topBottomLimits = {0.35, 60};
+    public double[] utLimits = {0.35, 10};
+    public double[] topBottomLimits = {10, 60};
     public double[] pressRange = {-2.5, 1.5};
     public double[] totalPressRange = {-2.5, 1.5};
     public double[] velRange = {0, 2};

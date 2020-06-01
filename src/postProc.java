@@ -26,29 +26,40 @@ public class postProc extends StarMacro {
         Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
         Collection<VisView> views3D = getViews("3D", sim);
         Collection<VisView> views2D = getViews("2D", sim);
+        Collection<VisView> profileViews = new ArrayList<>();
+        Collection<VisView> aftForeViews = new ArrayList<>();
+        Collection<VisView> topBottomViews = new ArrayList<>();
+        for (VisView view : views2D)
+        {
+            String key = getSecondKey(view)[0];
+            if (key.equals("Profile"))
+                profileViews.add(view);
+            else if (key.equals("AftFore"))
+                aftForeViews.add(view);
+            else if (key.equals("TopBottom"))
+                topBottomViews.add(view);
+        }
 
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
         String orientation = "Profile";
-        Screenplay screenplayObj = sim.profile;
-        postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
         orientation = "AftFore";
-        screenplayObj = sim.aftFore;
-        postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
         orientation = "TopBottom";
-        screenplayObj = sim.topBottom;
-        postProc2D(sim, displayers2D, views2D, orientation, screenplayObj);
+        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25);
+        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4);
 
     }
 
-    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, String orientation, Screenplay screenplayObj) {
+    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment) {
         for (Displayer disp : displayers2D)
         {
             hideDisps(sim.scene2D);
@@ -57,20 +68,10 @@ public class postProc extends StarMacro {
             makeDir(displayerPath);
             for (VisView view : views2D)
             {
-                if (!getSecondKey(view)[0].contains(orientation))
-                    continue;
-                sim.scene2D.setCurrentView(view);
-                String filePath = generateFileName(displayerPath, sim.scene2D, disp, view, orientation, ".avi");
-                long startTime = System.currentTimeMillis();
-                File f = new File(resolvePath(filePath));
-                if (f.exists())
-                    sim.activeSim.println(filePath + " already exists. skipping screenplay");
-                else {
-                    sim.activeSim.println("Saving screenplay to : " + filePath);
-                    screenplayObj.getScreenplayDirector().record(4000, 2000, 10, 0.0, 10.0, resolvePath(filePath), 0, true, false, VideoEncodingQualityEnum.Q1);
-                    long endTime = System.currentTimeMillis();
-                    long elapsedTime = (endTime - startTime) / 1000;
-                    sim.activeSim.println("Time to generate screenplay: " + elapsedTime);
+                for (double i = limits[0]; i <= limits[1]; i += increment)
+                {
+                    String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
+                    saveFile(filename, sim.scene2D);
                 }
             }
         }
