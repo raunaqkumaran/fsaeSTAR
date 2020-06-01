@@ -33,7 +33,7 @@ public class exportReports extends StarMacro {
         activeSim.repTable.extract();
         activeSim.repTable.export(path + activeSim.separator + "Reports.csv");
 
-        exportScenes esObj = new exportScenes();
+        postProc esObj = new postProc();
         esObj.exportPlots(activeSim);
     }
 
