@@ -71,12 +71,6 @@ public class simComponents {
     public double[] aftForeLimits = {-70, 55};
     public double[] utLimits = {0.35, 10};
     public double[] topBottomLimits = {10, 60};
-    public double[] pressRange = {-2.5, 1.5};
-    public double[] totalPressRange = {-2.5, 1.5};
-    public double[] velRange = {0, 2};
-    public double[] wallYRange = {3, 30};
-    public double[] wallYRangeNearWall = {0.0, 3};
-    public double[] utTopBottom = {0.35, 10};
 
     //These define the vector direction for cross section scenes.
     public double[] foreAftDirection = {1, 0, 0};
@@ -183,7 +177,6 @@ public class simComponents {
     //Scenes and displayers
     public PlaneSection crossSection;
     public Scene scene2D;
-    public PartDisplayer meshDisplayer;
     public Scene scene3D;
     public String separator;
     public FvRepresentation finiteVol;
@@ -198,24 +191,6 @@ public class simComponents {
     public Screenplay aftFore;
     public Screenplay profile;
     public Screenplay topBottom;
-    //Views
-    public VisView carRear;
-    public VisView carStd;
-    public VisView utRear;
-    public VisView utBottom;
-    public VisView utProfile;
-    public VisView fwBottom;
-    private VisView fwRear;                                 //Some of these are collections in case we ever go to multiple views in the future.
-    private Collection<VisView> fwViews;
-    private Collection<VisView> rwViews;
-    private Collection<VisView> carViews;
-    private Collection<VisView> utViews;
-    public VisView fwTop;
-    public VisView fwProfile;
-    public VisView rwTop;
-    public VisView rwProfile;
-    public VisView rwBottom;
-    public VisView rwRear;
 
     //Mesh controls
     public AutoMeshOperation autoMesh;
@@ -640,36 +615,6 @@ public class simComponents {
             topBottom = activeSim.get(ScreenplayManager.class).getObject("Screenplay 3");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Scene or displayer lookup failed, or volume mesh not found");
-        }
-        try {
-            fwViews = new ArrayList<>();
-            rwViews = new ArrayList<>();
-            carViews = new ArrayList<>();
-            utViews = new ArrayList<>();
-
-            carStd = activeSim.getViewManager().getObject("Car standard");
-            carRear = activeSim.getViewManager().getObject("Car Rear");
-            carViews.addAll(Arrays.asList(carRear, carStd));
-
-            utBottom = activeSim.getViewManager().getObject("UT Bottom");
-            utRear = activeSim.getViewManager().getObject("UT Rear");
-            utProfile = activeSim.getViewManager().getObject("UT Profile");
-            utViews.addAll(Arrays.asList(utBottom, utRear, utProfile));
-
-            fwBottom = activeSim.getViewManager().getObject("FW Bottom");
-            fwProfile = activeSim.getViewManager().getObject("FW Profile");
-            fwRear = activeSim.getViewManager().getObject("FW Rear");
-            fwTop = activeSim.getViewManager().getObject("FW Top");
-            fwViews.addAll(Arrays.asList(fwBottom, fwProfile, fwRear, fwTop));
-
-            rwProfile = activeSim.getViewManager().getObject("RW Profile");
-            rwBottom = activeSim.getViewManager().getObject("RW Bottom");
-            rwTop = activeSim.getViewManager().getObject("RW Top");
-            rwRear = activeSim.getViewManager().getObject("RW Rear");
-            rwViews.addAll(Arrays.asList(rwProfile, rwBottom, rwTop, rwRear));
-
-        } catch (Exception e) {
-            activeSim.println("simComponents.java - View lookup failed");
         }
     }
 
