@@ -33,6 +33,7 @@ public class macroController extends StarMacro {
 
 
         String [] postprocessMacros = {
+                "domainSet.java",
                 "exportReports.java",
                 "postProc.java"
         };

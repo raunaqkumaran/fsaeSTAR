@@ -665,7 +665,7 @@ public class simComponents {
     public static boolean boolEnv(String env) {
 
         // Read the sys environment to figure out if you want a full car or a half car sim
-        if (env.equals("domainSet") && System.getenv(env) != null && System.getenv(env).toLowerCase().equals("full"))
+        if (env.equals("domainSet") && System.getenv(env) != null && System.getenv(env).toLowerCase().equals("half"))
             return true;
         return System.getenv(env) != null && System.getenv(env).toLowerCase().equals("true");
 
