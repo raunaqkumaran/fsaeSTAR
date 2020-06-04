@@ -189,7 +189,7 @@ public class postProc extends StarMacro {
             x.extract();
         for (StarPlot plot : sim.plots)
         {
-            if (simComponents.boolEnv("DES") && !plot.getPresentationName().contains("Residuals"))
+            if (sim.DESFlag && !plot.getPresentationName().contains("Residuals"))
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Physical Time"));
             else if (plot instanceof MonitorPlot)
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Iteration"));
