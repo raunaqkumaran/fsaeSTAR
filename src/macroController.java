@@ -12,6 +12,7 @@ public class macroController extends StarMacro {
         // Macros run in the order they're defined in this string[]
 
         String [] meshMacros = {
+                "domainSet.java",
                 "rideHeight.java",
                 "surfaceWrap.java",
                 "subtract.java",
@@ -33,7 +34,6 @@ public class macroController extends StarMacro {
 
 
         String [] postprocessMacros = {
-                "domainSet.java",
                 "exportReports.java",
                 "postProc.java"
         };
