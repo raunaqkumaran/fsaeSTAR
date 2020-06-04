@@ -186,7 +186,7 @@ public class regions extends StarMacro {
             activeSim.dualRadiatorRegion.setPhysicsContinuum(activeSim.saPhysics);
 
 
-        if (simComponents.boolEnv("DES")) {
+        if (activeSim.DESFlag) {
             activeSim.domainRegion.setPhysicsContinuum(activeSim.desPhysics);
             activeSim.radiatorRegion.setPhysicsContinuum(activeSim.desPhysics);
             if (activeSim.dualRadFlag)
