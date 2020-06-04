@@ -34,7 +34,7 @@ public class genReports extends StarMacro {
 
                 AllSamplesFilter all_samples = (AllSamplesFilter) ((StatisticsReport) rep).getSampleFilterManager().getObject("All samples");
                 LastNSamplesFilter lastN = (LastNSamplesFilter) ((StatisticsReport) rep).getSampleFilterManager().getObject("Last N Samples");
-                if (simComponents.boolEnv("DES"))
+                if (activeSim.DESFlag)
                 {
                     ((StatisticsReport) rep).setSampleFilterOption(SampleFilterOption.AllSamples);
                 }
@@ -129,7 +129,7 @@ public class genReports extends StarMacro {
 
             try {
 
-                if (simComponents.boolEnv("DES"))
+                if (activeSim.DESFlag)
                     x.getStarUpdate().getUpdateModeOption().setSelected(StarUpdateModeOption.Type.TIMESTEP);
                 else
                     x.getStarUpdate().getUpdateModeOption().setSelected(StarUpdateModeOption.Type.ITERATION);

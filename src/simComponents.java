@@ -111,6 +111,7 @@ public class simComponents {
     //Flags to track sim status
     public boolean fullCarFlag;             //True if full car domain detected
     public boolean wtFlag;                  //True if user wants WT (no ground velocity, no tyre rotation)
+    public boolean DESFlag;
 
     //Stopping criteria
     public MonitorIterationStoppingCriterion maxVel;
@@ -485,6 +486,7 @@ public class simComponents {
 
         // Flags
         freestreamVal = valEnv("freestream");
+        DESFlag = boolEnv("DES");
         wtFlag = boolEnv("windTunnel");
         setFreestreamParameterValue();
 
