@@ -63,6 +63,7 @@ public class postProc extends StarMacro {
         for (Displayer disp : displayers2D)
         {
             hideDisps(sim.scene2D);
+            disp.setRepresentation(sim.finiteVol);
             disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
             String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
             makeDir(displayerPath);
