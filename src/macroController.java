@@ -55,11 +55,12 @@ public class macroController extends StarMacro {
         if (postprocess)
             runMacros.addAll(Arrays.asList(postprocessMacros));
 
-        getActiveRootObject().println(runMacros);
+        getActiveSimulation().println("Macros to run: \n" + runMacros);
 
         // Run the macros
         for (String macro : runMacros)
         {
+            getActiveSimulation().println("-----" + macro + "-----");
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath(macro))).play();
         }
 
