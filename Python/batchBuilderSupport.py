@@ -62,6 +62,12 @@ def get_env_vals(file):
         val = line.split("=")[0].strip()
         var_dict[val] = get_config_var(val, file)
 
+    if "CLUSTER" in var_dict.keys():
+        if "WALLTIME" not in var_dict.keys():
+            if var_dict["CLUSTER"] == "gpu" or var_dict["CLUSTER"] == "scholar":
+                var_dict["WALLTIME"] = 240
+            elif var_dict["CLUSTER"] == "long":
+                var_dict["WALLTIME"] = 4310
     return var_dict
 
 
