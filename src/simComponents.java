@@ -22,7 +22,7 @@ import java.util.*;
 
 public class simComponents {
 
-    //Some string constants. This is something I started doing later on, and haven't done for every string. Probably a good idea to do so though.
+    //Some string constants. This is something I started doing later on, and haven't done for every string. Probably a good idea to do so for strings that are used in multiple locations though.
 
     public static final String YAW_INTERFACE_NAME = "Yaw interface";
     public static final String USER_FREESTREAM = "User Freestream";
@@ -180,11 +180,6 @@ public class simComponents {
     public Scene scene3D;
     public String separator;
     public FvRepresentation finiteVol;
-    public ScalarDisplayer wallY;
-    public VectorDisplayer velVector2D;
-    public ScalarDisplayer pressure2D;
-    public ScalarDisplayer totalPressure2D;
-    public ScalarDisplayer pressure3D;
     public String dir;
     public String simName;
     public Scene meshScene;
