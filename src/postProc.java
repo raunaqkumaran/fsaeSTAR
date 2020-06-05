@@ -24,6 +24,7 @@ public class postProc extends StarMacro {
         exportPlots(sim);
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
         Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
+        Collection<Displayer> meshDisplayers = sim.meshScene.getDisplayerManager().getNonDummyObjects();
         Collection<VisView> views3D = getViews("3D", sim);
         Collection<VisView> views2D = getViews("2D", sim);
         Collection<VisView> profileViews = new ArrayList<>();
@@ -43,17 +44,15 @@ public class postProc extends StarMacro {
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
-        String orientation = "Profile";
-        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1.25);
+        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
-        orientation = "AftFore";
-        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 2);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
-        orientation = "TopBottom";
         postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25);
         postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4);
 
