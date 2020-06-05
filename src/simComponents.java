@@ -39,7 +39,7 @@ public class simComponents {
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later. This needs to match the version parameter in STAR.
-    private double version = 2.0;
+    private double version = 2.1;
 
     // Simulation object
     public Simulation activeSim;
