@@ -63,6 +63,7 @@ public class postProc extends StarMacro {
 
         String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
         makeDir(displayerPath);
+        sim.crossSection.getSingleValue().setUnits(sim.inches);
 
         for (double i = limits[0]; i <= limits[1]; i += increment)
         {
@@ -75,7 +76,6 @@ public class postProc extends StarMacro {
                     if (!fileExists(filename)) {
                         disp.setRepresentation(sim.finiteVol);
                         disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
-                        sim.crossSection.getSingleValue().setUnits(sim.inches);
                         sim.crossSection.getSingleValue().setValue(i);
                         sim.scene2D.setCurrentView(view);
                         saveFile(filename, sim.scene2D);
