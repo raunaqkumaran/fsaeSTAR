@@ -34,6 +34,7 @@ public class macroController extends StarMacro {
 
 
         String [] postprocessMacros = {
+                "exportReports.java",
                 "postProc.java"
         };
 

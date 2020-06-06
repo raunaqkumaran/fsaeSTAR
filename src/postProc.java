@@ -19,8 +19,6 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
-        exportReports eRobj = new exportReports();
-        eRobj.execute();
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
         exportPlots(sim);
