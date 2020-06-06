@@ -44,12 +44,12 @@ public class postProc extends StarMacro {
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
         String orientation = "Profile";
-        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1.25);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
         orientation = "AftFore";
-        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 2);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
