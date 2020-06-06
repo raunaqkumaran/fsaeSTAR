@@ -62,8 +62,6 @@ public class postProc extends StarMacro {
     private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment) {
         for (double i = limits[0]; i <= limits[1]; i += increment)
         {
-            sim.crossSection.getSingleValue().setUnits(sim.inches);
-            sim.crossSection.getSingleValue().setValue(i);
 
             for (Displayer disp : displayers2D)
             {
@@ -77,6 +75,8 @@ public class postProc extends StarMacro {
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
                     if (!fileExists(filename)) {
+                        sim.crossSection.getSingleValue().setUnits(sim.inches);
+                        sim.crossSection.getSingleValue().setValue(i);
                         sim.scene2D.setCurrentView(view);
                         saveFile(filename, sim.scene2D);
                     }
