@@ -4,11 +4,11 @@ import batchBuilderSupport as bbs
 import os
 import sys
 
-path = r"D:\Archive\Formula\2020"
+path = r"D:\PostProc"
 sizeLimit = 400e6
 fileList = bbs.get_file_list(path, sizeLimit)
 starPath = r'"C:\Program Files\Siemens\15.02.009-R8\STAR-CCM+15.02.009-R8\star\bin\starccm+.exe"'
-macroPath = r"C:\Users\rauna\Documents\GitHub\fsaeSTAR\src\universalMeshClear.java"
+macroPath = r"C:\Users\rauna\Documents\GitHub\fsaeSTAR\src\postProc.java"
 classPath = r"C:\Users\rauna\Documents\GitHub\fsaeSTAR\src"
 outputFile = "deleteEverything.bat"
 output = open(outputFile, "w")
