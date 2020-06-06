@@ -60,9 +60,9 @@ public class postProc extends StarMacro {
     }
 
     private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment) {
+        hideDisps(sim.scene2D);
         for (double i = limits[0]; i <= limits[1]; i += increment)
         {
-            hideDisps(sim.scene2D);
             for (Displayer disp : displayers2D)
             {
                 String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
@@ -84,8 +84,8 @@ public class postProc extends StarMacro {
                         sim.activeSim.println(filename + " already exists");
                     }
                 }
+                hideDisps(sim.scene2D);
             }
-            hideDisps(sim.scene2D);
         }
     }
 
