@@ -23,6 +23,8 @@ public class postProc extends StarMacro {
         obj.mergeBoundaries(sim);
         sim = new simComponents(getActiveSimulation());
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
+        sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
+                sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
         exportPlots(sim);
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
