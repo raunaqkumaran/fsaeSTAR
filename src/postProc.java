@@ -78,6 +78,10 @@ public class postProc extends StarMacro {
                         sim.scene2D.setCurrentView(view);
                         saveFile(filename, sim.scene2D);
                     }
+                    else
+                    {
+                        sim.activeSim.println(filename + " already exists");
+                    }
                 }
             }
         }
