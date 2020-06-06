@@ -121,8 +121,6 @@ public class genReports extends StarMacro {
         }
         activeSim.maxVelocity.getParts().setObjects(activeSim.domainRegion);
         activeSim.maxVelocity.setRepresentation(activeSim.finiteVol);
-        activeSim.point.getPointCoordinate().setCoordinate(activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"), new DoubleVector(new double[] {1, 1, 1}));
-        activeSim.point.getInputParts().setObjects(activeSim.groundPlane);
 
         for (Monitor x : activeSim.activeSim.getMonitorManager().getMonitors())
         {

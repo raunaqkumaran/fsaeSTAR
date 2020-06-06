@@ -1,3 +1,4 @@
+import star.base.neo.DoubleVector;
 import star.base.report.Report;
 import star.common.StarMacro;
 
@@ -28,6 +29,9 @@ public class exportReports extends StarMacro {
         {
             rep.printReport(resolvePath(path + activeSim.separator + rep.getPresentationName().replaceAll("[\\/]", "") + ".txt"), false);
         }
+
+        activeSim.point.getPointCoordinate().setCoordinate(activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"),activeSim.activeSim.getUnitsManager().getObject("in"), new DoubleVector(new double[] {1, 1, 1}));
+        activeSim.point.getInputParts().setObjects(activeSim.groundPlane);
 
         activeSim.repTable.setRepresentation(activeSim.finiteVol);
         activeSim.repTable.extract();
