@@ -14,6 +14,7 @@ public class macroController extends StarMacro {
         String [] meshMacros = {
                 "domainSet.java",
                 "rideHeight.java",
+                "steering.java",
                 "surfaceWrap.java",
                 "subtract.java",
                 "regions.java",

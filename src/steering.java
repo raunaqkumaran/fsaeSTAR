@@ -14,6 +14,10 @@ public class steering extends StarMacro {
     public void execute() {
         simComponents sim = new simComponents(getActiveSimulation());
         double steerAngle = Math.toRadians(sim.valEnv(simComponents.STEERING));
+        if (steerAngle == 0)
+            return;
+        else
+            sim.activeSim.println("Attempting steering change to : " + steerAngle + " radians");
         GeometryPart frontRight = null, frontLeft = null;
         for (GeometryPart x : sim.wheels)
         {
