@@ -19,8 +19,6 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
-        regions obj = new regions();
-        obj.mergeBoundaries(sim);
         sim = new simComponents(getActiveSimulation());
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
@@ -47,6 +45,8 @@ public class postProc extends StarMacro {
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
         String orientation = "Profile";
+        regions obj = new regions();
+        obj.mergeBoundaries(sim);
         postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1.25);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
