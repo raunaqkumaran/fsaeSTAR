@@ -206,15 +206,12 @@ public class regions extends StarMacro {
         {
             mergeBounds.add(x);
 
-            if (activeSim.radBounds.contains(x))
-                mergeBounds.remove(x);
-
             for (Collection<Boundary> coll : activeSim.partSpecBounds.values())
             {
                 if (coll.contains(x))
                     mergeBounds.remove(x);
             }
-            if (x.getPresentationName().toLowerCase().contains("interface"))
+            if (x.getPresentationName().toLowerCase().contains("interface") || x.getPresentationName().toLowerCase().contains("radiator"))
                 mergeBounds.remove(x);
         }
         activeSim.activeSim.println("merging: " + mergeBounds);
