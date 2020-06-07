@@ -1,11 +1,11 @@
 import star.common.StarMacro;
 
-public class kill extends StarMacro {
+public class save extends StarMacro {
 
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
-        sim.killSim();
+        sim.saveSim();
     }
 
 }
