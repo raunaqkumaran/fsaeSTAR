@@ -64,7 +64,6 @@ public class simComponents {
     private String[] wheelNames = {"Front Left", "Front Right", "Rear Left", "Rear Right"};                             //Names for wheels. Must be exact.
     private String radiatorName = "CFD_RADIATOR";
     private String dualRadiatorName = "CFD_DUAL_RADIATOR";
-    private Collection<Boundary> liftGeneratorBounds;
 
     //Double arrays to hold ranges for scenes and plane section sweeps. Limits are in inches, and control how far the cross sections will go. Pressures are Cps.
     public double[] profileLimits = {-29, 29};
@@ -303,7 +302,6 @@ public class simComponents {
         freestreamBounds = new ArrayList<>();
         wheelBounds = new ArrayList<>();
         partBounds = new ArrayList<>();
-        liftGeneratorBounds = new ArrayList<>();
         partSpecBounds = new HashMap<>();
         domainRadBounds = new ArrayList<>();
         boundarySet();
@@ -399,14 +397,6 @@ public class simComponents {
             // if it isn't a domain or a wheel, it's a "part", and gets added to part bounds.
             if (partFlag == 0) {
                 partBounds.add(bound);
-
-                //Separate category for lift generators
-                for (String prefix : liftGeneratorPrefixes) {
-                    if (boundName.contains(prefix)) {
-                        liftGeneratorBounds.add(bound);
-                        partFlag = 1;
-                    }
-                }
             }
             // here we filter for the radiator
             if (partFlag == 0) {
