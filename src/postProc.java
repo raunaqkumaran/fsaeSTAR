@@ -19,6 +19,9 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
+        regions obj = new regions();
+        obj.mergeBoundaries(sim);
+        sim = new simComponents(getActiveSimulation());
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
         sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
                 sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
@@ -146,7 +149,7 @@ public class postProc extends StarMacro {
     {
         String output = folder + File.separator + scn.getPresentationName() + "_" + disp.getPresentationName() + "_" + view.getPresentationName();
         if (offset != null)
-            output = output + "_" + String.valueOf(offset);
+            output = output + "_" + offset;
         if (append.length() > 0) output = output + "_" + append;
         output = output + ext;
         return output;
