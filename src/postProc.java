@@ -45,11 +45,14 @@ public class postProc extends StarMacro {
                 topBottomViews.add(view);
         }
 
+        sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
+        sim.activeSim.println("---Merging boundaries---");
         regions obj = new regions();
         obj.mergeBoundaries(sim);
+        sim.activeSim.println("---Processing 2D---");
         postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1);
         postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
 
