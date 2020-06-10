@@ -1,5 +1,6 @@
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
+import star.cadmodeler.VectorQuantityDesignParameter;
 import star.common.Boundary;
 import star.common.MonitorPlot;
 import star.common.StarMacro;
@@ -52,21 +53,21 @@ public class postProc extends StarMacro {
         regions obj = new regions();
         obj.mergeBoundaries(sim);
         sim.activeSim.println("---Processing 2D---");
-        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1);
-        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
+        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1, 0.1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
-        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
-        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25);
-        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4);
+        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1);
+        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1);
 
     }
 
-    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment) {
+    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment, double glyph) {
         hideDisps(sim.scene2D);
 
         String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
@@ -77,7 +78,11 @@ public class postProc extends StarMacro {
         {
             for (Displayer disp : displayers2D)
             {
-                
+                if (disp instanceof VectorDisplayer)
+                {
+                    VectorDisplayer dispV = (VectorDisplayer) disp;
+                    dispV.getGlyphSettings().setRelativeToModelLength(glyph);
+                }
                 for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
