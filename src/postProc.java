@@ -24,7 +24,6 @@ public class postProc extends StarMacro {
         sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
                 sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
-        exportPlots(sim);
         setCrossSectionParts(sim);
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
         Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
