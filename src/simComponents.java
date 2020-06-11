@@ -35,11 +35,17 @@ public class simComponents {
     public static final String DOMAIN_REGION = "Subtract";
     public static final String RADIATOR_REGION = "Radiator";
     public static final String DUAL_RADIATOR_REGION = "Radiator 2";
+    public static final String FRONT_LEFT = "Front Left";
+    public static final String FRONT_RIGHT = "Front Right";
+    public static final String REAR_LEFT = "Rear Left";
+    public static final String REAR_RIGHT = "Rear Right";
+    public static final String USER_STEERING = "User Steering";
+    public static final String STEERING = "steering";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later. This needs to match the version parameter in STAR.
-    private double version = 2.1;
+    private double version = 2.2;
 
     // Simulation object
     public Simulation activeSim;
@@ -61,10 +67,9 @@ public class simComponents {
     private Collection<GeometryPart> radiator;
     private Collection<GeometryPart> dualRadiator;
     private String[] nonAeroPrefixes = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
-    private String[] wheelNames = {"Front Left", "Front Right", "Rear Left", "Rear Right"};                             //Names for wheels. Must be exact.
+    private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                             //Names for wheels. Must be exact.
     private String radiatorName = "CFD_RADIATOR";
     private String dualRadiatorName = "CFD_DUAL_RADIATOR";
-    private Collection<Boundary> liftGeneratorBounds;
 
     //Double arrays to hold ranges for scenes and plane section sweeps. Limits are in inches, and control how far the cross sections will go. Pressures are Cps.
     public double[] profileLimits = {-29, 29};
@@ -108,6 +113,7 @@ public class simComponents {
     private ScalarGlobalParameter frontRide;
     private ScalarGlobalParameter rearRide;
     private ScalarGlobalParameter sideSlip;
+    private ScalarGlobalParameter userSteering;
 
     //Flags to track sim status
     public boolean fullCarFlag;             //True if full car domain detected
@@ -163,6 +169,7 @@ public class simComponents {
     public BoundaryInterface dualMassFlowInterfaceOutlet;
     public CylindricalCoordinateSystem frontWheelCoord;
     public CylindricalCoordinateSystem rearWheelCoord;
+    public CylindricalCoordinateSystem frontWheelSteering;
     public Boundary fsInlet;
     public CartesianCoordinateSystem radiatorCoord;
     public CartesianCoordinateSystem rollAxis;
@@ -299,7 +306,6 @@ public class simComponents {
         freestreamBounds = new ArrayList<>();
         wheelBounds = new ArrayList<>();
         partBounds = new ArrayList<>();
-        liftGeneratorBounds = new ArrayList<>();
         partSpecBounds = new HashMap<>();
         domainRadBounds = new ArrayList<>();
         boundarySet();
@@ -369,6 +375,7 @@ public class simComponents {
         frontRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FRONT_RIDE_HEIGHT);
         rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
         sideSlip = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(SIDESLIP);
+        userSteering = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_STEERING);
     }
 
     private void boundarySet() {
@@ -395,14 +402,6 @@ public class simComponents {
             // if it isn't a domain or a wheel, it's a "part", and gets added to part bounds.
             if (partFlag == 0) {
                 partBounds.add(bound);
-
-                //Separate category for lift generators
-                for (String prefix : liftGeneratorPrefixes) {
-                    if (boundName.contains(prefix)) {
-                        liftGeneratorBounds.add(bound);
-                        partFlag = 1;
-                    }
-                }
             }
             // here we filter for the radiator
             if (partFlag == 0) {
@@ -646,6 +645,8 @@ public class simComponents {
         {
             return sideSlip.getQuantity().getRawValue();
         }
+        else if (env.equals(STEERING))
+            return userSteering.getQuantity().getRawValue();
         else if (env.equals("maxSteps"))
             return 1100;
         else
@@ -672,6 +673,7 @@ public class simComponents {
     private void setupCoordinates() {
         try {
             radiatorCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem("Radiator Cartesian");
+            frontWheelSteering = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem("Front Wheel Steering");
             frontWheelCoord = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem("Front Wheel Cylindrical");
             rearWheelCoord = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem("Rear Wheel Cylindrical");
             if (dualRadFlag)

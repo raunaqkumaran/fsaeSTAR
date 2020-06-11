@@ -1,5 +1,6 @@
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
+import star.cadmodeler.VectorQuantityDesignParameter;
 import star.common.Boundary;
 import star.common.MonitorPlot;
 import star.common.StarMacro;
@@ -19,11 +20,11 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
+        sim = new simComponents(getActiveSimulation());
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
         sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
                 sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
-        exportPlots(sim);
         setCrossSectionParts(sim);
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
         Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
@@ -44,24 +45,29 @@ public class postProc extends StarMacro {
                 topBottomViews.add(view);
         }
 
+        sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
-        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1);
-        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
+        sim.activeSim.println("---Merging boundaries---");
+        regions obj = new regions();
+        obj.mergeBoundaries(sim);
+        sim.activeSim.println("---Processing 2D---");
+        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1, 0.1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
-        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
-        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25);
-        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4);
+        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1);
+        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1);
 
     }
 
-    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment) {
+    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment, double glyph) {
         hideDisps(sim.scene2D);
 
         String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
@@ -72,7 +78,11 @@ public class postProc extends StarMacro {
         {
             for (Displayer disp : displayers2D)
             {
-                
+                if (disp instanceof VectorDisplayer)
+                {
+                    VectorDisplayer dispV = (VectorDisplayer) disp;
+                    dispV.getGlyphSettings().setRelativeToModelLength(glyph);
+                }
                 for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
@@ -146,7 +156,7 @@ public class postProc extends StarMacro {
     {
         String output = folder + File.separator + scn.getPresentationName() + "_" + disp.getPresentationName() + "_" + view.getPresentationName();
         if (offset != null)
-            output = output + "_" + String.valueOf(offset);
+            output = output + "_" + offset;
         if (append.length() > 0) output = output + "_" + append;
         output = output + ext;
         return output;
