@@ -1,6 +1,10 @@
 import star.base.neo.DoubleVector;
+import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.flow.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class regions extends StarMacro {
 
@@ -186,11 +190,31 @@ public class regions extends StarMacro {
             activeSim.dualRadiatorRegion.setPhysicsContinuum(activeSim.saPhysics);
 
 
-        if (simComponents.boolEnv("DES")) {
+        if (activeSim.DESFlag) {
             activeSim.domainRegion.setPhysicsContinuum(activeSim.desPhysics);
             activeSim.radiatorRegion.setPhysicsContinuum(activeSim.desPhysics);
             if (activeSim.dualRadFlag)
                 activeSim.dualRadiatorRegion.setPhysicsContinuum(activeSim.desPhysics);
         }
+    }
+
+    public void mergeBoundaries (simComponents activeSim)
+    {
+        MeshManager meshManager = activeSim.activeSim.getMeshManager();
+        Collection<Boundary> mergeBounds = new ArrayList<>();
+        for (Boundary x : activeSim.partBounds)
+        {
+            mergeBounds.add(x);
+
+            for (Collection<Boundary> coll : activeSim.partSpecBounds.values())
+            {
+                if (coll.contains(x))
+                    mergeBounds.remove(x);
+            }
+            if (x.getPresentationName().toLowerCase().contains("interface") || x.getPresentationName().toLowerCase().contains("radiator"))
+                mergeBounds.remove(x);
+        }
+        activeSim.activeSim.println("merging: " + mergeBounds);
+        meshManager.combineBoundaries(new NeoObjectVector(mergeBounds.toArray()));
     }
 }

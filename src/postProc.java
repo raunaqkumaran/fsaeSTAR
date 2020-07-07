@@ -1,5 +1,6 @@
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
+import star.cadmodeler.VectorQuantityDesignParameter;
 import star.common.Boundary;
 import star.common.MonitorPlot;
 import star.common.StarMacro;
@@ -19,11 +20,15 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
-        sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
+        sim = new simComponents(getActiveSimulation());
+        sim.crossSection.getInputParts().setObjects(sim.activeSim.getRegionManager().getRegions());
+        sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
+                sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
-        exportPlots(sim);
+        setCrossSectionParts(sim);
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
         Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
+        Collection<Displayer> meshDisplayers = sim.meshScene.getDisplayerManager().getNonDummyObjects();
         Collection<VisView> views3D = getViews("3D", sim);
         Collection<VisView> views2D = getViews("2D", sim);
         Collection<VisView> profileViews = new ArrayList<>();
@@ -40,45 +45,60 @@ public class postProc extends StarMacro {
                 topBottomViews.add(view);
         }
 
+        sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
-        String orientation = "Profile";
-        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1);
+        sim.activeSim.println("---Merging boundaries---");
+        regions obj = new regions();
+        obj.mergeBoundaries(sim);
+        sim.activeSim.println("---Processing 2D---");
+        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1, 0.1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
-        orientation = "AftFore";
-        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1, 1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
-        orientation = "TopBottom";
-        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25);
-        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4);
+        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1);
+        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1);
 
     }
 
-    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment) {
-        for (Displayer disp : displayers2D)
+    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment, double glyph) {
+        hideDisps(sim.scene2D);
+
+        String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
+        makeDir(displayerPath);
+        sim.crossSection.getSingleValue().setUnits(sim.inches);
+
+        for (double i = limits[0]; i <= limits[1]; i += increment)
         {
-            hideDisps(sim.scene2D);
-            disp.setRepresentation(sim.finiteVol);
-            disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
-            String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
-            makeDir(displayerPath);
-            for (double i = limits[0]; i <= limits[1]; i += increment)
+            for (Displayer disp : displayers2D)
             {
+                if (disp instanceof VectorDisplayer)
+                {
+                    VectorDisplayer dispV = (VectorDisplayer) disp;
+                    dispV.getGlyphSettings().setRelativeToModelLength(glyph);
+                }
                 for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
                     if (!fileExists(filename)) {
-                        sim.crossSection.getSingleValue().setUnits(sim.inches);
+                        disp.setRepresentation(sim.finiteVol);
+                        disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
                         sim.crossSection.getSingleValue().setValue(i);
                         sim.scene2D.setCurrentView(view);
                         saveFile(filename, sim.scene2D);
                     }
+                    else
+                    {
+                        sim.activeSim.println(filename + " already exists");
+                    }
                 }
+                hideDisps(sim.scene2D);
             }
         }
     }
@@ -136,7 +156,7 @@ public class postProc extends StarMacro {
     {
         String output = folder + File.separator + scn.getPresentationName() + "_" + disp.getPresentationName() + "_" + view.getPresentationName();
         if (offset != null)
-            output = output + "_" + String.valueOf(offset);
+            output = output + "_" + offset;
         if (append.length() > 0) output = output + "_" + append;
         output = output + ext;
         return output;
@@ -183,7 +203,7 @@ public class postProc extends StarMacro {
             x.extract();
         for (StarPlot plot : sim.plots)
         {
-            if (simComponents.boolEnv("DES") && !plot.getPresentationName().contains("Residuals"))
+            if (sim.DESFlag && !plot.getPresentationName().contains("Residuals"))
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Physical Time"));
             else if (plot instanceof MonitorPlot)
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Iteration"));
@@ -224,6 +244,8 @@ public class postProc extends StarMacro {
         if (sim.dualRadFlag)
             sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
         sim.crossSection.getSingleValue().getValueQuantity().setValue(0);
+        sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
+                sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
     }
 
 }
