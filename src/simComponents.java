@@ -833,7 +833,7 @@ public class simComponents {
         }
     }
 
-    //Convert a sideslip angle into an actionable y-component of velocity for the ground. Obviously, since it's using a tangent function, don't use very high and unrealistic sideslip angles. 
+    //Convert a sideslip angle into an actionable y-component of velocity for the ground. Obviously, since it's using a tangent function, don't use very high and unrealistic sideslip angles.
     public double calculateSideslip()
     {
         double sideslipAngle = valEnv(CONFIGSIDESLIP);

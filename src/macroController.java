@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+/*
+This is the God macro that runs the other macros. Pull in the sys env flags, and based on those decide which macros need to be executed.
+ */
 public class macroController extends StarMacro {
     public void execute()
     {
@@ -43,10 +45,12 @@ public class macroController extends StarMacro {
 
         List<String> runMacros = new ArrayList<>();
 
+        //Get the sysenvs.
         boolean process = simComponents.boolEnv("process");
         boolean postprocess = simComponents.boolEnv("postprocess");
         boolean preprocess = simComponents.boolEnv("preprocess");
 
+        //Set up run order based on which flags are true and which aren't.
         if (preprocess)
             runMacros.addAll(Arrays.asList(meshMacros));
 
@@ -65,9 +69,11 @@ public class macroController extends StarMacro {
             new StarScript(getActiveRootObject(), new java.io.File(resolvePath(macro))).play();
         }
 
+        //Generate a report file for the sim, then kill the sim.
         new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
         new StarScript(getActiveRootObject(), new java.io.File(resolvePath("kill.java"))).play();
 
+        //There's a lot of back and forth about whether or not macroController should handle save events, or if the individual macros should. I'll let that be a decision for the programmer.
        
         
     }

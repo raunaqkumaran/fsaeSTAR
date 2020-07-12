@@ -9,6 +9,10 @@ import star.common.Units;
 import java.util.Arrays;
 import java.util.Collections;
 
+/*
+This is like rideHeight, except it rotates the wheels for steering angle.
+ */
+
 public class steering extends StarMacro {
 
     public void execute() {

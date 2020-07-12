@@ -1,5 +1,9 @@
 import star.common.StarMacro;
 
+/*
+This is something i was playing around with. could be interesting if you want the sim to automatically kill itself based on walltime restrictions, rather than iteration restrictions. tie it into the zombie code for the abort file. never got this finished or tested.
+ */
+
 public class walltimeKill extends StarMacro
 {
     public void execute()

@@ -15,17 +15,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/*
+This used to be a much nastier macro. It's not pretty now, but this used to be exponentially worse.
+Goes through scenes and displayers to export reports, plots, and scenes for a sim. This is also a destructive macro. Do not save the result of the macro.
+ */
+
 public class postProc extends StarMacro {
 
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
-        sim = new simComponents(getActiveSimulation());
+
+        //Assign all regions to cross section derived part. Set origin to origin.
         sim.crossSection.getInputParts().setObjects(sim.activeSim.getRegionManager().getRegions());
         sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
                 sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
         if (sim.dualRadFlag) sim.crossSection.getInputParts().addObjects(sim.dualRadiatorRegion);
         setCrossSectionParts(sim);
+
+        //Create displayer collections to ease use later. There's a naming convection to the scenes, views, and displayers.
         Collection<Displayer> displayers3D = sim.scene3D.getDisplayerManager().getNonDummyObjects();
         Collection<Displayer> displayers2D = sim.scene2D.getDisplayerManager().getNonDummyObjects();
         Collection<Displayer> meshDisplayers = sim.meshScene.getDisplayerManager().getNonDummyObjects();
@@ -45,15 +53,22 @@ public class postProc extends StarMacro {
                 topBottomViews.add(view);
         }
 
+        //Export mesh and 3D scenes before destroying the mesh.
+        sim.activeSim.println("---Exporting mesh---");
+        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1);
         sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
             sim.inches, new DoubleVector(sim.profileDirection));
+
+        //Need to merge boundaries, otherwise it takes forever to get 2D data when you have 10k+ boundaries (thanks powertrain)
         sim.activeSim.println("---Merging boundaries---");
         regions obj = new regions();
         obj.mergeBoundaries(sim);
+
+        //Export 2D scenes. Can figure out what the function arugements mean from the function definitions below.
+        //The plane section must be correctly configured before handing control to the postProc functions.
         sim.activeSim.println("---Processing 2D---");
-        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1);
         postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1, 0.1);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
@@ -67,11 +82,19 @@ public class postProc extends StarMacro {
 
     }
 
+    /*
+    exports a set of images for a 2D scene. Must pass all displayers, all views, limits for the cross section sweep, and the size of the increment between successive scenes.
+     */
+
     private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment, double glyph) {
+        //Hide everything first, to make sure the macro operations from a consistent and well defined entry point.
         hideDisps(sim.scene2D);
 
+        //Generate a new folder for the scene. Every scene gets its own folder.
         String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
         makeDir(displayerPath);
+
+        //Set the offset for the cross section. We're controling the scene by defining the plane section offset from its origin.
         sim.crossSection.getSingleValue().setUnits(sim.inches);
 
         for (double i = limits[0]; i <= limits[1]; i += increment)
@@ -103,6 +126,7 @@ public class postProc extends StarMacro {
         }
     }
 
+    //Return true if a file already exists. Generally used to avoid regenerating scenes that have already been exported.
     private boolean fileExists(String filepath)
     {
         String resolved = resolvePath(filepath);
@@ -110,6 +134,7 @@ public class postProc extends StarMacro {
         return f.exists();
     }
 
+    //Basically the same thing as postProc2D, without the added complexity of the plane section derived part.
     private void postProc3D(simComponents sim, Collection<Displayer> displayers3D, Collection<VisView> views3D) {
         for (Displayer disp :  displayers3D)
         {
@@ -140,16 +165,12 @@ public class postProc extends StarMacro {
         }
     }
 
+    //Essentially enforces a naming convection. The name of a given scene export is defined by the scene name,
+    // the displayer name, view name, and any additional "appended" string. As well as the file extension
     public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, String append, String ext)
     {
         Double offset = null;
         return generateFileName(folder, scn, disp, view, offset, append, ext);
-    }
-
-    private void saveFile (String filePath, Scene scn)
-    {
-        scn.printAndWait((resolvePath(filePath)), 1, 4000, 2000, true, false);
-
     }
 
     public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, Double offset, String append, String ext)
@@ -162,7 +183,13 @@ public class postProc extends StarMacro {
         return output;
     }
 
+    private void saveFile (String filePath, Scene scn)
+    {
+        scn.printAndWait((resolvePath(filePath)), 1, 4000, 2000, true, false);
 
+    }
+
+    //Generates a collection of parts to assign to a given displayer. A RW displayer can use function to ensure only RW surfaces are assigned to the displayer
     public Collection<Boundary> getParts(simComponents sim, VisView view)
     {
         Collection<Boundary> desiredParts = new ArrayList<>();
@@ -176,12 +203,14 @@ public class postProc extends StarMacro {
         return desiredParts;
     }
 
+    // This is parsing. If a view is called [2D] [AftFore] car, this extracts the [AftFore] part. Important so the plane section scene can be defined correctly.
     private String[] getSecondKey(VisView view) {
         String viewName = view.getPresentationName();
         String partSegment = viewName.split("]", 0)[1];
         return partSegment.replaceAll("\\[", "").strip().split("[ ]");
     }
 
+    // Retuns every view of a given type. getViews("2D") will only return views that have the [2D] indicator.
     public Collection<VisView> getViews (String key, simComponents sim)
     {
         Collection<VisView> desiredViews = new ArrayList<>();
@@ -203,6 +232,7 @@ public class postProc extends StarMacro {
             x.extract();
         for (StarPlot plot : sim.plots)
         {
+            //Need to make sure the residuals X axis is physical time for transient, otherwise the plot is basically unreadable.
             if (sim.DESFlag && !plot.getPresentationName().contains("Residuals"))
                 ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Physical Time"));
             else if (plot instanceof MonitorPlot)

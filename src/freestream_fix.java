@@ -5,6 +5,8 @@ import star.common.*;
 import star.base.neo.*;
 import star.meshing.*;
 
+//This looks like a one-off. Not important.
+
 public class freestream_fix extends StarMacro {
 
     public void execute() {
