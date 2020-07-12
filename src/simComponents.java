@@ -22,7 +22,8 @@ import java.util.*;
 
 public class simComponents {
 
-    //Some string constants. This is something I started doing later on, and haven't done for every string. Probably a good idea to do so for strings that are used in multiple locations though.
+    //Some string constants. This is something I started doing later on, and haven't done for every string.
+    // I keep flip-flopping between whether or not this is a good idea or not, which means the final result of string management is pretty poor. Sorry.
 
     public static final String YAW_INTERFACE_NAME = "Yaw interface";
     public static final String USER_FREESTREAM = "User Freestream";
@@ -43,8 +44,10 @@ public class simComponents {
     public static final String STEERING = "steering";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
+    // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
 
-    //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later. This needs to match the version parameter in STAR.
+    //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
+    // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
     private double version = 2.2;
 
     // Simulation object
@@ -61,13 +64,13 @@ public class simComponents {
     public Collection<Boundary> freestreamBounds;
     public Collection<Boundary> partBounds;
     public Collection<Boundary> wheelBounds;
-    public String freestreamPrefix = "Freestream";                                                                      //This prefix differentiates from geometry, and the domain itself.
+    public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
     public Map<String, Collection<Boundary>> partSpecBounds;
     private Collection<GeometryPart> allParts;
     private Collection<GeometryPart> radiator;
     private Collection<GeometryPart> dualRadiator;
     private String[] nonAeroPrefixes = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
-    private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                             //Names for wheels. Must be exact.
+    private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                                     //Names for wheels. Must be exact.
     private String radiatorName = "CFD_RADIATOR";
     private String dualRadiatorName = "CFD_DUAL_RADIATOR";
 
@@ -96,6 +99,7 @@ public class simComponents {
     public Units noUnit;
     public Units inches;
     public Units meters;
+    public Units degs;
 
     //Vehicle dimensions radii
     public double frontTyreRadius = 0.228599;           //meters
@@ -129,33 +133,13 @@ public class simComponents {
     public UpdateEvent monitorWaypoint;             //Only for transient.
 
     // Physics
-    public PhysicsContinuum saPhysics;
+    public PhysicsContinuum steadyStatePhysics;
     public PhysicsContinuum desPhysics;
     public double freestreamVal;
     public boolean dualRadFlag;
 
-    private String subtractName = "Subtract";
-    public Units degs;
-    public SurfaceWrapperAutoMeshOperation surfaceWrapOperation;
-    public SurfaceCustomMeshControl aeroSurfaceWrapper;
-    public GeometryPart dualRadPart;
-    public GeometryPart radPart;
-    public GeometryPart volumetricWake;
-    public GeometryPart volumetricCar;
-    public GeometryPart volumetricRearWing;
-    public GeometryPart volumetricFrontWing;
-    public GeometryPart volumetricUnderbody;
-    public GeometryPart volumetricWingWake;
-    public GeometryPart farWakePart;
-    public Boundary dualRadInlet;
-    public Boundary dualRadOutlet;
-    public Boundary radInlet;            // There are two sets of these corresponding to the two regions. Need these for interfacing
-    public Boundary radOutlet;
-    public Boundary domainRadInlet;
-    public Boundary domainRadOutlet;
-    public Boundary domainDualRadInlet;
-    public Boundary domainDualRadOutlet;
     // Regions
+    private String subtractName = "Subtract";
     public Region radiatorRegion;
     public Region dualRadiatorRegion;
     public Region domainRegion;
@@ -170,18 +154,27 @@ public class simComponents {
     public CylindricalCoordinateSystem frontWheelCoord;
     public CylindricalCoordinateSystem rearWheelCoord;
     public CylindricalCoordinateSystem frontWheelSteering;
-    public Boundary fsInlet;
-    public CartesianCoordinateSystem radiatorCoord;
-    public CartesianCoordinateSystem rollAxis;
-    public CartesianCoordinateSystem dualRadCoord;
-    public BoundaryInterface yawInterface;
+    public Boundary fsInlet;                            //fs refers to freestream here
     public Boundary leftPlane;
     public Boundary groundPlane;
     public Boundary fsOutlet;
     public Boundary symPlane;
     public Boundary topPlane;
+    public CartesianCoordinateSystem radiatorCoord;
+    public CartesianCoordinateSystem rollAxis;          //I don't think I'm using this for anything right now. But there's some amount of code in here that allows for roll adjustments. This is necessary for that.
+    public CartesianCoordinateSystem dualRadCoord;
+    public BoundaryInterface yawInterface;              //This is necessary for doing yaw correctly.
     private Collection<Boundary> dualRadBounds;
     private Collection<Boundary> domainRadBounds;
+    public Boundary dualRadInlet;
+    public Boundary dualRadOutlet;
+    public Boundary radInlet;            // There are two sets of these corresponding to the two regions. Need these for interfacing
+    public Boundary radOutlet;
+    public Boundary domainRadInlet;
+    public Boundary domainRadOutlet;
+    public Boundary domainDualRadInlet;
+    public Boundary domainDualRadOutlet;
+
     //Scenes and displayers
     public PlaneSection crossSection;
     public Scene scene2D;
@@ -214,6 +207,17 @@ public class simComponents {
     public VolumeCustomMeshControl volControlUnderbody;
     public MeshOperationPart subtractPart;
     public SimpleBlockPart domain;
+    public SurfaceWrapperAutoMeshOperation surfaceWrapOperation;
+    public SurfaceCustomMeshControl aeroSurfaceWrapper;
+    public GeometryPart dualRadPart;
+    public GeometryPart radPart;
+    public GeometryPart volumetricWake;
+    public GeometryPart volumetricCar;
+    public GeometryPart volumetricRearWing;
+    public GeometryPart volumetricFrontWing;
+    public GeometryPart volumetricUnderbody;
+    public GeometryPart volumetricWingWake;
+    public GeometryPart farWakePart;
 
     // Constructor
     public simComponents(Simulation inputSim) {
@@ -368,6 +372,9 @@ public class simComponents {
 
     }
 
+
+    //Assigns user parameters in the sim file to their associated java objects. Makes it easier to refer to them later
+
     private void userParameters()
     {
         userFreestream = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FREESTREAM);
@@ -378,6 +385,7 @@ public class simComponents {
         userSteering = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_STEERING);
     }
 
+    //Sets up boundary conditions. It's generally a good idea to avoid touching things (especially boundaries) when you can avoid it.
     private void boundarySet() {
 
         //Iterates through every boundary in domainBounds and checks for prexies.
@@ -427,7 +435,7 @@ public class simComponents {
                     domainDualRadOutlet = bound;
             }
 
-            //Filter out for aero parts.
+            //Positively select aero parts, and throw them into partSpecBounds
 
             for (String prefix : aeroPrefixes) {
                 if (boundName.contains(prefix) && !boundName.toLowerCase().contains("suspension"))      // Janky code so CFD_SUSPENSION doesn't trigger the NS prefix.
@@ -485,6 +493,7 @@ public class simComponents {
         }
     }
 
+    //Sets up continuua and populates the appropriate stopping criteria. The stopping criteria are a function of steady vs transient. It's been a while since I've used this for transient, I'm not sure if the transient code still works.
     private void physicsSet() {
         tagContinua();
 
@@ -509,23 +518,27 @@ public class simComponents {
         freestreamParameter.getQuantity().setValue(freestreamVal);
     }
 
+    //This is assigning the continuua objects in the sim to their java objects.
     private void tagContinua() {
         // Define physics block
         desPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("DES");
 
+        //If there isn't a continuum named steady state, it will default to a continuum named S-a physics. This logic was largely for backwards compatibility, and could probably be removed.
         if (activeSim.getContinuumManager().has("Steady state"))
-            saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("Steady state");
+            steadyStatePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("Steady state");
         else if (activeSim.getContinuumManager().has("S-a physics"))
         {
-            saPhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("S-a physics");
-            saPhysics.setPresentationName("Steady state");
+            steadyStatePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("S-a physics");
+            steadyStatePhysics.setPresentationName("Steady state");
         }
         else
         {
+            // I don't know if RuntimeException is the right exception class to throw. It probably isn't, but it gets the job done.
             throw new RuntimeException("No physics continuum found for steady state. Check physicsSet() in simComponents.java for logic");
         }
     }
 
+    //Assigns the freestream domain in the sim to its java object. Doesn't throw a killer exception. Could probably be modified to throw one. It's very unlikely the macro is going to get very far without a freestream anyway.
     private void domainCatch() {
         try {
             domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart("Freestream");
@@ -534,9 +547,7 @@ public class simComponents {
         }
     }
 
-    //Returns true for full car. False for half car. The whole first 70% of this is legacy code that isn't used for much any more.
-
-
+    //Returns true for full car. False for half car. Based purely on whether or not the y-coordinate of the domain block extends beyong positive +0.5 meters. PLEASE KEEP USING METERS.
     private boolean domainSizing() {
 
         double[] domainCorner = domain.getCorner1().evaluate().toDoubleArray();
@@ -550,6 +561,7 @@ public class simComponents {
     }
 
 
+    //Populate mesh objects with their STAR objects. This function doesn't do any processing, it's just object initialization.
     private void mesherSetup() {
         // Set up mesher
         try {
@@ -614,6 +626,8 @@ public class simComponents {
         }
     }
 
+    //Scales a vector with a scale.
+    //example: vectorScale(2, [1, 1, 1]) = [2, 2, 2]
     public static double[] vectorScale(double scalar, double[] vect) {
         vect = vect.clone();
         for (int i = 0; i < vect.length; i++)
@@ -622,6 +636,7 @@ public class simComponents {
         return vect;
     }
 
+    // I don't like this function, but it's a simple one. There's got to be a cleaner way to do this but, this works for now.
     public double valEnv(String env) {
         if (System.getenv(env) != null && !System.getenv(env).isEmpty())
             return Double.parseDouble(System.getenv(env));
@@ -653,6 +668,7 @@ public class simComponents {
             return 0;
     }
 
+    //This is dumber than valEnv. Just pulls the sysenv and returns it as a string.
     public static String valEnvString(String env) {
         if (System.getenv(env) != null && !System.getenv(env).isEmpty())
             return System.getenv(env);
@@ -660,6 +676,7 @@ public class simComponents {
             return null;
     }
 
+    //Returns true if true, false if false. Needs to parse the string into a boolean. There's some legacy code for the domainSet flag, but this could be removed.
     public static boolean boolEnv(String env) {
 
         // Read the sys environment to figure out if you want a full car or a half car sim
@@ -670,6 +687,7 @@ public class simComponents {
     }
 
 
+    //Initialize coordinate systems with their STAR objects.
     private void setupCoordinates() {
         try {
             radiatorCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem("Radiator Cartesian");
@@ -691,9 +709,9 @@ public class simComponents {
         }
     }
 
+    // Removes old regions. Creates new ones. Avoid using this function too if you can avoid it. The way this does things is very destructive.
     public void regionSwap() {
-        // Removes old regions. Creates new ones. There's some variable casting going on which I don't understand
-        // but STAR seems to require it.
+
         try {
             activeSim.getRegionManager().removeRegion(domainRegion);
             activeSim.getRegionManager().removeRegion(radiatorRegion);
@@ -735,6 +753,7 @@ public class simComponents {
 
     }
 
+    //I have no idea why this is here. But it reverses an array. eg [1, 2, 3] -> [3, 2, 1]
     public static Object[] reverseArr(Object [] arr)
     {
         for (int i = 0; i < arr.length / 2 ; i++)
@@ -769,6 +788,7 @@ public class simComponents {
         clearHistory();
     }
 
+    //If a region named regName exists, it'll return that region, otherwise it'll create a new empty region and name it regName
     private Region assignRegion(String regName) {
         Region output;
         if (activeSim.getRegionManager().has(regName))
@@ -780,6 +800,7 @@ public class simComponents {
         return output;
     }
 
+    //Some 2D vector transformation.
     public static double[] vectorRotate(double angle, double[] arr) {
         double r = Math.hypot(arr[0], arr[1]);
         double x = r * Math.cos(angle);
@@ -792,6 +813,7 @@ public class simComponents {
 
     }
 
+    //Explode if the version in the macro doesn't match the version in the sim parameter.
     private void checkVersion()
     {
         ScalarGlobalParameter versionParam;
@@ -811,6 +833,7 @@ public class simComponents {
         }
     }
 
+    //Convert a sideslip angle into an actionable y-component of velocity for the ground. Obviously, since it's using a tangent function, don't use very high and unrealistic sideslip angles. 
     public double calculateSideslip()
     {
         double sideslipAngle = valEnv(CONFIGSIDESLIP);

@@ -36,7 +36,7 @@ public class regions extends StarMacro {
         setTyreRotation(activeSim);
 
         // Set up initial conditions
-        activeSim.saPhysics.getInitialConditions().get(VelocityProfile.class).
+        activeSim.steadyStatePhysics.getInitialConditions().get(VelocityProfile.class).
                 getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(initialVector);
         activeSim.desPhysics.getInitialConditions().get(VelocityProfile.class).
                 getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(initialVector);
@@ -184,10 +184,10 @@ public class regions extends StarMacro {
 
     public static void setTurbulence(simComponents activeSim) {
 
-        activeSim.domainRegion.setPhysicsContinuum(activeSim.saPhysics);
-        activeSim.radiatorRegion.setPhysicsContinuum(activeSim.saPhysics);
+        activeSim.domainRegion.setPhysicsContinuum(activeSim.steadyStatePhysics);
+        activeSim.radiatorRegion.setPhysicsContinuum(activeSim.steadyStatePhysics);
         if (activeSim.dualRadFlag)
-            activeSim.dualRadiatorRegion.setPhysicsContinuum(activeSim.saPhysics);
+            activeSim.dualRadiatorRegion.setPhysicsContinuum(activeSim.steadyStatePhysics);
 
 
         if (activeSim.DESFlag) {
