@@ -56,6 +56,8 @@ public class regions extends StarMacro {
                 createBoundaryInterface(activeSim.domainRadOutlet, activeSim.radOutlet,
                         activeSim.massFlowInterfaceNameOutlet);
 
+        activeSim.fanInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.radFanBound, activeSim.domainFanBound, "Fan Interface");
+        setUpFan(activeSim, activeSim.fanInterface);
         if (activeSim.dualRadFlag && activeSim.domainDualRadInlet != null && activeSim.domainDualRadOutlet != null) {
             activeSim.dualMassFlowInterfaceInlet = activeSim.activeSim.getInterfaceManager().
                     createBoundaryInterface(activeSim.domainDualRadInlet, activeSim.dualRadInlet,
@@ -63,7 +65,8 @@ public class regions extends StarMacro {
             activeSim.dualMassFlowInterfaceOutlet = activeSim.activeSim.getInterfaceManager().
                     createBoundaryInterface(activeSim.domainDualRadOutlet, activeSim.dualRadOutlet,
                             activeSim.dualMassFlowInterfaceNameOutlet);
-
+            activeSim.dualFanInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.dualRadFanBound, activeSim.dualDomainFanBound, "Dual Fan Interface");
+            setUpFan(activeSim, activeSim.dualFanInterface);
         }
 
         //Assign viscous properties to the radiator regions.
@@ -72,6 +75,19 @@ public class regions extends StarMacro {
         if (activeSim.dualRadFlag) {
             setRadiatorParams(activeSim, activeSim.dualRadiatorRegion);
         }
+    }
+
+    private void setUpFan(simComponents activeSim, BoundaryInterface fanInterface)
+    {
+        fanInterface.setInterfaceType(FanInterface.class);
+        fanInterface.getConditions().get(InterfaceFanCurveSpecification.class).getFanCurveTypeOption().setSelected(FanCurveTypeOption.Type.TABLE);
+        FanCurveTableLeaf node = fanInterface.getValues().get(FanCurveTable.class).getModelPartValue();
+        activeSim.activeSim.getTableManager().getTable("fan_table_csv").extract();
+        node.setVolumeFlowTable(activeSim.activeSim.getTableManager().getTable("fan_table_csv"));
+        node.setVolumeFlowTableX("m^3/s");
+        node.setVolumeFlowUnitsX(activeSim.activeSim.getUnitsManager().getUnits("m^3/s"));
+        node.setVolumeFlowTableP("dP");
+        node.setVolumeFlowUnitsP(activeSim.activeSim.getUnitsManager().getUnits("Pa"));
     }
 
     private void setTyreRotation(simComponents activeSim) {

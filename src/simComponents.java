@@ -48,7 +48,7 @@ public class simComponents {
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 2.2;
+    private double version = 3.0;
 
     // Simulation object
     public Simulation activeSim;
@@ -145,6 +145,8 @@ public class simComponents {
     public Region domainRegion;
     public BoundaryInterface massFlowInterfaceInlet;
     public BoundaryInterface massFlowInterfaceOutlet;
+    public BoundaryInterface fanInterface;
+    public BoundaryInterface dualFanInterface;
     public String massFlowInterfaceNameInlet;
     public String massFlowInterfaceNameOutlet;
     public String dualMassFlowInterfaceNameInlet;
@@ -174,6 +176,11 @@ public class simComponents {
     public Boundary domainRadOutlet;
     public Boundary domainDualRadInlet;
     public Boundary domainDualRadOutlet;
+    public Boundary domainFanBound;
+    public Boundary radFanBound;
+    public Boundary dualRadFanBound;
+    public Boundary dualDomainFanBound;
+
 
     //Scenes and displayers
     public PlaneSection crossSection;
@@ -434,6 +441,13 @@ public class simComponents {
                 else if (boundName.contains(dualRadiatorName))
                     domainDualRadOutlet = bound;
             }
+            else if (boundName.contains("Fan"))
+            {
+                if (boundName.contains(radiatorName))
+                    domainFanBound = bound;
+                else if (boundName.contains(dualRadiatorName))
+                    dualDomainFanBound = bound;
+            }
 
             //Positively select aero parts, and throw them into partSpecBounds
 
@@ -460,6 +474,8 @@ public class simComponents {
                 radInlet = bound;
             if (boundName.contains("Outlet"))
                 radOutlet = bound;
+            if (boundName.contains("Fan"))
+                radFanBound = bound;
         }
 
         //Now for the other radiator.
@@ -471,6 +487,8 @@ public class simComponents {
                 dualRadInlet = bound;
             if (boundName.contains("Outlet"))
                 dualRadOutlet = bound;
+            if (boundName.contains("Fan"))
+                dualRadFanBound = bound;
         }
 
         //Filter out freestream boundaries to make it easier to set up boundary conditions later.
