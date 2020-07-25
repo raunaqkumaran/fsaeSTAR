@@ -55,7 +55,7 @@ public class postProc extends StarMacro {
 
         //Export mesh and 3D scenes before destroying the mesh.
         sim.activeSim.println("---Exporting mesh---");
-        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1);
+        postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1, sim.meshScene);
         sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
@@ -69,16 +69,16 @@ public class postProc extends StarMacro {
         //Export 2D scenes. Can figure out what the function arugements mean from the function definitions below.
         //The plane section must be correctly configured before handing control to the postProc functions.
         sim.activeSim.println("---Processing 2D---");
-        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1, 0.1);
+        postProc2D(sim, displayers2D, profileViews, sim.profileLimits, 1, 0.1, sim.scene2D);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.foreAftDirection));
-        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1, 1);
+        postProc2D(sim, displayers2D, aftForeViews, sim.aftForeLimits, 1, 1, sim.scene2D);
 
         sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
                 sim.inches, new DoubleVector(sim.topBottomDirection));
-        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1);
-        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1);
+        postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1, sim.scene2D);
+        postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1, sim.scene2D);
 
     }
 
@@ -86,12 +86,12 @@ public class postProc extends StarMacro {
     exports a set of images for a 2D scene. Must pass all displayers, all views, limits for the cross section sweep, and the size of the increment between successive scenes.
      */
 
-    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment, double glyph) {
+    private void postProc2D(simComponents sim, Collection<Displayer> displayers2D, Collection<VisView> views2D, double[] limits, double increment, double glyph, Scene scn) {
         //Hide everything first, to make sure the macro operations from a consistent and well defined entry point.
-        hideDisps(sim.scene2D);
+        hideDisps(scn);
 
         //Generate a new folder for the scene. Every scene gets its own folder.
-        String displayerPath = getFolderPath(sim.scene2D.getPresentationName(), sim);
+        String displayerPath = getFolderPath(scn.getPresentationName(), sim);
         makeDir(displayerPath);
 
         //Set the offset for the cross section. We're controling the scene by defining the plane section offset from its origin.
@@ -108,20 +108,20 @@ public class postProc extends StarMacro {
                 }
                 for (VisView view : views2D)
                 {
-                    String filename = generateFileName(displayerPath, sim.scene2D, disp, view, String.valueOf(i), ".png");
+                    String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(i), ".png");
                     if (!fileExists(filename)) {
                         disp.setRepresentation(sim.finiteVol);
                         disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
                         sim.crossSection.getSingleValue().setValue(i);
                         sim.scene2D.setCurrentView(view);
-                        saveFile(filename, sim.scene2D);
+                        saveFile(filename, scn);
                     }
                     else
                     {
                         sim.activeSim.println(filename + " already exists");
                     }
                 }
-                hideDisps(sim.scene2D);
+                hideDisps(scn);
             }
         }
     }
