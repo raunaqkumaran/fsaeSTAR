@@ -3,6 +3,8 @@ import star.common.StarMacro;
 
 import java.util.Map;
 
+//Hacked this together to force a change to a half-car domain if the domainSet flag is set appropriately. This doesn't need to be a part of the macroController flow, but it's a nice tool to have.
+
 public class domainSet extends StarMacro {
 
     public void execute()

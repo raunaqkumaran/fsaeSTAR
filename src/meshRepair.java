@@ -4,7 +4,8 @@ import star.common.*;
 
 import java.util.Vector;
 
-// So for this macro I didn't really rewrite it. It's only 30 lines.
+// So for this macro I didn't really fully rewrite it. This is mostly what you get by recording the macro with STAR's recorder.
+// This essentially scans the mesh for poor quality cells, high velocity cells, and removes them. This also splits the region by non-continguous, and proceedes to assign them with a null physics continuum to make sure they're essentially out of the solution.
 
 public class meshRepair extends StarMacro {
 
@@ -28,12 +29,14 @@ public class meshRepair extends StarMacro {
         Region region_0 =
                 simulation_0.getRegionManager().getRegion("Subtract");
 
+        //Define which regions are going to be checked by the invalid cell removal tool.
         Object[] regArray;
         if (activeSim.dualRadFlag)
             regArray = new Object[] {activeSim.domainRegion, activeSim.dualRadiatorRegion, activeSim.radiatorRegion};
         else
             regArray = new Object[] {activeSim.domainRegion, activeSim.radiatorRegion};
 
+        //If the iteration count is higher than 0, then run the mesh repair with the maxVel
         if (activeSim.activeSim.getSimulationIterator().getCurrentIteration() > 0) {
             if (activeSim.maxVelocity.getReportMonitorValue() > ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxVel.getCriterionType()).getLimit().evaluate())
             {
@@ -57,7 +60,6 @@ public class meshRepair extends StarMacro {
                 reg.setPhysicsContinuum(null);
         }
         regions.setTurbulence(activeSim);
-        //activeSim.clearSoln();
     }
 
 }
