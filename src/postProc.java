@@ -113,7 +113,7 @@ public class postProc extends StarMacro {
                         disp.setRepresentation(sim.finiteVol);
                         disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
                         sim.crossSection.getSingleValue().setValue(i);
-                        sim.scene2D.setCurrentView(view);
+                        scn.setCurrentView(view);
                         saveFile(filename, scn);
                     }
                     else
