@@ -137,6 +137,7 @@ public class simComponents {
     public PhysicsContinuum desPhysics;
     public double freestreamVal;
     public boolean dualRadFlag;
+    public boolean fanFlag;
 
     // Regions
     private String subtractName = "Subtract";
@@ -363,6 +364,9 @@ public class simComponents {
         fullCarFlag = domainSizing();
         if (!fullCarFlag)
             profileLimits[1] = 0;
+
+        //Set up fan flag
+        fanFlag = boolEnv("FAN");
 
         //Set physics objects
         physicsSet();

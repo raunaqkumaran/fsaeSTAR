@@ -7,6 +7,7 @@ MACRO = macro to run. generally macroController
 CLUSTER = cluster to submit job to (scholar, gpu, or long)
 PROCS = total procs to use
 WALLTIME = length of job in minutes. This is OPTIONAL. 
+FAN = set to true if you want a fan model for the radiator. Otherwise false. 
 yaw = yaw angle in degrees
 sideslip = sideslip angle in degrees
 steering = tyre slip change angle in degrees
