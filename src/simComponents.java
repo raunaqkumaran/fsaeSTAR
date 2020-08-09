@@ -48,7 +48,7 @@ public class simComponents {
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 3.0;
+    private double version = 3.1;
 
     // Simulation object
     public Simulation activeSim;

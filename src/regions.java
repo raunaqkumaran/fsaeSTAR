@@ -86,7 +86,10 @@ public class regions extends StarMacro {
         node.setVolumeFlowTable(activeSim.activeSim.getTableManager().getTable("fan_table_csv"));
         node.setVolumeFlowTableX("m^3/s");
         node.setVolumeFlowUnitsX(activeSim.activeSim.getUnitsManager().getUnits("m^3/s"));
-        node.setVolumeFlowTableP("dP");
+        if (activeSim.fanFlag)
+            node.setVolumeFlowTableP("dP");
+        else
+            node.setVolumeFlowTableP("no_fan");
         node.setVolumeFlowUnitsP(activeSim.activeSim.getUnitsManager().getUnits("Pa"));
     }
 
