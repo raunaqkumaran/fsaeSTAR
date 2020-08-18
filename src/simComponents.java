@@ -443,13 +443,14 @@ public class simComponents {
                     domainRadInlet = bound;
                 else if (boundName.contains(dualRadiatorName))
                     domainDualRadInlet = bound;
-            } else if (boundName.contains("Outlet")) {
+            }
+            else if (boundName.contains("Outlet") && !boundName.contains("Fan")) {
                 if (boundName.contains(radiatorName))
                     domainRadOutlet = bound;
                 else if (boundName.contains(dualRadiatorName))
                     domainDualRadOutlet = bound;
             }
-            else if (boundName.contains("Fan"))
+            else if (boundName.contains("Fan Outlet"))
             {
                 if (boundName.contains(radiatorName))
                     domainFanBound = bound;
