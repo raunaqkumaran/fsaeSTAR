@@ -48,7 +48,7 @@ public class simComponents {
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 3.1;
+    private double version = 3.2;
 
     // Simulation object
     public Simulation activeSim;
@@ -216,7 +216,9 @@ public class simComponents {
     public MeshOperationPart subtractPart;
     public SimpleBlockPart domain;
     public SurfaceWrapperAutoMeshOperation surfaceWrapOperation;
+    public SurfaceWrapperAutoMeshOperation surfaceWrapOperationPPM;
     public SurfaceCustomMeshControl aeroSurfaceWrapper;
+    public SurfaceCustomMeshControl aeroSurfaceWrapperPPM;
     public GeometryPart dualRadPart;
     public GeometryPart radPart;
     public GeometryPart volumetricWake;
@@ -249,7 +251,9 @@ public class simComponents {
 
         // Initialize surface wrappers
         surfaceWrapOperation = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject("Surface wrapper"));
+        surfaceWrapOperationPPM = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject("Surface wrapper PPM"));
         aeroSurfaceWrapper = (SurfaceCustomMeshControl) surfaceWrapOperation.getCustomMeshControls().getObject("Aero Control");
+        aeroSurfaceWrapperPPM = (SurfaceCustomMeshControl) surfaceWrapOperationPPM.getCustomMeshControls().getObject("Aero Control");
 
 
         // Part management. Get an object to hold all parts.
