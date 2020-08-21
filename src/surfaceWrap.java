@@ -30,6 +30,7 @@ public class surfaceWrap extends StarMacro {
         simObject.surfaceWrapOperationPPM.execute();
 
         surfaceWrapSetup(simObject, simObject.surfaceWrapOperation, simObject.aeroSurfaceWrapperPPM);
+        simObject.saveSim();
 
         simObject.surfaceWrapOperation.getMesherParallelModeOption().setSelected(MesherParallelModeOption.Type.SERIAL);
         simObject.surfaceWrapOperation.setMeshPartByPart(false);
