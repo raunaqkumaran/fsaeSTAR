@@ -31,10 +31,7 @@ public class meshRepair extends StarMacro {
 
         //Define which regions are going to be checked by the invalid cell removal tool.
         Object[] regArray;
-        if (activeSim.dualRadFlag)
-            regArray = new Object[] {activeSim.domainRegion, activeSim.dualRadiatorRegion, activeSim.radiatorRegion};
-        else
-            regArray = new Object[] {activeSim.domainRegion, activeSim.radiatorRegion};
+        regArray = new Object[] {activeSim.domainRegion};
 
         //If the iteration count is higher than 0, then run the mesh repair with the maxVel
         if (activeSim.activeSim.getSimulationIterator().getCurrentIteration() > 0) {
