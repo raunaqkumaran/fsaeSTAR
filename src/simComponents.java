@@ -740,10 +740,10 @@ public class simComponents {
     public void regionSwap() {
 
         try {
-            activeSim.getRegionManager().removeRegion(domainRegion);
-            activeSim.getRegionManager().removeRegion(radiatorRegion);
-            if (dualRadFlag)
-                activeSim.getRegionManager().removeRegion(dualRadiatorRegion);
+            for (Region x : activeSim.getRegionManager().getRegions())
+            {
+                activeSim.getRegionManager().removeRegion(x);
+            }
         } catch (Exception e) {
             activeSim.println("Old regions not found");
         }
