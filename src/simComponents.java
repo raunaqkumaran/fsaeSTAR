@@ -481,7 +481,7 @@ public class simComponents {
 
             if (boundName.contains("Inlet"))
                 radInlet = bound;
-            if (boundName.contains("Outlet"))
+            if (boundName.contains("Outlet") && !boundName.contains("Fan"))
                 radOutlet = bound;
             if (boundName.contains("Fan"))
                 radFanBound = bound;

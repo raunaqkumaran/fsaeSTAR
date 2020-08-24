@@ -21,7 +21,7 @@ public class surfaceWrap extends StarMacro {
 
         // Set up controls. Unlike autoMesh which depends on the user to define which controls are enabled. surfaceWrap automatically enables everything.
 
-        surfaceWrapSetup(simObject, simObject.surfaceWrapOperationPPM, simObject.aeroSurfaceWrapper);
+        surfaceWrapSetup(simObject, simObject.surfaceWrapOperationPPM, simObject.aeroSurfaceWrapperPPM);
 
         simObject.surfaceWrapOperationPPM.getMesherParallelModeOption().setSelected(MesherParallelModeOption.Type.CONCURRENT);
         simObject.surfaceWrapOperationPPM.setMeshPartByPart(true);
@@ -29,7 +29,7 @@ public class surfaceWrap extends StarMacro {
         if (simObject.dualRadFlag) simObject.surfaceWrapOperationPPM.getInputGeometryObjects().removePart(simObject.dualRadPart);
         simObject.surfaceWrapOperationPPM.execute();
 
-        surfaceWrapSetup(simObject, simObject.surfaceWrapOperation, simObject.aeroSurfaceWrapperPPM);
+        surfaceWrapSetup(simObject, simObject.surfaceWrapOperation, simObject.aeroSurfaceWrapper);
 
         simObject.surfaceWrapOperation.getMesherParallelModeOption().setSelected(MesherParallelModeOption.Type.SERIAL);
         simObject.surfaceWrapOperation.setMeshPartByPart(false);
