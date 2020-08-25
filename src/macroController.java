@@ -32,6 +32,8 @@ public class macroController extends StarMacro {
                 "genReports.java",
                 "softRun.java",                         //Sometimes STAR will find negative volume cells after first iteration, not before. If this happens, the macro crashes. I'd rather crash this sacrificial macro than crash the whole chain.
                 "meshRepair.java",
+                "softRun.java",
+                "meshRepair.java",
                 "run.java",
                 "exportReports.java",
                 "save.java"
