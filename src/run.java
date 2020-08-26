@@ -2,6 +2,7 @@
 Runs the sim. First runs it for 4 steps, runs meshRepair to see if anything needs to be nuked, then continues running.
  */
 
+import star.common.BoundaryInterface;
 import star.common.MonitorIterationStoppingCriterionMaxLimitType;
 import star.common.StarMacro;
 import star.common.StarScript;
@@ -14,6 +15,8 @@ public class run extends StarMacro {
     public void execute() {
 
         simComponents activeSim = new simComponents(getActiveSimulation());
+        regions obj = new regions();
+        obj.initFans(activeSim);
         activeSim.activeSim.println("--- RUNNING SIMULATION ---");
         regions.setTurbulence(activeSim);
         initial(activeSim);

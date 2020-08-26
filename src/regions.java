@@ -77,7 +77,7 @@ public class regions extends StarMacro {
         }
     }
 
-    private void setUpFan(simComponents activeSim, BoundaryInterface fanInterface)
+    public void setUpFan(simComponents activeSim, BoundaryInterface fanInterface)
     {
         fanInterface.setInterfaceType(FanInterface.class);
         fanInterface.getConditions().get(InterfaceFanCurveSpecification.class).getFanCurveTypeOption().setSelected(FanCurveTypeOption.Type.TABLE);
@@ -255,5 +255,15 @@ public class regions extends StarMacro {
         }
         activeSim.activeSim.println("merging: " + mergeBounds);
         meshManager.combineBoundaries(new NeoObjectVector(mergeBounds.toArray()));
+    }
+    public void initFans(simComponents activeSim)
+    {
+        for (Interface x : activeSim.activeSim.getInterfaceManager().getObjects())
+        {
+            if (x.getInterfaceType() instanceof FanInterface)
+            {
+                setUpFan(activeSim, (BoundaryInterface) x);
+            }
+        }
     }
 }
