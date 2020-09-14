@@ -142,6 +142,7 @@ public class simComponents {
     public double freestreamVal;
     public boolean dualRadFlag;
     public boolean fanFlag;
+    public boolean corneringFlag;
 
     // Regions
     private String subtractName = "Subtract";
@@ -574,9 +575,17 @@ public class simComponents {
     private void domainCatch() {
 
         if (activeSim.get(SimulationPartManager.class).has(freestreamPrefix))
+        {
             domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(freestreamPrefix);
+            corneringFlag = false;
+            activeSim.println("Straight domain detected");
+        }
         else if (activeSim.get(SimulationPartManager.class).has(freestreamCornering))
+        {
             domain_c = (SolidModelPart) activeSim.get(SimulationPartManager.class).getPart(freestreamCornering);
+            corneringFlag = true;
+            activeSim.println("Cornering domain detected");
+        }
         else
             throw new RuntimeException("Could not find a domain. Check the domainCatch() method in simComponents.java");
 
