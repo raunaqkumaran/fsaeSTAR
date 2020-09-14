@@ -6,9 +6,12 @@
     Raunaq Kumaran, January 2019
  */
 
+import star.base.neo.ClientServerObject;
+import star.base.neo.ClientServerObjectManager;
 import star.base.neo.NeoObjectVector;
 import star.base.report.MaxReport;
 import star.base.report.Report;
+import star.cadmodeler.SolidModelPart;
 import star.common.*;
 import star.flow.AccumulatedForceTable;
 import star.meshing.*;
@@ -48,7 +51,7 @@ public class simComponents {
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 3.2;
+    private double version = 4.0;
 
     // Simulation object
     public Simulation activeSim;
@@ -65,6 +68,7 @@ public class simComponents {
     public Collection<Boundary> partBounds;
     public Collection<Boundary> wheelBounds;
     public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
+    public String freestreamCornering = "Freestream_C";
     public Map<String, Collection<Boundary>> partSpecBounds;
     private Collection<GeometryPart> allParts;
     private Collection<GeometryPart> radiator;
@@ -215,6 +219,7 @@ public class simComponents {
     public VolumeCustomMeshControl volControlUnderbody;
     public MeshOperationPart subtractPart;
     public SimpleBlockPart domain;
+    public SolidModelPart domain_c;
     public SurfaceWrapperAutoMeshOperation surfaceWrapOperation;
     public SurfaceWrapperAutoMeshOperation surfaceWrapOperationPPM;
     public SurfaceCustomMeshControl aeroSurfaceWrapper;
@@ -567,16 +572,21 @@ public class simComponents {
 
     //Assigns the freestream domain in the sim to its java object. Doesn't throw a killer exception. Could probably be modified to throw one. It's very unlikely the macro is going to get very far without a freestream anyway.
     private void domainCatch() {
-        try {
-            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart("Freestream");
-        } catch (NullPointerException e) {
-            activeSim.println(this.getClass().getName() + " - Domain could not be caught");
-        }
+
+        if (activeSim.get(SimulationPartManager.class).has(freestreamPrefix))
+            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(freestreamPrefix);
+        else if (activeSim.get(SimulationPartManager.class).has(freestreamCornering))
+            domain_c = (SolidModelPart) activeSim.get(SimulationPartManager.class).getPart(freestreamCornering);
+        else
+            throw new RuntimeException("Could not find a domain. Check the domainCatch() method in simComponents.java");
+
     }
 
     //Returns true for full car. False for half car. Based purely on whether or not the y-coordinate of the domain block extends beyong positive +0.5 meters. PLEASE KEEP USING METERS.
     private boolean domainSizing() {
 
+        if (domain == null)
+            return true;
         double[] domainCorner = domain.getCorner1().evaluate().toDoubleArray();
         if (domainCorner[1] > 0.5) {
             activeSim.println("Full car domain detected");
