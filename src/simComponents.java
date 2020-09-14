@@ -6,8 +6,6 @@
     Raunaq Kumaran, January 2019
  */
 
-import star.base.neo.ClientServerObject;
-import star.base.neo.ClientServerObjectManager;
 import star.base.neo.NeoObjectVector;
 import star.base.report.MaxReport;
 import star.base.report.Report;
@@ -45,6 +43,9 @@ public class simComponents {
     public static final String REAR_RIGHT = "Rear Right";
     public static final String USER_STEERING = "User Steering";
     public static final String STEERING = "steering";
+    public static final String CORNERING = "cornering";
+    public static final String USER_CORNERING = "User Cornering Radius";
+    public static final String ANGULAR_VELOCITY = "Angular Velocity";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -109,6 +110,7 @@ public class simComponents {
     public double frontTyreRadius = 0.228599;           //meters
     public double rearTyreRadius = 0.228599;            //meters
     public double wheelBase = 61;                       //inches (i know, sorry)
+    public double trackWidth = 47;                      //inches again (sorry)
     public double radResBig = 10000;                    //Pretty sure this can be any big number.
 
     // Subtract object
@@ -116,12 +118,14 @@ public class simComponents {
 
     //Parameters for user flow characteristics
     private ScalarGlobalParameter freestreamParameter;
+    private ScalarGlobalParameter corneringRadiusParameter;
     private ScalarGlobalParameter userYaw;
     private ScalarGlobalParameter userFreestream;
     private ScalarGlobalParameter frontRide;
     private ScalarGlobalParameter rearRide;
     private ScalarGlobalParameter sideSlip;
     private ScalarGlobalParameter userSteering;
+    public ScalarGlobalParameter angularVelocity;
 
     //Flags to track sim status
     public boolean fullCarFlag;             //True if full car domain detected
@@ -140,6 +144,7 @@ public class simComponents {
     public PhysicsContinuum steadyStatePhysics;
     public PhysicsContinuum desPhysics;
     public double freestreamVal;
+    public double corneringRadius;
     public boolean dualRadFlag;
     public boolean fanFlag;
     public boolean corneringFlag;
@@ -247,7 +252,7 @@ public class simComponents {
         checkVersion();
 
         //Define user parameters
-        userParameters();
+        parameters();
 
         // Units
         noUnit = activeSim.getUnitsManager().getObject("");
@@ -396,7 +401,7 @@ public class simComponents {
 
     //Assigns user parameters in the sim file to their associated java objects. Makes it easier to refer to them later
 
-    private void userParameters()
+    private void parameters()
     {
         userFreestream = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FREESTREAM);
         userYaw = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_YAW);
@@ -404,6 +409,8 @@ public class simComponents {
         rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
         sideSlip = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(SIDESLIP);
         userSteering = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_STEERING);
+        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_CORNERING);
+        angularVelocity = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(ANGULAR_VELOCITY);
     }
 
     //Sets up boundary conditions. It's generally a good idea to avoid touching things (especially boundaries) when you can avoid it.
@@ -532,6 +539,7 @@ public class simComponents {
 
         // Flags
         freestreamVal = valEnv("freestream");
+        corneringRadius = valEnv(CORNERING);
         DESFlag = boolEnv("DES");
         wtFlag = boolEnv("windTunnel");
         setFreestreamParameterValue();
@@ -549,6 +557,8 @@ public class simComponents {
     public void setFreestreamParameterValue() {
         freestreamParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
         freestreamParameter.getQuantity().setValue(freestreamVal);
+        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
+        corneringRadiusParameter.getQuantity().setValue(corneringRadius);
     }
 
     //This is assigning the continuua objects in the sim to their java objects.
@@ -705,6 +715,10 @@ public class simComponents {
         else if (env.equals(CONFIGSIDESLIP))
         {
             return sideSlip.getQuantity().getRawValue();
+        }
+        else if (env.equals(CORNERING))
+        {
+            return corneringRadiusParameter.getQuantity().getRawValue();
         }
         else if (env.equals(STEERING))
             return userSteering.getQuantity().getRawValue();
