@@ -2,6 +2,8 @@ import star.base.neo.DoubleVector;
 import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.flow.*;
+import star.motion.BoundaryReferenceFrameSpecification;
+import star.motion.ReferenceFrameOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -143,22 +145,39 @@ public class regions extends StarMacro {
 
     //Sets up boundary conditions for the domain boundaries. Ground, inlet, outlet, symmetry, symmetry, symmetry.
     private void setDomainBoundaries(simComponents activeSim) {
-            String yVal = String.valueOf(activeSim.calculateSideslip());
-            activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.fsInlet.setBoundaryType(InletBoundary.class);
-            activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
-                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
-            activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
-                    setSelected(WallSlidingOption.Type.VECTOR);
-            if (activeSim.wtFlag)
-                activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
-            else
-                activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
-            activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
+        if (activeSim.corneringFlag)
+        {
+            setDomainBoundaries_Cornering(activeSim);
+            return;
+        }
+        String yVal = String.valueOf(activeSim.calculateSideslip());
+        activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
+                getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
+        activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
+                setSelected(WallSlidingOption.Type.VECTOR);
+        if (activeSim.wtFlag)
+            activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
+                    getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
+        else
+            activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
+                    getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
+        activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
+    }
+
+    private void setDomainBoundaries_Cornering(simComponents activeSim){
+        activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.fsOutlet.setBoundaryType(OutletBoundary.class);
+        activeSim.groundPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+        activeSim.groundPlane.get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+        activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+        activeSim.fsInlet.get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
     }
 
     //Set up interfaces for a full car domain. Need to interface the left and right boundaries together, otherwise the domain will naturally straighten any yaw condition you set at the inlet.

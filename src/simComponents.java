@@ -13,6 +13,7 @@ import star.cadmodeler.SolidModelPart;
 import star.common.*;
 import star.flow.AccumulatedForceTable;
 import star.meshing.*;
+import star.motion.UserRotatingReferenceFrame;
 import star.screenplay.Screenplay;
 import star.screenplay.ScreenplayManager;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
@@ -47,6 +48,7 @@ public class simComponents {
     public static final String USER_CORNERING = "User Cornering Radius";
     public static final String ANGULAR_VELOCITY = "Angular Velocity";
     public static final String DOMAIN_AXIS = "Domain_Axis";
+    public static final String ROTATING = "Rotating";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -64,7 +66,6 @@ public class simComponents {
     private Collection<GeometryPart> liftGenerators;
     public String[] aeroPrefixes = {"RW", "FW", "UT", "EC", "MOUNT", "SW", "FC"};                                       //These prefixes will be used to decide what an aero component is.
     private String[] liftGeneratorPrefixes = {"RW", "FW", "UT", "SW", "FC"};                                            //These prefixes generate lift. Aero surface wrap control needs to know this.
-    public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
     private String[] nonAeroPrefixes = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
     private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                                     //Names for wheels. Must be exact.
     public Collection<Boundary> domainBounds;
@@ -170,6 +171,7 @@ public class simComponents {
     public CylindricalCoordinateSystem rearWheelCoord;
     public CylindricalCoordinateSystem frontWheelSteering;
     public CylindricalCoordinateSystem domainAxis;
+    public UserRotatingReferenceFrame rotatingFrame;
     public Boundary fsInlet;                            //fs refers to freestream here
     public Boundary leftPlane;
     public Boundary groundPlane;
@@ -761,7 +763,10 @@ public class simComponents {
                 dualRadCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().
                         getCoordinateSystem("Dual Radiator Cartesian");
             if (corneringFlag)
+            {
+                rotatingFrame = (UserRotatingReferenceFrame) activeSim.getReferenceFrameManager().getObject(ROTATING);
                 domainAxis = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(DOMAIN_AXIS);
+            }
 
         } catch (Exception e) {
             activeSim.println("simComponents.java - Coordinate system lookup failed");
