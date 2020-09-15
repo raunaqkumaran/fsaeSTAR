@@ -46,6 +46,7 @@ public class simComponents {
     public static final String CORNERING = "cornering";
     public static final String USER_CORNERING = "User Cornering Radius";
     public static final String ANGULAR_VELOCITY = "Angular Velocity";
+    public static final String DOMAIN_AXIS = "Domain_Axis";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -167,6 +168,7 @@ public class simComponents {
     public CylindricalCoordinateSystem frontWheelCoord;
     public CylindricalCoordinateSystem rearWheelCoord;
     public CylindricalCoordinateSystem frontWheelSteering;
+    public CylindricalCoordinateSystem domainAxis;
     public Boundary fsInlet;                            //fs refers to freestream here
     public Boundary leftPlane;
     public Boundary groundPlane;
@@ -757,6 +759,8 @@ public class simComponents {
             if (dualRadFlag)
                 dualRadCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().
                         getCoordinateSystem("Dual Radiator Cartesian");
+            if (corneringFlag)
+                domainAxis = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(DOMAIN_AXIS);
 
         } catch (Exception e) {
             activeSim.println("simComponents.java - Coordinate system lookup failed");
