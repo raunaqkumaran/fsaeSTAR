@@ -59,18 +59,18 @@ public class simComponents {
     private Collection<GeometryPart> liftGenerators;
     public String[] aeroPrefixes = {"RW", "FW", "UT", "EC", "MOUNT", "SW", "FC"};                                       //These prefixes will be used to decide what an aero component is.
     private String[] liftGeneratorPrefixes = {"RW", "FW", "UT", "SW", "FC"};                                            //These prefixes generate lift. Aero surface wrap control needs to know this.
+    public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
+    private String[] nonAeroPrefixes = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
+    private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                                     //Names for wheels. Must be exact.
     public Collection<Boundary> domainBounds;
     public Collection<Boundary> radBounds;
     public Collection<Boundary> freestreamBounds;
     public Collection<Boundary> partBounds;
     public Collection<Boundary> wheelBounds;
-    public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
     public Map<String, Collection<Boundary>> partSpecBounds;
     private Collection<GeometryPart> allParts;
     private Collection<GeometryPart> radiator;
     private Collection<GeometryPart> dualRadiator;
-    private String[] nonAeroPrefixes = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
-    private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                                     //Names for wheels. Must be exact.
     private String radiatorName = "CFD_RADIATOR";
     private String dualRadiatorName = "CFD_DUAL_RADIATOR";
 
