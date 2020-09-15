@@ -9,6 +9,7 @@
 import star.base.neo.NeoObjectVector;
 import star.base.report.MaxReport;
 import star.base.report.Report;
+import star.cadmodeler.SolidModelPart;
 import star.common.*;
 import star.flow.AccumulatedForceTable;
 import star.meshing.*;
@@ -42,13 +43,17 @@ public class simComponents {
     public static final String REAR_RIGHT = "Rear Right";
     public static final String USER_STEERING = "User Steering";
     public static final String STEERING = "steering";
+    public static final String CORNERING = "cornering";
+    public static final String USER_CORNERING = "User Cornering Radius";
+    public static final String ANGULAR_VELOCITY = "Angular Velocity";
+    public static final String DOMAIN_AXIS = "Domain_Axis";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 3.2;
+    private double version = 4.0;
 
     // Simulation object
     public Simulation activeSim;
@@ -67,6 +72,8 @@ public class simComponents {
     public Collection<Boundary> freestreamBounds;
     public Collection<Boundary> partBounds;
     public Collection<Boundary> wheelBounds;
+    public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
+    public String freestreamCornering = "Freestream_C";
     public Map<String, Collection<Boundary>> partSpecBounds;
     private Collection<GeometryPart> allParts;
     private Collection<GeometryPart> radiator;
@@ -105,6 +112,7 @@ public class simComponents {
     public double frontTyreRadius = 0.228599;           //meters
     public double rearTyreRadius = 0.228599;            //meters
     public double wheelBase = 61;                       //inches (i know, sorry)
+    public double trackWidth = 47;                      //inches again (sorry)
     public double radResBig = 10000;                    //Pretty sure this can be any big number.
 
     // Subtract object
@@ -112,12 +120,14 @@ public class simComponents {
 
     //Parameters for user flow characteristics
     private ScalarGlobalParameter freestreamParameter;
+    private ScalarGlobalParameter corneringRadiusParameter;
     private ScalarGlobalParameter userYaw;
     private ScalarGlobalParameter userFreestream;
     private ScalarGlobalParameter frontRide;
     private ScalarGlobalParameter rearRide;
     private ScalarGlobalParameter sideSlip;
     private ScalarGlobalParameter userSteering;
+    public ScalarGlobalParameter angularVelocity;
 
     //Flags to track sim status
     public boolean fullCarFlag;             //True if full car domain detected
@@ -136,8 +146,10 @@ public class simComponents {
     public PhysicsContinuum steadyStatePhysics;
     public PhysicsContinuum desPhysics;
     public double freestreamVal;
+    public double corneringRadius;
     public boolean dualRadFlag;
     public boolean fanFlag;
+    public boolean corneringFlag;
 
     // Regions
     private String subtractName = "Subtract";
@@ -157,6 +169,7 @@ public class simComponents {
     public CylindricalCoordinateSystem frontWheelCoord;
     public CylindricalCoordinateSystem rearWheelCoord;
     public CylindricalCoordinateSystem frontWheelSteering;
+    public CylindricalCoordinateSystem domainAxis;
     public Boundary fsInlet;                            //fs refers to freestream here
     public Boundary leftPlane;
     public Boundary groundPlane;
@@ -215,6 +228,7 @@ public class simComponents {
     public VolumeCustomMeshControl volControlUnderbody;
     public MeshOperationPart subtractPart;
     public SimpleBlockPart domain;
+    public SolidModelPart domain_c;
     public SurfaceWrapperAutoMeshOperation surfaceWrapOperation;
     public SurfaceWrapperAutoMeshOperation surfaceWrapOperationPPM;
     public SurfaceCustomMeshControl aeroSurfaceWrapper;
@@ -241,7 +255,7 @@ public class simComponents {
         checkVersion();
 
         //Define user parameters
-        userParameters();
+        parameters();
 
         // Units
         noUnit = activeSim.getUnitsManager().getObject("");
@@ -390,7 +404,7 @@ public class simComponents {
 
     //Assigns user parameters in the sim file to their associated java objects. Makes it easier to refer to them later
 
-    private void userParameters()
+    private void parameters()
     {
         userFreestream = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FREESTREAM);
         userYaw = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_YAW);
@@ -398,6 +412,8 @@ public class simComponents {
         rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
         sideSlip = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(SIDESLIP);
         userSteering = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_STEERING);
+        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_CORNERING);
+        angularVelocity = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(ANGULAR_VELOCITY);
     }
 
     //Sets up boundary conditions. It's generally a good idea to avoid touching things (especially boundaries) when you can avoid it.
@@ -526,6 +542,7 @@ public class simComponents {
 
         // Flags
         freestreamVal = valEnv("freestream");
+        corneringRadius = valEnv(CORNERING);
         DESFlag = boolEnv("DES");
         wtFlag = boolEnv("windTunnel");
         setFreestreamParameterValue();
@@ -543,6 +560,8 @@ public class simComponents {
     public void setFreestreamParameterValue() {
         freestreamParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
         freestreamParameter.getQuantity().setValue(freestreamVal);
+        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
+        corneringRadiusParameter.getQuantity().setValue(corneringRadius);
     }
 
     //This is assigning the continuua objects in the sim to their java objects.
@@ -567,16 +586,29 @@ public class simComponents {
 
     //Assigns the freestream domain in the sim to its java object. Doesn't throw a killer exception. Could probably be modified to throw one. It's very unlikely the macro is going to get very far without a freestream anyway.
     private void domainCatch() {
-        try {
-            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart("Freestream");
-        } catch (NullPointerException e) {
-            activeSim.println(this.getClass().getName() + " - Domain could not be caught");
+
+        if (activeSim.get(SimulationPartManager.class).has(freestreamPrefix))
+        {
+            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(freestreamPrefix);
+            corneringFlag = false;
+            activeSim.println("Straight domain detected");
         }
+        else if (activeSim.get(SimulationPartManager.class).has(freestreamCornering))
+        {
+            domain_c = (SolidModelPart) activeSim.get(SimulationPartManager.class).getPart(freestreamCornering);
+            corneringFlag = true;
+            activeSim.println("Cornering domain detected");
+        }
+        else
+            throw new RuntimeException("Could not find a domain. Check the domainCatch() method in simComponents.java");
+
     }
 
     //Returns true for full car. False for half car. Based purely on whether or not the y-coordinate of the domain block extends beyong positive +0.5 meters. PLEASE KEEP USING METERS.
     private boolean domainSizing() {
 
+        if (domain == null)
+            return true;
         double[] domainCorner = domain.getCorner1().evaluate().toDoubleArray();
         if (domainCorner[1] > 0.5) {
             activeSim.println("Full car domain detected");
@@ -687,6 +719,10 @@ public class simComponents {
         {
             return sideSlip.getQuantity().getRawValue();
         }
+        else if (env.equals(CORNERING))
+        {
+            return corneringRadiusParameter.getQuantity().getRawValue();
+        }
         else if (env.equals(STEERING))
             return userSteering.getQuantity().getRawValue();
         else if (env.equals("maxSteps"))
@@ -724,6 +760,8 @@ public class simComponents {
             if (dualRadFlag)
                 dualRadCoord = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().
                         getCoordinateSystem("Dual Radiator Cartesian");
+            if (corneringFlag)
+                domainAxis = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(DOMAIN_AXIS);
 
         } catch (Exception e) {
             activeSim.println("simComponents.java - Coordinate system lookup failed");

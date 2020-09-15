@@ -135,6 +135,12 @@ public class regions extends StarMacro {
         }
     }
 
+    private double velocityDifference(simComponents activeSim)
+    {
+        double omega = activeSim.angularVelocity.getQuantity().evaluate();
+        return omega * activeSim.trackWidth;
+    }
+
     //Sets up boundary conditions for the domain boundaries. Ground, inlet, outlet, symmetry, symmetry, symmetry.
     private void setDomainBoundaries(simComponents activeSim) {
             String yVal = String.valueOf(activeSim.calculateSideslip());
