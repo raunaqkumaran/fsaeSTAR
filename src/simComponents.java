@@ -345,6 +345,7 @@ public class simComponents {
         // Set up coordinate systems
         activeSim.getCoordinateSystemManager().getLabCoordinateSystem();
 
+        domainCatch();
         setupCoordinates();
 
         // Set up scenes, representations, and views.
@@ -380,7 +381,6 @@ public class simComponents {
         plots = activeSim.getPlotManager().getPlots();
 
         //Define domain sizes
-        domainCatch();
         fullCarFlag = domainSizing();
         if (!fullCarFlag)
             profileLimits[1] = 0;
