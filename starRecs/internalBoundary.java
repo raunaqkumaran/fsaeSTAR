@@ -1,3 +1,5 @@
+
+
 // STAR-CCM+ macro: internalBoundary.java
 // Written by STAR-CCM+ 14.06.013
 package macro;

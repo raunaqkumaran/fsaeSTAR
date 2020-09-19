@@ -2,6 +2,8 @@ import star.base.neo.DoubleVector;
 import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.flow.*;
+import star.motion.BoundaryReferenceFrameSpecification;
+import star.motion.ReferenceFrameOption;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,16 +97,25 @@ public class regions extends StarMacro {
 
     private void setTyreRotation(simComponents activeSim) {
 
-        for (Boundary wheelBound : activeSim.wheelBounds) {
-            //Calculate angular rotation rate for wheels based on freestream (vehicle speed) and provided tyre radii. (omega = v/r, need to have m/s and meters)
-            double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
-            double rearRotationRate = activeSim.freestreamVal / activeSim.rearTyreRadius;
+        //Calculate angular rotation rate for wheels based on freestream (vehicle speed) and provided tyre radii. (omega = v/r, need to have m/s and meters)
+        double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
+        double rearRotationRate = activeSim.freestreamVal / activeSim.rearTyreRadius;
+        double diffVelocity;
+        //Set rotation rates to zero if the wt flag is enabled.
+        if (activeSim.wtFlag) {
+            frontRotationRate = 0;
+            rearRotationRate = 0;
+        }
+        if (activeSim.corneringFlag)
+        {
+            diffVelocity = velocityDifference(activeSim);
+        }
+        else
+        {
+            diffVelocity = 0;
+        }
 
-            //Set rotation rates to zero if the wt flag is enabled.
-            if (activeSim.wtFlag) {
-                frontRotationRate = 0;
-                rearRotationRate = 0;
-            }
+        for (Boundary wheelBound : activeSim.wheelBounds) {
 
             //Set the correct boundary type to the wheels.
             String boundName = wheelBound.getPresentationName();
@@ -112,22 +123,39 @@ public class regions extends StarMacro {
                     setSelected(WallSlidingOption.Type.LOCAL_ROTATION_RATE);
 
             try {
-
                 //This is the chunk that actually assigns the rotation rate to the wheels.
                 if (boundName.contains("Front")) {
-                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + frontRotationRate);
+                    double rotationRate = frontRotationRate;
+                    if (boundName.contains("Front Right"))
+                    {
+                        rotationRate = frontRotationRate - diffVelocity / activeSim.frontTyreRadius;
+                    }
+                    else if (boundName.contains("Front Left"))
+                    {
+                        rotationRate = frontRotationRate + diffVelocity / activeSim.frontTyreRadius;
+                    }
+                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + rotationRate);
                     wheelBound.getValues().
                             get(ReferenceFrame.class).setCoordinateSystem(activeSim.frontWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
                             getMethod(ConstantScalarProfileMethod.class).getQuantity().
-                            setValue(frontRotationRate);
+                            setValue(rotationRate);
                 } else if (boundName.contains("Rear")) {
-                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rearRotationRate);
+                    double rotationRate = rearRotationRate;
+                    if (boundName.contains("Rear Right"))
+                    {
+                        rotationRate = rearRotationRate - diffVelocity / activeSim.rearTyreRadius;
+                    }
+                    else if (boundName.contains("Rear Left"))
+                    {
+                        rotationRate = rearRotationRate + diffVelocity / activeSim.rearTyreRadius;
+                    }
+                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rotationRate);
                     wheelBound.getValues().get(ReferenceFrame.class).
                             setCoordinateSystem(activeSim.rearWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
                             getMethod(ConstantScalarProfileMethod.class).getQuantity().
-                            setValue(rearRotationRate);
+                            setValue(rotationRate);
                 }
             } catch (Exception e) {
                 activeSim.activeSim.println("regions.java - Wheel boundary set-up failed");
@@ -138,27 +166,44 @@ public class regions extends StarMacro {
     private double velocityDifference(simComponents activeSim)
     {
         double omega = activeSim.angularVelocity.getQuantity().evaluate();
-        return omega * activeSim.trackWidth;
+        return omega * activeSim.trackWidth * 0.0254;
     }
 
     //Sets up boundary conditions for the domain boundaries. Ground, inlet, outlet, symmetry, symmetry, symmetry.
     private void setDomainBoundaries(simComponents activeSim) {
-            String yVal = String.valueOf(activeSim.calculateSideslip());
-            activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.fsInlet.setBoundaryType(InletBoundary.class);
-            activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
-                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
-            activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
-                    setSelected(WallSlidingOption.Type.VECTOR);
-            if (activeSim.wtFlag)
-                activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
-            else
-                activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
-            activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
+        if (activeSim.corneringFlag)
+        {
+            setDomainBoundaries_Cornering(activeSim);
+            return;
+        }
+        String yVal = String.valueOf(activeSim.calculateSideslip());
+        activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
+                getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
+        activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
+                setSelected(WallSlidingOption.Type.VECTOR);
+        if (activeSim.wtFlag)
+            activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
+                    getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
+        else
+            activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
+                    getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
+        activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
+    }
+
+    private void setDomainBoundaries_Cornering(simComponents activeSim){
+        activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.fsOutlet.setBoundaryType(OutletBoundary.class);
+        activeSim.groundPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+        activeSim.groundPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+        activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+        activeSim.fsInlet.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
     }
 
     //Set up interfaces for a full car domain. Need to interface the left and right boundaries together, otherwise the domain will naturally straighten any yaw condition you set at the inlet.
