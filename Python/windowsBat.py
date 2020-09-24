@@ -4,7 +4,7 @@ import batchBuilderSupport as bbs
 import os
 import sys
 
-path = r"D:\2021 Simulations\Moved"
+path = r"D:\2021 Simulations"
 sizeLimit = 400e6
 fileList = bbs.get_file_list(path, sizeLimit)
 starPath = r'"C:\Program Files\Siemens\15.04.010-R8\STAR-CCM+15.04.010-R8\star\bin\starccm+.exe"'
