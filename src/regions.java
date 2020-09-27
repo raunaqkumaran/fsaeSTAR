@@ -85,22 +85,21 @@ public class regions extends StarMacro {
         fanInterface.setInterfaceType(FanInterface.class);
         fanInterface.getConditions().get(InterfaceFanCurveSpecification.class).getFanCurveTypeOption().setSelected(FanCurveTypeOption.Type.TABLE);
         FanCurveTableLeaf node = fanInterface.getValues().get(FanCurveTable.class).getModelPartValue();
-        activeSim.activeSim.getTableManager().getTable("fan_table_csv").extract();
-        node.setVolumeFlowTable(activeSim.activeSim.getTableManager().getTable("fan_table_csv"));
-        FileTable fanTable = (FileTable) activeSim.activeSim.getTableManager().getTable("fan_table_csv");
-        fanTable.setFileName("fan_curve.csv");
-        if (!fanTable.getFile().exists())
+        node.setVolumeFlowTable(activeSim.fan_curve_table);
+        activeSim.fan_curve_table.setFileName(simComponents.FAN_CURVE_CSV_FN);
+        if (!activeSim.fan_curve_table.getFile().exists())
         {
             activeSim.activeSim.println("Cannot find fan_curve.csv in working directory, attempting to find file in classpath");
             String classPath = simComponents.valEnvString("CP");
-            String filePath = classPath + File.separator + "fan_curve.csv";
+            String filePath = classPath + File.separator + simComponents.FAN_CURVE_CSV_FN;
             File f = new File(filePath);
             if (!f.exists())
             {
                 throw new IllegalStateException("No fan table found. Terminating");
             }
-            fanTable.setFileName(filePath);
+            activeSim.fan_curve_table.setFileName(filePath);
         }
+        activeSim.fan_curve_table.extract();
         node.setVolumeFlowTableX("m^3/s");
         node.setVolumeFlowUnitsX(activeSim.activeSim.getUnitsManager().getUnits("m^3/s"));
         if (activeSim.fanFlag)

@@ -49,6 +49,7 @@ public class simComponents {
     public static final String ANGULAR_VELOCITY = "Angular Velocity";
     public static final String DOMAIN_AXIS = "Domain_Axis";
     public static final String ROTATING = "Rotating";
+    public static final String FAN_CURVE_CSV_FN = "fan_curve.csv";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -151,6 +152,7 @@ public class simComponents {
     public boolean dualRadFlag;
     public boolean fanFlag;
     public boolean corneringFlag;
+    public FileTable fan_curve_table;
 
     // Regions
     private String subtractName = "Subtract";
@@ -385,8 +387,9 @@ public class simComponents {
         if (!fullCarFlag)
             profileLimits[1] = 0;
 
-        //Set up fan flag
+        //Set up fan flag and table
         fanFlag = boolEnv("FAN");
+        fan_curve_table = (FileTable) activeSim.getTableManager().getTable("fan_table_csv");
 
         //Set physics objects
         physicsSet();
