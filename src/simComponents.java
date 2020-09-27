@@ -45,7 +45,8 @@ public class simComponents {
     public static final String USER_STEERING = "User Steering";
     public static final String STEERING = "steering";
     public static final String CORNERING = "cornering";
-    public static final String USER_CORNERING = "User Cornering Radius";
+    public static final String USER_CORNERING_RADIUS = "User Cornering Radius";
+    public static final String USER_CORNERING = USER_CORNERING_RADIUS;
     public static final String ANGULAR_VELOCITY = "Angular Velocity";
     public static final String DOMAIN_AXIS = "Domain_Axis";
     public static final String ROTATING = "Rotating";
@@ -417,7 +418,7 @@ public class simComponents {
         rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
         sideSlip = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(SIDESLIP);
         userSteering = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_STEERING);
-        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_CORNERING);
+        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_CORNERING_RADIUS);
         angularVelocity = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(ANGULAR_VELOCITY);
     }
 
@@ -563,9 +564,7 @@ public class simComponents {
     }
 
     public void setFreestreamParameterValue() {
-        freestreamParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
         freestreamParameter.getQuantity().setValue(freestreamVal);
-        corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
         corneringRadiusParameter.getQuantity().setValue(corneringRadius);
     }
 
