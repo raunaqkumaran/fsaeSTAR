@@ -1,5 +1,6 @@
 import star.common.GeometryPart;
 import star.common.Simulation;
+import star.common.SimulationPartManager;
 import star.common.StarMacro;
 import star.meshing.MesherParallelModeOption;
 import star.meshing.SurfaceCustomMeshControl;
@@ -18,6 +19,7 @@ public class surfaceWrap extends StarMacro {
         // Instantiate simComponents object
         Simulation simFile = getActiveSimulation();
         simComponents simObject = new simComponents(simFile);
+
 
         // Set up controls. Unlike autoMesh which depends on the user to define which controls are enabled. surfaceWrap automatically enables everything.
 

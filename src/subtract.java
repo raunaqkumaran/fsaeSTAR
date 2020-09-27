@@ -1,3 +1,4 @@
+import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.meshing.MeshOperationPart;
 
@@ -22,7 +23,10 @@ public class subtract extends StarMacro {
         if (!simObject.corneringFlag)
             domain = simObject.domain;
         else
+        {
             domain = simObject.domain_c;
+            simObject.activeSim.get(SimulationPartManager.class).updateParts(new NeoObjectVector(new Object[] {domain, simObject.farWakePart}));
+        }
         subtractManager.setObjects(domain);
         subtractManager.addObjects(surfaceWrap);
 

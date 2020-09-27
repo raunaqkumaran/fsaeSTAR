@@ -54,12 +54,12 @@ public class postProc extends StarMacro {
         }
 
         //Export mesh and 3D scenes before destroying the mesh.
+        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
+                sim.inches, new DoubleVector(sim.profileDirection));
         sim.activeSim.println("---Exporting mesh---");
         postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1, sim.meshScene);
         sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
-        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
-            sim.inches, new DoubleVector(sim.profileDirection));
 
         //Need to merge boundaries, otherwise it takes forever to get 2D data when you have 10k+ boundaries (thanks powertrain)
         sim.activeSim.println("---Merging boundaries---");

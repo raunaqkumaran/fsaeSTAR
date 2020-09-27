@@ -5,6 +5,7 @@ import star.flow.*;
 import star.motion.BoundaryReferenceFrameSpecification;
 import star.motion.ReferenceFrameOption;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -86,6 +87,20 @@ public class regions extends StarMacro {
         FanCurveTableLeaf node = fanInterface.getValues().get(FanCurveTable.class).getModelPartValue();
         activeSim.activeSim.getTableManager().getTable("fan_table_csv").extract();
         node.setVolumeFlowTable(activeSim.activeSim.getTableManager().getTable("fan_table_csv"));
+        FileTable fanTable = (FileTable) activeSim.activeSim.getTableManager().getTable("fan_table_csv");
+        fanTable.setFileName("fan_curve.csv");
+        if (!fanTable.getFile().exists())
+        {
+            activeSim.activeSim.println("Cannot find fan_curve.csv in working directory, attempting to find file in classpath");
+            String classPath = simComponents.valEnvString("CP");
+            String filePath = classPath + File.separator + "fan_curve.csv";
+            File f = new File(filePath);
+            if (!f.exists())
+            {
+                throw new IllegalStateException("No fan table found. Terminating");
+            }
+            fanTable.setFileName(filePath);
+        }
         node.setVolumeFlowTableX("m^3/s");
         node.setVolumeFlowUnitsX(activeSim.activeSim.getUnitsManager().getUnits("m^3/s"));
         if (activeSim.fanFlag)
