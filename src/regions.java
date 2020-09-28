@@ -86,18 +86,19 @@ public class regions extends StarMacro {
         fanInterface.getConditions().get(InterfaceFanCurveSpecification.class).getFanCurveTypeOption().setSelected(FanCurveTypeOption.Type.TABLE);
         FanCurveTableLeaf node = fanInterface.getValues().get(FanCurveTable.class).getModelPartValue();
         node.setVolumeFlowTable(activeSim.fan_curve_table);
-        activeSim.fan_curve_table.setFileName(simComponents.FAN_CURVE_CSV_FN);
-        if (!activeSim.fan_curve_table.getFile().exists())
+        File fanfile = new File(activeSim.dir + activeSim.separator + simComponents.FAN_CURVE_CSV_FN);
+        if (fanfile.exists())
+            activeSim.fan_curve_table.setFile(fanfile);
+        else
         {
             activeSim.activeSim.println("Cannot find fan_curve.csv in working directory, attempting to find file in classpath");
             String classPath = simComponents.valEnvString("CP");
             String filePath = classPath + File.separator + simComponents.FAN_CURVE_CSV_FN;
-            File f = new File(filePath);
-            if (!f.exists())
-            {
+            fanfile = new File(filePath);
+            if (!fanfile.exists())
                 throw new IllegalStateException("No fan table found. Terminating");
-            }
-            activeSim.fan_curve_table.setFileName(filePath);
+            else
+                activeSim.fan_curve_table.setFile(fanfile);
         }
         activeSim.fan_curve_table.extract();
         node.setVolumeFlowTableX("m^3/s");
@@ -216,8 +217,10 @@ public class regions extends StarMacro {
         activeSim.groundPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
         activeSim.groundPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
         activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
         activeSim.fsInlet.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
         activeSim.fsInlet.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+        activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(0);
     }
 
     //Set up interfaces for a full car domain. Need to interface the left and right boundaries together, otherwise the domain will naturally straighten any yaw condition you set at the inlet.
@@ -237,6 +240,11 @@ public class regions extends StarMacro {
                 activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.yawInterface);
                 setDomainBoundaries(activeSim);  //I don't know why I'm calling this. I think it's for repeatability, to make sure there's a consistent set-up for the domain boundaries before createBoundaryInterface is called.
             }
+
+            //For the time being, don't want to set yaw if we're cornering.
+
+            if (activeSim.corneringFlag)
+                return;
 
             activeSim.activeSim.println("Creating yaw interface");
             activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);

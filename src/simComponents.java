@@ -413,6 +413,7 @@ public class simComponents {
     private void parameters()
     {
         userFreestream = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FREESTREAM);
+        freestreamParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(FREESTREAM_PARAMETER_NAME);
         userYaw = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_YAW);
         frontRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_FRONT_RIDE_HEIGHT);
         rearRide = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_REAR_RIDE_HEIGHT);
