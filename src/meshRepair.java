@@ -6,6 +6,7 @@ import java.util.Vector;
 
 // So for this macro I didn't really fully rewrite it. This is mostly what you get by recording the macro with STAR's recorder.
 // This essentially scans the mesh for poor quality cells, high velocity cells, and removes them. This also splits the region by non-continguous, and proceedes to assign them with a null physics continuum to make sure they're essentially out of the solution.
+// If you want to improve the way we handle meshRepairing, this is where you'd tell fsaeSTAR which field functions to use for determining bad cells.
 
 public class meshRepair extends StarMacro {
 

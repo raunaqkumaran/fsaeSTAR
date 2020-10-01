@@ -59,6 +59,7 @@ public class regions extends StarMacro {
                 createBoundaryInterface(activeSim.domainRadOutlet, activeSim.radOutlet,
                         activeSim.massFlowInterfaceNameOutlet);
 
+        //Setting up fans
         activeSim.fanInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.radFanBound, activeSim.domainFanBound, "Fan Interface");
         setUpFan(activeSim, activeSim.fanInterface);
         if (activeSim.dualRadFlag && activeSim.domainDualRadInlet != null && activeSim.domainDualRadOutlet != null) {
@@ -80,15 +81,23 @@ public class regions extends StarMacro {
         }
     }
 
+    //This handles assigning a fan curve csv file to the fan curve table in STAR, and assigns that table to the fan boundary (passed as a parameter)
     public void setUpFan(simComponents activeSim, BoundaryInterface fanInterface)
     {
+        //Make sure the fan interface is set to use a table
         fanInterface.setInterfaceType(FanInterface.class);
         fanInterface.getConditions().get(InterfaceFanCurveSpecification.class).getFanCurveTypeOption().setSelected(FanCurveTypeOption.Type.TABLE);
         FanCurveTableLeaf node = fanInterface.getValues().get(FanCurveTable.class).getModelPartValue();
+
+        //assign fan curve table to fan interface
         node.setVolumeFlowTable(activeSim.fan_curve_table);
         File fanfile = new File(activeSim.dir + activeSim.separator + simComponents.FAN_CURVE_CSV_FN);
+
+        //If the csv file exists, set the fan curve table to use that csv, otherwise try to find it somewhere else.
         if (fanfile.exists())
             activeSim.fan_curve_table.setFile(fanfile);
+
+        //If there isn't a csv file in the sim's working directory, check the classpath. if there isn't one in the classpath, kill the sim.
         else
         {
             activeSim.activeSim.println("Cannot find fan_curve.csv in working directory, attempting to find file in classpath");
@@ -100,9 +109,13 @@ public class regions extends StarMacro {
             else
                 activeSim.fan_curve_table.setFile(fanfile);
         }
+
+        //Extract the fan curve table, make sure it's populated from the csv file before using it to enforce the fan boundary condition.
         activeSim.fan_curve_table.extract();
         node.setVolumeFlowTableX("m^3/s");
         node.setVolumeFlowUnitsX(activeSim.activeSim.getUnitsManager().getUnits("m^3/s"));
+
+        //If the fan flag is on, use the fan's pressure drop, otherwise set the pressure drop to zero. There's technically always a fan enabled in the sim, but a fan with no pressure drop isn't much of a fan...
         if (activeSim.fanFlag)
             node.setVolumeFlowTableP("dP");
         else
@@ -121,15 +134,15 @@ public class regions extends StarMacro {
             frontRotationRate = 0;
             rearRotationRate = 0;
         }
-        if (activeSim.corneringFlag)
-        {
-            diffVelocity = velocityDifference(activeSim);
-        }
-        else
-        {
-            diffVelocity = 0;
-        }
 
+        // If the sim is a cornering sim, you need to calculate the difference between inner and outer tyre rotation rates, assuming no slip.
+        if (activeSim.corneringFlag)
+            diffVelocity = velocityDifference(activeSim);
+        else
+            diffVelocity = 0;
+
+        //It's important to make sure the entire wheel assembly is combined into a single entity in STAR, otherwise your tyre will rotate, but nothing in the wheel will rotate, which doesn't make sense.
+        //Right now technically the uprights and at least parts of the control arms are rotating as well.......which might be something you want to fix at some point.
         for (Boundary wheelBound : activeSim.wheelBounds) {
 
             //Set the correct boundary type to the wheels.
@@ -143,11 +156,11 @@ public class regions extends StarMacro {
                     double rotationRate = frontRotationRate;
                     if (boundName.contains("Front Right"))
                     {
-                        rotationRate = frontRotationRate - diffVelocity / activeSim.frontTyreRadius;
+                        rotationRate = frontRotationRate - 0.5 * diffVelocity / activeSim.frontTyreRadius;
                     }
                     else if (boundName.contains("Front Left"))
                     {
-                        rotationRate = frontRotationRate + diffVelocity / activeSim.frontTyreRadius;
+                        rotationRate = frontRotationRate + 0.5 * diffVelocity / activeSim.frontTyreRadius;
                     }
                     activeSim.activeSim.println("Setting front tyre rotation rate to : " + rotationRate);
                     wheelBound.getValues().
@@ -159,11 +172,11 @@ public class regions extends StarMacro {
                     double rotationRate = rearRotationRate;
                     if (boundName.contains("Rear Right"))
                     {
-                        rotationRate = rearRotationRate - diffVelocity / activeSim.rearTyreRadius;
+                        rotationRate = rearRotationRate - 0.5 * diffVelocity / activeSim.rearTyreRadius;
                     }
                     else if (boundName.contains("Rear Left"))
                     {
-                        rotationRate = rearRotationRate + diffVelocity / activeSim.rearTyreRadius;
+                        rotationRate = rearRotationRate + 0.5 * diffVelocity / activeSim.rearTyreRadius;
                     }
                     activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rotationRate);
                     wheelBound.getValues().get(ReferenceFrame.class).
@@ -178,6 +191,7 @@ public class regions extends StarMacro {
         }
     }
 
+    //Use track width and angular velocity to figure out what the linear velocity difference is between the two tyres.
     private double velocityDifference(simComponents activeSim)
     {
         double omega = activeSim.angularVelocity.getQuantity().evaluate();
@@ -209,6 +223,7 @@ public class regions extends StarMacro {
         activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
     }
 
+    //Same thing as the method above, except for a cornering case.
     private void setDomainBoundaries_Cornering(simComponents activeSim){
         activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
         activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
@@ -329,6 +344,8 @@ public class regions extends StarMacro {
         activeSim.activeSim.println("merging: " + mergeBounds);
         meshManager.combineBoundaries(new NeoObjectVector(mergeBounds.toArray()));
     }
+
+    //Quick and dirty method to set up fans, and only fans when needed by run.java, and fan boundaries aren't already known.
     public void initFans(simComponents activeSim)
     {
         for (Interface x : activeSim.activeSim.getInterfaceManager().getObjects())
