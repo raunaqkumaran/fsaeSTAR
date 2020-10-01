@@ -769,6 +769,7 @@ public class simComponents {
             {
                 rotatingFrame = (UserRotatingReferenceFrame) activeSim.getReferenceFrameManager().getObject(ROTATING);
                 domainAxis = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(DOMAIN_AXIS);
+                domainAxis.getOrigin().setDefinition("[0, ${User Cornering Radius}, 0]");
             }
 
         } catch (Exception e) {
