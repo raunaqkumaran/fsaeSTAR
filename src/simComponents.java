@@ -25,7 +25,7 @@ import java.util.*;
 public class simComponents {
 
     //Some string constants. This is something I started doing later on, and haven't done for every string.
-    // I keep flip-flopping between whether or not this is a good idea or not, which means the final result of string management is pretty poor. Sorry.
+    //I keep flip-flopping between whether or not this is a good idea or not, which means the final result of string management is pretty poor. Sorry.
 
     public static final String YAW_INTERFACE_NAME = "Yaw interface";
     public static final String USER_FREESTREAM = "User Freestream";
@@ -46,11 +46,23 @@ public class simComponents {
     public static final String STEERING = "steering";
     public static final String CORNERING = "cornering";
     public static final String USER_CORNERING_RADIUS = "User Cornering Radius";
-    public static final String USER_CORNERING = USER_CORNERING_RADIUS;
     public static final String ANGULAR_VELOCITY = "Angular Velocity";
     public static final String DOMAIN_AXIS = "Domain_Axis";
     public static final String ROTATING = "Rotating";
     public static final String FAN_CURVE_CSV_FN = "fan_curve.csv";
+    public static final String SUBTRACT_NAME = "Subtract";
+    public static final String[] AERO_PREFIXES = {"RW", "FW", "UT", "EC", "MOUNT", "SW", "FC"};                                       //These prefixes will be used to decide what an aero component is.
+    public static final String[] LIFT_GENERATOR_PREFIXES = {"RW", "FW", "UT", "SW", "FC"};                                            //These prefixes generate lift. Aero surface wrap control needs to know this.
+    public static final String[] NON_AERO_PREFIXES = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
+    public static final String[] WHEEL_NAMES = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                                      //Names for wheels. Must be exact.
+    public static final String FREESTREAM_PREFIX = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
+    public static final String FREESTREAM_CORNERING = "Freestream_C";
+    public static final String RADIATOR_NAME = "CFD_RADIATOR";
+    public static final String DUAL_RADIATOR_NAME = "CFD_DUAL_RADIATOR";
+    public static final String SURFACE_WRAPPER = "Surface wrapper";
+    public static final String SURFACE_WRAPPER_PPM = "Surface wrapper PPM";
+    public static final String AERO_CONTROL = "Aero Control";
+    public static final String AERO_CONTROL_PPM = "Aero Control";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -66,23 +78,15 @@ public class simComponents {
     public Collection<GeometryPart> nonAeroParts;
     public Collection<GeometryPart> wheels;
     private Collection<GeometryPart> liftGenerators;
-    public String[] aeroPrefixes = {"RW", "FW", "UT", "EC", "MOUNT", "SW", "FC"};                                       //These prefixes will be used to decide what an aero component is.
-    private String[] liftGeneratorPrefixes = {"RW", "FW", "UT", "SW", "FC"};                                            //These prefixes generate lift. Aero surface wrap control needs to know this.
-    private String[] nonAeroPrefixes = {"CFD", "DONTGIVE", "NS"};                                                       //These are prefixes for non-aero parts. Everything other than aero and tyres must have one of these prefixes.
-    private String[] wheelNames = {FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT};                                     //Names for wheels. Must be exact.
     public Collection<Boundary> domainBounds;
     public Collection<Boundary> radBounds;
     public Collection<Boundary> freestreamBounds;
     public Collection<Boundary> partBounds;
     public Collection<Boundary> wheelBounds;
-    public String freestreamPrefix = "Freestream";                                                                      //This is the domain. Good way to make sure the macros filter out domain surfaces later on. Just make sure no actual parts include the term "freestream"
-    public String freestreamCornering = "Freestream_C";
     public Map<String, Collection<Boundary>> partSpecBounds;
     private Collection<GeometryPart> allParts;
     private Collection<GeometryPart> radiator;
     private Collection<GeometryPart> dualRadiator;
-    private String radiatorName = "CFD_RADIATOR";
-    private String dualRadiatorName = "CFD_DUAL_RADIATOR";
 
     //Double arrays to hold ranges for scenes and plane section sweeps. Limits are in inches, and control how far the cross sections will go. Pressures are Cps.
     public double[] profileLimits = {-29, 29};
@@ -156,7 +160,6 @@ public class simComponents {
     public FileTable fan_curve_table;
 
     // Regions
-    private String subtractName = "Subtract";
     public Region radiatorRegion;
     public Region dualRadiatorRegion;
     public Region domainRegion;
@@ -269,10 +272,10 @@ public class simComponents {
         meters = activeSim.getUnitsManager().getObject("m");
 
         // Initialize surface wrappers
-        surfaceWrapOperation = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject("Surface wrapper"));
-        surfaceWrapOperationPPM = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject("Surface wrapper PPM"));
-        aeroSurfaceWrapper = (SurfaceCustomMeshControl) surfaceWrapOperation.getCustomMeshControls().getObject("Aero Control");
-        aeroSurfaceWrapperPPM = (SurfaceCustomMeshControl) surfaceWrapOperationPPM.getCustomMeshControls().getObject("Aero Control");
+        surfaceWrapOperation = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject(SURFACE_WRAPPER));
+        surfaceWrapOperationPPM = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject(SURFACE_WRAPPER_PPM));
+        aeroSurfaceWrapper = (SurfaceCustomMeshControl) surfaceWrapOperation.getCustomMeshControls().getObject(AERO_CONTROL);
+        aeroSurfaceWrapperPPM = (SurfaceCustomMeshControl) surfaceWrapOperationPPM.getCustomMeshControls().getObject(AERO_CONTROL_PPM);
 
 
         // Part management. Get an object to hold all parts.
@@ -288,28 +291,28 @@ public class simComponents {
         //This does all the filtering.
         for (GeometryPart prt : allParts) {
             String prtName = prt.getPresentationName();
-            for (String prefix : aeroPrefixes) {
+            for (String prefix : AERO_PREFIXES) {
                 if (prtName.startsWith(prefix)) {
                     aeroParts.add(prt);
                 }
             }
-            for (String prefix : nonAeroPrefixes) {
+            for (String prefix : NON_AERO_PREFIXES) {
                 if (prtName.startsWith(prefix))
                     nonAeroParts.add(prt);
             }
-            for (String prefix : wheelNames) {
+            for (String prefix : WHEEL_NAMES) {
                 if (prtName.startsWith(prefix))
                     wheels.add(prt);
             }
-            for (String prefix : liftGeneratorPrefixes) {
+            for (String prefix : LIFT_GENERATOR_PREFIXES) {
                 if (prtName.startsWith(prefix)) {
                     liftGenerators.add(prt);
                 }
             }
-            if (prtName.startsWith(radiatorName))
+            if (prtName.startsWith(RADIATOR_NAME))
                 radiator.add(prt);
 
-            if (prtName.startsWith(dualRadiatorName))
+            if (prtName.startsWith(DUAL_RADIATOR_NAME))
                 dualRadiator.add(prt);
         }
         dualRadFlag = dualRadiator.size() != 0;     //Sets dual rad flag to true if populateAllParts finds something for dualRadFlag
@@ -357,7 +360,7 @@ public class simComponents {
 
 
         // Set up subtract
-        subtract = (SubtractPartsOperation) activeSim.get(MeshOperationManager.class).getObject(subtractName);
+        subtract = (SubtractPartsOperation) activeSim.get(MeshOperationManager.class).getObject(SUBTRACT_NAME);
         mesherSetup();
 
 
@@ -375,10 +378,10 @@ public class simComponents {
 
 
         // Miscellaneous constructor things
-        radPart = activeSim.get(SimulationPartManager.class).getObject(radiatorName);
-        subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(subtractName);
+        radPart = activeSim.get(SimulationPartManager.class).getObject(RADIATOR_NAME);
+        subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(SUBTRACT_NAME);
         if (dualRadFlag)
-            dualRadPart = activeSim.get(SimulationPartManager.class).getObject(dualRadiatorName);
+            dualRadPart = activeSim.get(SimulationPartManager.class).getObject(DUAL_RADIATOR_NAME);
 
         // Plots
         plots = activeSim.getPlotManager().getPlots();
@@ -432,13 +435,13 @@ public class simComponents {
             String boundName = bound.getPresentationName();
 
             //check for domain
-            if (boundName.contains(freestreamPrefix)) {
+            if (boundName.contains(FREESTREAM_PREFIX)) {
                 freestreamBounds.add(bound);
                 partFlag = 1;
             }
             //check for wheels
             else {
-                for (String wheelName : wheelNames) {
+                for (String wheelName : WHEEL_NAMES) {
                     if (boundName.contains(wheelName)) {
                         wheelBounds.add(bound);
                         partFlag = 1;
@@ -462,28 +465,28 @@ public class simComponents {
         for (Boundary bound : partBounds) {
             String boundName = bound.getPresentationName();
             if (boundName.contains("Inlet")) {
-                if (boundName.contains(radiatorName))
+                if (boundName.contains(RADIATOR_NAME))
                     domainRadInlet = bound;
-                else if (boundName.contains(dualRadiatorName))
+                else if (boundName.contains(DUAL_RADIATOR_NAME))
                     domainDualRadInlet = bound;
             }
             else if (boundName.contains("Outlet") && !boundName.contains("Fan")) {
-                if (boundName.contains(radiatorName))
+                if (boundName.contains(RADIATOR_NAME))
                     domainRadOutlet = bound;
-                else if (boundName.contains(dualRadiatorName))
+                else if (boundName.contains(DUAL_RADIATOR_NAME))
                     domainDualRadOutlet = bound;
             }
             else if (boundName.contains("Fan Outlet"))
             {
-                if (boundName.contains(radiatorName))
+                if (boundName.contains(RADIATOR_NAME))
                     domainFanBound = bound;
-                else if (boundName.contains(dualRadiatorName))
+                else if (boundName.contains(DUAL_RADIATOR_NAME))
                     dualDomainFanBound = bound;
             }
 
             //Positively select aero parts, and throw them into partSpecBounds
 
-            for (String prefix : aeroPrefixes) {
+            for (String prefix : AERO_PREFIXES) {
                 if (boundName.contains(prefix) && !boundName.toLowerCase().contains("suspension"))      // Janky code so CFD_SUSPENSION doesn't trigger the NS prefix.
 
                 {
@@ -592,15 +595,15 @@ public class simComponents {
     //Assigns the freestream domain in the sim to its java object. Doesn't throw a killer exception. Could probably be modified to throw one. It's very unlikely the macro is going to get very far without a freestream anyway.
     private void domainCatch() {
 
-        if (activeSim.get(SimulationPartManager.class).has(freestreamPrefix))
+        if (activeSim.get(SimulationPartManager.class).has(FREESTREAM_PREFIX))
         {
-            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(freestreamPrefix);
+            domain = (SimpleBlockPart) activeSim.get(SimulationPartManager.class).getPart(FREESTREAM_PREFIX);
             corneringFlag = false;
             activeSim.println("Straight domain detected");
         }
-        else if (activeSim.get(SimulationPartManager.class).has(freestreamCornering))
+        else if (activeSim.get(SimulationPartManager.class).has(FREESTREAM_CORNERING))
         {
-            domain_c = (SolidModelPart) activeSim.get(SimulationPartManager.class).getPart(freestreamCornering);
+            domain_c = (SolidModelPart) activeSim.get(SimulationPartManager.class).getPart(FREESTREAM_CORNERING);
             corneringFlag = true;
             activeSim.println("Cornering domain detected");
         }
@@ -682,6 +685,7 @@ public class simComponents {
             dir = activeSim.getSessionDir();
             simName = activeSim.getPresentationName();
             finiteVol = (FvRepresentation) activeSim.getRepresentationManager().getObject("Volume Mesh");
+            // this looks like carry over from the brief time i was trying to get screenplays to work. these aren't important, and should be safely delete-able from the code and the sim environment
             aftFore = activeSim.get(ScreenplayManager.class).getObject("Screenplay 1");
             profile = activeSim.get(ScreenplayManager.class).getObject("Screenplay 2");
             topBottom = activeSim.get(ScreenplayManager.class).getObject("Screenplay 3");
@@ -796,10 +800,10 @@ public class simComponents {
         }
 
         try {
-            radPart = activeSim.get(SimulationPartManager.class).getObject(radiatorName);
-            subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(subtractName);
+            radPart = activeSim.get(SimulationPartManager.class).getObject(RADIATOR_NAME);
+            subtractPart = (MeshOperationPart) activeSim.get(SimulationPartManager.class).getPart(SUBTRACT_NAME);
             if (dualRadFlag)
-                dualRadPart = activeSim.get(SimulationPartManager.class).getObject(dualRadiatorName);
+                dualRadPart = activeSim.get(SimulationPartManager.class).getObject(DUAL_RADIATOR_NAME);
         } catch (Exception e) {
             activeSim.println("Can't create new regions");
         }
@@ -818,10 +822,10 @@ public class simComponents {
         }
 
         domainRegion = assignRegion(DOMAIN_REGION);
-        radiatorRegion = assignRegion(radiatorName);
+        radiatorRegion = assignRegion(RADIATOR_NAME);
         radiatorRegion.setPresentationName(RADIATOR_REGION);
         if (dualRadFlag) {
-            dualRadiatorRegion = assignRegion(dualRadiatorName);
+            dualRadiatorRegion = assignRegion(DUAL_RADIATOR_NAME);
             dualRadiatorRegion.setPresentationName(DUAL_RADIATOR_REGION);
         }
 
