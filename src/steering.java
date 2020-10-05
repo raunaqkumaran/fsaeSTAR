@@ -1,4 +1,3 @@
-import org.osgi.util.measurement.Unit;
 import star.base.neo.DoubleVector;
 import star.base.neo.NeoObjectVector;
 import star.common.GeometryPart;
