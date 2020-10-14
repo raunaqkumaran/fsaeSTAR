@@ -253,7 +253,7 @@ public class regions extends StarMacro {
                 activeSim.activeSim.println("Found yaw interface");
                 activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME);
                 activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.yawInterface);
-                setDomainBoundaries(activeSim);  //I don't know why I'm calling this. I think it's for repeatability, to make sure there's a consistent set-up for the domain boundaries before createBoundaryInterface is called.
+                setDomainBoundaries(activeSim);  //This is to make sure we're always in a consistent and well-defined state, rather than having to deal with deviations from the assumptions.
             }
 
             //For the time being, don't want to set yaw if we're cornering.
@@ -261,6 +261,7 @@ public class regions extends StarMacro {
             if (activeSim.corneringFlag)
                 return;
 
+            //Keeping with the philosophy of deleting the existing components if they exist, and recreating them from scratch for consistency.
             activeSim.activeSim.println("Creating yaw interface");
             activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);
 
@@ -281,7 +282,7 @@ public class regions extends StarMacro {
         }
     }
 
-    //Set up viscous and intertial resistances for the radiators. There's a good article on Siemens' Steve portal (or whatever they're calling it now, there's a very solid chance the Steve portal no longer exists if you're reading this in the future) explaining how you can get radiator properties out of wind tunnel data for a given radiator.
+    //Set up viscous and inertial resistances for the radiators. There's a good article on Siemens' Steve portal (or whatever they're calling it now, there's a very solid chance the Steve portal no longer exists if you're reading this in the future) explaining how you can get radiator properties out of wind tunnel data for a given radiator.
     private void setRadiatorParams(simComponents activeSim, Region radiatorRegion) {
         radiatorRegion.setRegionType(PorousRegion.class);
         PrincipalTensorProfileMethod radiatorTensor = radiatorRegion.getValues().get(PorousInertialResistance.class).
