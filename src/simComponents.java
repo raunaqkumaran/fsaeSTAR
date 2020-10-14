@@ -901,7 +901,7 @@ public class simComponents {
         }
         else
         {
-            return;
+            throw new IllegalStateException("You don't have a version checker parameter");
         }
         double val = versionParam.getQuantity().getRawValue();
         if (val != version)
