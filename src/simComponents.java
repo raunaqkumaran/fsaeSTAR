@@ -13,6 +13,7 @@ import star.cadmodeler.SolidModelPart;
 import star.common.*;
 import star.flow.AccumulatedForceTable;
 import star.meshing.*;
+import star.motion.UserRotatingAndTranslatingReferenceFrame;
 import star.motion.UserRotatingReferenceFrame;
 import star.screenplay.Screenplay;
 import star.screenplay.ScreenplayManager;
@@ -69,7 +70,7 @@ public class simComponents {
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 4.0;
+    private double version = 4.1;
 
     // Simulation object
     public Simulation activeSim;
@@ -114,6 +115,7 @@ public class simComponents {
     public Units inches;
     public Units meters;
     public Units degs;
+    public Units ms;
 
     //Vehicle dimensions radii
     public double frontTyreRadius = 0.228599;           //meters
@@ -177,7 +179,7 @@ public class simComponents {
     public CylindricalCoordinateSystem rearWheelCoord;
     public CylindricalCoordinateSystem frontWheelSteering;
     public CylindricalCoordinateSystem domainAxis;
-    public UserRotatingReferenceFrame rotatingFrame;
+    public UserRotatingAndTranslatingReferenceFrame rotatingFrame;
     public Boundary fsInlet;                            //fs refers to freestream here
     public Boundary leftPlane;
     public Boundary groundPlane;
@@ -270,6 +272,7 @@ public class simComponents {
         inches = activeSim.getUnitsManager().getObject("in");
         degs = activeSim.getUnitsManager().getObject("deg");
         meters = activeSim.getUnitsManager().getObject("m");
+        ms = activeSim.getUnitsManager().getObject("m/s");
 
         // Initialize surface wrappers
         surfaceWrapOperation = ((SurfaceWrapperAutoMeshOperation) activeSim.get(MeshOperationManager.class).getObject(SURFACE_WRAPPER));
@@ -771,7 +774,7 @@ public class simComponents {
                         getCoordinateSystem("Dual Radiator Cartesian");
             if (corneringFlag)
             {
-                rotatingFrame = (UserRotatingReferenceFrame) activeSim.getReferenceFrameManager().getObject(ROTATING);
+                rotatingFrame = (UserRotatingAndTranslatingReferenceFrame) activeSim.getReferenceFrameManager().getObject(ROTATING);
                 domainAxis = (CylindricalCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem(DOMAIN_AXIS);
                 domainAxis.getOrigin().setDefinition("[0, ${User Cornering Radius}, 0]");
             }

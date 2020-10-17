@@ -243,6 +243,8 @@ public class regions extends StarMacro {
     //I do know it was very hard to get this to work reliably. there are a lot of edge cases that unravel here, especially when resuing a sim, or changing a sim from full car to half car or vice versa.
     public void yawInterfaces(simComponents activeSim) {
         setTyreRotation(activeSim);
+        double yawVal = activeSim.valEnv("yaw");
+        double slip = activeSim.freestreamVal * Math.tan(Math.toRadians(yawVal));
 
         if (activeSim.fullCarFlag) {
             activeSim.activeSim.println("Setting boundary conditions for yaw");
@@ -259,7 +261,25 @@ public class regions extends StarMacro {
             //For the time being, don't want to set yaw if we're cornering.
 
             if (activeSim.corneringFlag)
+            {
+                if (yawVal == 0)
+                    return;
+
+                activeSim.leftPlane.setBoundaryType(InletBoundary.class);
+                activeSim.leftPlane.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
+                activeSim.leftPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+                activeSim.leftPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+                activeSim.leftPlane.getValues().get(VelocityMagnitudeProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(0);
+                activeSim.symPlane.setBoundaryType(InletBoundary.class);
+                activeSim.symPlane.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
+                activeSim.symPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+                activeSim.symPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+                activeSim.symPlane.getValues().get(VelocityMagnitudeProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(0);
+                activeSim.rotatingFrame.getTranslationVelocity().setComponents(0, -slip, 0);
+                activeSim.rotatingFrame.getTranslationVelocity().setUnits(activeSim.ms);
+
                 return;
+            }
 
             //Keeping with the philosophy of deleting the existing components if they exist, and recreating them from scratch for consistency.
             activeSim.activeSim.println("Creating yaw interface");
@@ -269,7 +289,6 @@ public class regions extends StarMacro {
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);               //I don't have the foggiest idea what interface topology is supposed to be for. this is some blatant plagiarism.
 
             //Set up the yaw condition at the inlet.
-            double yawVal = activeSim.valEnv("yaw");
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
                     getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.freestreamVal / Math.cos(Math.toRadians(yawVal)));
             activeSim.fsInlet.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.ANGLES);
