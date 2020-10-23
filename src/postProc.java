@@ -1,14 +1,10 @@
 import star.base.neo.DoubleVector;
 import star.base.report.PlotableMonitor;
-import star.cadmodeler.VectorQuantityDesignParameter;
 import star.common.Boundary;
 import star.common.MonitorPlot;
 import star.common.StarMacro;
 import star.common.StarPlot;
 import star.flow.AccumulatedForceTable;
-import star.screenplay.Screenplay;
-import star.screenplay.ScreenplayDirector;
-import star.screenplay.ScreenplaySelectorDescriptor;
 import star.vis.*;
 
 import java.io.File;
@@ -17,7 +13,7 @@ import java.util.Collection;
 
 /*
 This used to be a much nastier macro. It's not pretty now, but this used to be exponentially worse.
-Goes through scenes and displayers to export reports, plots, and scenes for a sim. This is also a destructive macro. Do not save the result of the macro.
+Goes through scenes and displayers to export reports, plots, and scenes for a sim. This is also a destructive macro. DO NOT save the result of the macro.
  */
 
 public class postProc extends StarMacro {
@@ -54,12 +50,12 @@ public class postProc extends StarMacro {
         }
 
         //Export mesh and 3D scenes before destroying the mesh.
+        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
+                sim.inches, new DoubleVector(sim.profileDirection));
         sim.activeSim.println("---Exporting mesh---");
         postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1, sim.meshScene);
         sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
-        sim.crossSection.getOrientationCoordinate().setCoordinate(sim.inches, sim.inches,
-            sim.inches, new DoubleVector(sim.profileDirection));
 
         //Need to merge boundaries, otherwise it takes forever to get 2D data when you have 10k+ boundaries (thanks powertrain)
         sim.activeSim.println("---Merging boundaries---");
@@ -97,6 +93,7 @@ public class postProc extends StarMacro {
         //Set the offset for the cross section. We're controling the scene by defining the plane section offset from its origin.
         sim.crossSection.getSingleValue().setUnits(sim.inches);
 
+        //There's very little overhead to changing a view. There's a lot of overhead to change a displayer or move your cross section. Minimize the number of displayer and cross section changes you make.
         for (double i = limits[0]; i <= limits[1]; i += increment)
         {
             for (Displayer disp : displayers2D)
@@ -109,6 +106,7 @@ public class postProc extends StarMacro {
                 for (VisView view : views2D)
                 {
                     String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(i), ".png");
+                    //This will not generate a new exported scene if the file path already exists. This is a very dumb way to do it, but this is one of those things where going big brain isn't worth the time.
                     if (!fileExists(filename)) {
                         disp.setRepresentation(sim.finiteVol);
                         disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
@@ -136,6 +134,7 @@ public class postProc extends StarMacro {
 
     //Basically the same thing as postProc2D, without the added complexity of the plane section derived part.
     private void postProc3D(simComponents sim, Collection<Displayer> displayers3D, Collection<VisView> views3D) {
+        //Again, keep displayers as your outer loop. Changing a displayer is a lot of overhead. Changing a view is very little overhead.
         for (Displayer disp :  displayers3D)
         {
             hideDisps(sim.scene3D);
@@ -173,6 +172,7 @@ public class postProc extends StarMacro {
         return generateFileName(folder, scn, disp, view, offset, append, ext);
     }
 
+    //This is essentially enforcing a naming convention for a given combination of scene, displayer, view, offset, and any appended text. This should be used to ensure every exported image has a unique file name, otherwise you're going to miss scenes.
     public String generateFileName(String folder, Scene scn, Displayer disp, VisView view, Double offset, String append, String ext)
     {
         String output = folder + File.separator + scn.getPresentationName() + "_" + disp.getPresentationName() + "_" + view.getPresentationName();
@@ -189,11 +189,11 @@ public class postProc extends StarMacro {
 
     }
 
-    //Generates a collection of parts to assign to a given displayer. A RW displayer can use function to ensure only RW surfaces are assigned to the displayer
+    //Generates a collection of parts to assign to a given displayer. A RW displayer can use this function to ensure only RW surfaces are assigned to the displayer
     public Collection<Boundary> getParts(simComponents sim, VisView view)
     {
         Collection<Boundary> desiredParts = new ArrayList<>();
-        String[] partArray = getSecondKey(view);
+        String[] partArray = getSecondKey(view);    //So the name of the view defines which part to filter. [3D] [RW] means you only want RW in the image. [3D] [RW SW] means you want RW and SW in the image.
         for (String part : partArray)
         {
             if (sim.partSpecBounds.containsKey(part))
@@ -269,6 +269,7 @@ public class postProc extends StarMacro {
             dis.setVisibilityOverrideMode(DisplayerVisibilityOverride.HIDE_ALL_PARTS);
     }
 
+    //You want your cross section to be set so the origin is at 0,0,0 (for repeatability reasons), and want to have the volumes of your domain, and radiator(s).
     private static void setCrossSectionParts(simComponents sim) {
         sim.crossSection.getInputParts().setObjects(sim.domainRegion, sim.radiatorRegion);
         if (sim.dualRadFlag)

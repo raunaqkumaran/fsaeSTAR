@@ -75,7 +75,7 @@ public class macroController extends StarMacro {
         new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
         new StarScript(getActiveRootObject(), new java.io.File(resolvePath("kill.java"))).play();
 
-        //There's a lot of back and forth about whether or not macroController should handle save events, or if the individual macros should. I'll let that be a decision for the programmer.
+        //There's a lot of back and forth about whether or not macroController should handle save events, or if the individual macros should. I'll let that be your problem.
        
         
     }

@@ -16,10 +16,8 @@ NX/
 Macro GUI*/
 intellIJSettings*
 nodefile*
-Libs/
 scripts/
-2019 macros/
 intellIJsettings.jar
 Python/__pycache__/
-~$*
 Python/deleteEverything.bat
+~$*

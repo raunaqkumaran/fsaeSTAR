@@ -1,4 +1,3 @@
-import star.base.neo.DoubleVector;
 import star.base.report.*;
 import star.common.*;
 import star.flow.AccumulatedForceTable;
@@ -95,7 +94,7 @@ public class genReports extends StarMacro {
 
             //Go through aeroPrefixes and assign them to their appropriate lift and drag reports. Set the flag to 1, essentially exiting out of the loop before double counting.
             String repName = rep.getPresentationName();
-            for (String prefix : activeSim.aeroPrefixes)
+            for (String prefix : activeSim.AERO_PREFIXES)
             {
                 if (repName.contains(prefix) && flag != 1)          //repName only contains prefix if it is a part specific report (eg "RW Lift")
                 {

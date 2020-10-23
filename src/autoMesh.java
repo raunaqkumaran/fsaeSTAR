@@ -39,7 +39,7 @@ public class autoMesh extends StarMacro {
 
         for (PartSurface surf :  activeSim.subtractPart.getPartSurfaceManager().getPartSurfaces())
         {
-            if (surf.getPresentationName().contains(activeSim.freestreamPrefix))
+            if (surf.getPresentationName().contains(activeSim.FREESTREAM_PREFIX))
             {
                 if (surf.getPresentationName().contains("Ground"))
                     activeSim.groundControl.getGeometryObjects().add(surf);

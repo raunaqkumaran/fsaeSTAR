@@ -11,6 +11,7 @@ FAN = set to true if you want a fan model for the radiator. Otherwise false.
 yaw = yaw angle in degrees
 sideslip = sideslip angle in degrees
 steering = tyre slip change angle in degrees
+cornering = cornering radius (in meters)
 frh = front ride height change in inches
 rrh = rear ride height change in inches. 
 freestream = freestream in m/s

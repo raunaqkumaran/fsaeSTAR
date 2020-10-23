@@ -1,5 +1,8 @@
+import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.meshing.MeshOperationPart;
+
+import java.util.Collection;
 
 public class subtract extends StarMacro {
 
@@ -16,10 +19,18 @@ public class subtract extends StarMacro {
                 simObject.activeSim.get(SimulationPartManager.class).getObject("Surface wrapper");
 
         GeometryObjectGroup subtractManager = simObject.subtract.getInputGeometryObjects();
-        subtractManager.setObjects(simObject.domain);
+        GeometryPart domain;
+        if (!simObject.corneringFlag)
+            domain = simObject.domain;
+        else
+        {
+            domain = simObject.domain_c;
+            simObject.activeSim.get(SimulationPartManager.class).updateParts(new NeoObjectVector(new Object[] {domain, simObject.farWakePart}));
+        }
+        subtractManager.setObjects(domain);
         subtractManager.addObjects(surfaceWrap);
 
-        simObject.subtract.getTargetPartManager().addObjects(simObject.domain);
+        simObject.subtract.getTargetPartManager().setObjects(domain);
         simObject.subtract.execute();
     }
 

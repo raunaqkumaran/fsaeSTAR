@@ -2,7 +2,10 @@ import star.base.neo.DoubleVector;
 import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.flow.*;
+import star.motion.BoundaryReferenceFrameSpecification;
+import star.motion.ReferenceFrameOption;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -56,6 +59,7 @@ public class regions extends StarMacro {
                 createBoundaryInterface(activeSim.domainRadOutlet, activeSim.radOutlet,
                         activeSim.massFlowInterfaceNameOutlet);
 
+        //Setting up fans
         activeSim.fanInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.radFanBound, activeSim.domainFanBound, "Fan Interface");
         setUpFan(activeSim, activeSim.fanInterface);
         if (activeSim.dualRadFlag && activeSim.domainDualRadInlet != null && activeSim.domainDualRadOutlet != null) {
@@ -77,15 +81,41 @@ public class regions extends StarMacro {
         }
     }
 
+    //This handles assigning a fan curve csv file to the fan curve table in STAR, and assigns that table to the fan boundary (passed as a parameter)
     public void setUpFan(simComponents activeSim, BoundaryInterface fanInterface)
     {
+        //Make sure the fan interface is set to use a table
         fanInterface.setInterfaceType(FanInterface.class);
         fanInterface.getConditions().get(InterfaceFanCurveSpecification.class).getFanCurveTypeOption().setSelected(FanCurveTypeOption.Type.TABLE);
         FanCurveTableLeaf node = fanInterface.getValues().get(FanCurveTable.class).getModelPartValue();
-        activeSim.activeSim.getTableManager().getTable("fan_table_csv").extract();
-        node.setVolumeFlowTable(activeSim.activeSim.getTableManager().getTable("fan_table_csv"));
+
+        //assign fan curve table to fan interface
+        node.setVolumeFlowTable(activeSim.fan_curve_table);
+        File fanfile = new File(activeSim.dir + activeSim.separator + simComponents.FAN_CURVE_CSV_FN);
+
+        //If the csv file exists, set the fan curve table to use that csv, otherwise try to find it somewhere else.
+        if (fanfile.exists())
+            activeSim.fan_curve_table.setFile(fanfile);
+
+        //If there isn't a csv file in the sim's working directory, check the classpath. if there isn't one in the classpath, kill the sim.
+        else
+        {
+            activeSim.activeSim.println("Cannot find fan_curve.csv in working directory, attempting to find file in classpath");
+            String classPath = simComponents.valEnvString("CP");
+            String filePath = classPath + File.separator + simComponents.FAN_CURVE_CSV_FN;
+            fanfile = new File(filePath);
+            if (!fanfile.exists())
+                throw new IllegalStateException("No fan table found. Terminating");
+            else
+                activeSim.fan_curve_table.setFile(fanfile);
+        }
+
+        //Extract the fan curve table, make sure it's populated from the csv file before using it to enforce the fan boundary condition.
+        activeSim.fan_curve_table.extract();
         node.setVolumeFlowTableX("m^3/s");
         node.setVolumeFlowUnitsX(activeSim.activeSim.getUnitsManager().getUnits("m^3/s"));
+
+        //If the fan flag is on, use the fan's pressure drop, otherwise set the pressure drop to zero. There's technically always a fan enabled in the sim, but a fan with no pressure drop isn't much of a fan...
         if (activeSim.fanFlag)
             node.setVolumeFlowTableP("dP");
         else
@@ -95,16 +125,25 @@ public class regions extends StarMacro {
 
     private void setTyreRotation(simComponents activeSim) {
 
-        for (Boundary wheelBound : activeSim.wheelBounds) {
-            //Calculate angular rotation rate for wheels based on freestream (vehicle speed) and provided tyre radii. (omega = v/r, need to have m/s and meters)
-            double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
-            double rearRotationRate = activeSim.freestreamVal / activeSim.rearTyreRadius;
+        //Calculate angular rotation rate for wheels based on freestream (vehicle speed) and provided tyre radii. (omega = v/r, need to have m/s and meters)
+        double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
+        double rearRotationRate = activeSim.freestreamVal / activeSim.rearTyreRadius;
+        double diffVelocity;
+        //Set rotation rates to zero if the wt flag is enabled.
+        if (activeSim.wtFlag) {
+            frontRotationRate = 0;
+            rearRotationRate = 0;
+        }
 
-            //Set rotation rates to zero if the wt flag is enabled.
-            if (activeSim.wtFlag) {
-                frontRotationRate = 0;
-                rearRotationRate = 0;
-            }
+        // If the sim is a cornering sim, you need to calculate the difference between inner and outer tyre rotation rates, assuming no slip.
+        if (activeSim.corneringFlag)
+            diffVelocity = velocityDifference(activeSim);
+        else
+            diffVelocity = 0;
+
+        //It's important to make sure the entire wheel assembly is combined into a single entity in STAR, otherwise your tyre will rotate, but nothing in the wheel will rotate, which doesn't make sense.
+        //Right now technically the uprights and at least parts of the control arms are rotating as well.......which might be something you want to fix at some point.
+        for (Boundary wheelBound : activeSim.wheelBounds) {
 
             //Set the correct boundary type to the wheels.
             String boundName = wheelBound.getPresentationName();
@@ -112,22 +151,39 @@ public class regions extends StarMacro {
                     setSelected(WallSlidingOption.Type.LOCAL_ROTATION_RATE);
 
             try {
-
                 //This is the chunk that actually assigns the rotation rate to the wheels.
                 if (boundName.contains("Front")) {
-                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + frontRotationRate);
+                    double rotationRate = frontRotationRate;
+                    if (boundName.contains("Front Right"))
+                    {
+                        rotationRate = frontRotationRate - 0.5 * diffVelocity / activeSim.frontTyreRadius;
+                    }
+                    else if (boundName.contains("Front Left"))
+                    {
+                        rotationRate = frontRotationRate + 0.5 * diffVelocity / activeSim.frontTyreRadius;
+                    }
+                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + rotationRate);
                     wheelBound.getValues().
                             get(ReferenceFrame.class).setCoordinateSystem(activeSim.frontWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
                             getMethod(ConstantScalarProfileMethod.class).getQuantity().
-                            setValue(frontRotationRate);
+                            setValue(rotationRate);
                 } else if (boundName.contains("Rear")) {
-                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rearRotationRate);
+                    double rotationRate = rearRotationRate;
+                    if (boundName.contains("Rear Right"))
+                    {
+                        rotationRate = rearRotationRate - 0.5 * diffVelocity / activeSim.rearTyreRadius;
+                    }
+                    else if (boundName.contains("Rear Left"))
+                    {
+                        rotationRate = rearRotationRate + 0.5 * diffVelocity / activeSim.rearTyreRadius;
+                    }
+                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rotationRate);
                     wheelBound.getValues().get(ReferenceFrame.class).
                             setCoordinateSystem(activeSim.rearWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
                             getMethod(ConstantScalarProfileMethod.class).getQuantity().
-                            setValue(rearRotationRate);
+                            setValue(rotationRate);
                 }
             } catch (Exception e) {
                 activeSim.activeSim.println("regions.java - Wheel boundary set-up failed");
@@ -135,24 +191,51 @@ public class regions extends StarMacro {
         }
     }
 
+    //Use track width and angular velocity to figure out what the linear velocity difference is between the two tyres.
+    private double velocityDifference(simComponents activeSim)
+    {
+        double omega = activeSim.angularVelocity.getQuantity().evaluate();
+        return omega * activeSim.trackWidth * 0.0254;
+    }
+
     //Sets up boundary conditions for the domain boundaries. Ground, inlet, outlet, symmetry, symmetry, symmetry.
     private void setDomainBoundaries(simComponents activeSim) {
-            String yVal = String.valueOf(activeSim.calculateSideslip());
-            activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
-            activeSim.fsInlet.setBoundaryType(InletBoundary.class);
-            activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
-                    getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
-            activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
-                    setSelected(WallSlidingOption.Type.VECTOR);
-            if (activeSim.wtFlag)
-                activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
-            else
-                activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
-                        getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
-            activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
+        if (activeSim.corneringFlag)
+        {
+            setDomainBoundaries_Cornering(activeSim);
+            return;
+        }
+        String yVal = String.valueOf(activeSim.calculateSideslip());
+        activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
+                getMethod(ConstantScalarProfileMethod.class).getQuantity().setDefinition("${" + activeSim.FREESTREAM_PARAMETER_NAME + "}");
+        activeSim.groundPlane.getConditions().get(WallSlidingOption.class).
+                setSelected(WallSlidingOption.Type.VECTOR);
+        if (activeSim.wtFlag)
+            activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
+                    getMethod(ConstantVectorProfileMethod.class).getQuantity().setConstant(new double[]{0, 0, 0});
+        else
+            activeSim.groundPlane.getValues().get(WallRelativeVelocityProfile.class).
+                    getMethod(ConstantVectorProfileMethod.class).getQuantity().setDefinition("[${Freestream}," + yVal + ", 0]");
+        activeSim.fsOutlet.setBoundaryType(PressureBoundary.class);
+    }
+
+    //Same thing as the method above, except for a cornering case.
+    private void setDomainBoundaries_Cornering(simComponents activeSim){
+        activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
+        activeSim.fsOutlet.setBoundaryType(OutletBoundary.class);
+        activeSim.groundPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+        activeSim.groundPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+        activeSim.fsInlet.setBoundaryType(InletBoundary.class);
+        activeSim.fsInlet.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
+        activeSim.fsInlet.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+        activeSim.fsInlet.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+        activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(0);
     }
 
     //Set up interfaces for a full car domain. Need to interface the left and right boundaries together, otherwise the domain will naturally straighten any yaw condition you set at the inlet.
@@ -160,6 +243,8 @@ public class regions extends StarMacro {
     //I do know it was very hard to get this to work reliably. there are a lot of edge cases that unravel here, especially when resuing a sim, or changing a sim from full car to half car or vice versa.
     public void yawInterfaces(simComponents activeSim) {
         setTyreRotation(activeSim);
+        double yawVal = activeSim.valEnv("yaw");
+        double slip = activeSim.freestreamVal * Math.tan(Math.toRadians(yawVal));
 
         if (activeSim.fullCarFlag) {
             activeSim.activeSim.println("Setting boundary conditions for yaw");
@@ -170,9 +255,33 @@ public class regions extends StarMacro {
                 activeSim.activeSim.println("Found yaw interface");
                 activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME);
                 activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.yawInterface);
-                setDomainBoundaries(activeSim);  //I don't know why I'm calling this. I think it's for repeatability, to make sure there's a consistent set-up for the domain boundaries before createBoundaryInterface is called.
+                setDomainBoundaries(activeSim);  //This is to make sure we're always in a consistent and well-defined state, rather than having to deal with deviations from the assumptions.
             }
 
+            //For the time being, don't want to set yaw if we're cornering.
+
+            if (activeSim.corneringFlag)
+            {
+                if (yawVal == 0)
+                    return;
+
+                activeSim.leftPlane.setBoundaryType(InletBoundary.class);
+                activeSim.leftPlane.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
+                activeSim.leftPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+                activeSim.leftPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+                activeSim.leftPlane.getValues().get(VelocityMagnitudeProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(0);
+                activeSim.symPlane.setBoundaryType(InletBoundary.class);
+                activeSim.symPlane.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
+                activeSim.symPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);
+                activeSim.symPlane.getValues().get(BoundaryReferenceFrameSpecification.class).setReferenceFrame(activeSim.rotatingFrame);
+                activeSim.symPlane.getValues().get(VelocityMagnitudeProfile.class).getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(0);
+                activeSim.rotatingFrame.getTranslationVelocity().setComponents(0, -slip, 0);
+                activeSim.rotatingFrame.getTranslationVelocity().setUnits(activeSim.ms);
+
+                return;
+            }
+
+            //Keeping with the philosophy of deleting the existing components if they exist, and recreating them from scratch for consistency.
             activeSim.activeSim.println("Creating yaw interface");
             activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);
 
@@ -180,7 +289,6 @@ public class regions extends StarMacro {
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);               //I don't have the foggiest idea what interface topology is supposed to be for. this is some blatant plagiarism.
 
             //Set up the yaw condition at the inlet.
-            double yawVal = activeSim.valEnv("yaw");
             activeSim.fsInlet.getValues().get(VelocityMagnitudeProfile.class).
                     getMethod(ConstantScalarProfileMethod.class).getQuantity().setValue(activeSim.freestreamVal / Math.cos(Math.toRadians(yawVal)));
             activeSim.fsInlet.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.ANGLES);
@@ -193,7 +301,7 @@ public class regions extends StarMacro {
         }
     }
 
-    //Set up viscous and intertial resistances for the radiators. There's a good article on Siemens' Steve portal (or whatever they're calling it now, there's a very solid chance the Steve portal no longer exists if you're reading this in the future) explaining how you can get radiator properties out of wind tunnel data for a given radiator.
+    //Set up viscous and inertial resistances for the radiators. There's a good article on Siemens' Steve portal (or whatever they're calling it now, there's a very solid chance the Steve portal no longer exists if you're reading this in the future) explaining how you can get radiator properties out of wind tunnel data for a given radiator.
     private void setRadiatorParams(simComponents activeSim, Region radiatorRegion) {
         radiatorRegion.setRegionType(PorousRegion.class);
         PrincipalTensorProfileMethod radiatorTensor = radiatorRegion.getValues().get(PorousInertialResistance.class).
@@ -256,6 +364,8 @@ public class regions extends StarMacro {
         activeSim.activeSim.println("merging: " + mergeBounds);
         meshManager.combineBoundaries(new NeoObjectVector(mergeBounds.toArray()));
     }
+
+    //Quick and dirty method to set up fans, and only fans when needed by run.java, and fan boundaries aren't already known.
     public void initFans(simComponents activeSim)
     {
         for (Interface x : activeSim.activeSim.getInterfaceManager().getObjects())
