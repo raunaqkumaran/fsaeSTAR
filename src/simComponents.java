@@ -65,6 +65,7 @@ public class simComponents {
     public static final String AERO_CONTROL = "Aero Control";
     public static final String AERO_CONTROL_PPM = "Aero Control";
     public static final String USER_ROLL = "User Roll";
+    public static final String CONFIG_ROLL = "roll";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -738,7 +739,7 @@ public class simComponents {
         {
             return corneringRadiusParameter.getQuantity().getRawValue();
         }
-        else if (env.equals("roll"))
+        else if (env.equals(CONFIG_ROLL))
         {
             return rollParameter.getQuantity().getRawValue();
         }
