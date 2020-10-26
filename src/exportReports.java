@@ -269,7 +269,8 @@ public class exportReports extends StarMacro {
     }
 
     public void printConvergence(boolean convergesCl, boolean convergesCd, boolean convergesFW, boolean convergesRW, boolean convergesSW, String filePath, simComponents simObj) throws IOException {
-        PrintWriter writer = new PrintWriter(filePath + simObj.separator + "Convergence.txt", StandardCharsets.UTF_8);
+        File convergenceFile = new File(filePath + simObj.separator + "Convergence.txt");
+        PrintWriter writer = new PrintWriter(convergenceFile);
         if (convergesCl)
             writer.println("Lift Coefficient sim converges.");
         if (!convergesCl)
