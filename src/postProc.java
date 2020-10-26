@@ -92,7 +92,7 @@ public class postProc extends StarMacro {
 
         //Set the offset for the cross section. We're controling the scene by defining the plane section offset from its origin.
         sim.crossSection.getSingleValue().setUnits(sim.inches);
-
+        double arrayMin = getMinimum(limits);
         //There's very little overhead to changing a view. There's a lot of overhead to change a displayer or move your cross section. Minimize the number of displayer and cross section changes you make.
         for (double i = limits[0]; i <= limits[1]; i += increment)
         {
@@ -105,7 +105,7 @@ public class postProc extends StarMacro {
                 }
                 for (VisView view : views2D)
                 {
-                    String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(i), ".png");
+                    String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(i + (int) Math.floor(arrayMin)), ".png");
                     //This will not generate a new exported scene if the file path already exists. This is a very dumb way to do it, but this is one of those things where going big brain isn't worth the time.
                     if (!fileExists(filename)) {
                         disp.setRepresentation(sim.finiteVol);
@@ -122,6 +122,23 @@ public class postProc extends StarMacro {
                 hideDisps(scn);
             }
         }
+    }
+
+    /*
+    get minimum value of array
+     */
+
+    private double getMinimum(double[] array)
+    {
+        double minimum = array[0];
+
+        for (int i = 0; i < array.length; i++)
+        {
+            if (array[i] < minimum)
+                minimum = array[i];
+        }
+
+        return minimum;
     }
 
     //Return true if a file already exists. Generally used to avoid regenerating scenes that have already been exported.
