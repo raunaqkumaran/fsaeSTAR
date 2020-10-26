@@ -63,7 +63,7 @@ public class exportReports extends StarMacro {
         boolean convergesRW = convergence(path + activeSim.separator + RW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
         boolean convergesSW = convergence(path + activeSim.separator + SW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
 
-        printConvergence(convergesCl, convergesCd, convergesFW, convergesRW, convergesSW);
+        printConvergence(convergesCl, convergesCd, convergesFW, convergesRW, convergesSW, path, activeSim);
     }
 
     public boolean convergence(String str) {
@@ -268,8 +268,8 @@ public class exportReports extends StarMacro {
         return ((score <= CONVERGENCE_SCORE_CUTOFF) && (avgDiff < CONVERGENCE_SCORE_CUTOFF));
     }
 
-    public void printConvergence(boolean convergesCl, boolean convergesCd, boolean convergesFW, boolean convergesRW, boolean convergesSW) throws IOException {
-        PrintWriter writer = new PrintWriter("Convergence.txt", StandardCharsets.UTF_8);
+    public void printConvergence(boolean convergesCl, boolean convergesCd, boolean convergesFW, boolean convergesRW, boolean convergesSW, String filePath, simComponents simObj) throws IOException {
+        PrintWriter writer = new PrintWriter(filePath + simObj.separator + "Convergence.txt", StandardCharsets.UTF_8);
         if (convergesCl)
             writer.println("Lift Coefficient sim converges.");
         if (!convergesCl)
