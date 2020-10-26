@@ -26,9 +26,6 @@ public class rollSet extends StarMacro {
 
         if (rollAngle!=0)
         {
-            // This is one of those code blocks that makes me fucking hate STAR's API.
-            // Why does this need to be so fucking ugly?
-
             sim.activeSim.get(SimulationPartManager.class).rotateParts(sim.nonAeroParts,
                     new DoubleVector(sim.foreAftDirection), Arrays.asList(sim.noUnit, sim.noUnit, sim.noUnit),
                     rollAngle, sim.rollAxis);
@@ -40,6 +37,13 @@ public class rollSet extends StarMacro {
                     rotateLocalCoordinateSystems(new ArrayList<>(Collections.singletonList(sim.radiatorCoord)),
                             new DoubleVector(sim.foreAftDirection),
                             new Vector(Arrays.asList(sim.noUnit, sim.noUnit, sim.noUnit)), rollAngle, sim.rollAxis);
+            if (sim.dualRadFlag)
+            {
+                sim.dualRadCoord.getLocalCoordinateSystemManager().
+                        rotateLocalCoordinateSystems(new ArrayList<>(Collections.singletonList(sim.radiatorCoord)),
+                                new DoubleVector(sim.foreAftDirection),
+                                new Vector(Arrays.asList(sim.noUnit, sim.noUnit, sim.noUnit)), rollAngle, sim.rollAxis);
+            }
             sim.rollAxis.getLocalCoordinateSystemManager().
                     rotateLocalCoordinateSystems(new ArrayList<>(Collections.singletonList(sim.rollAxis)),
                             new DoubleVector(sim.foreAftDirection),

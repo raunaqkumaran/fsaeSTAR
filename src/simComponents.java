@@ -64,13 +64,14 @@ public class simComponents {
     public static final String SURFACE_WRAPPER_PPM = "Surface wrapper PPM";
     public static final String AERO_CONTROL = "Aero Control";
     public static final String AERO_CONTROL_PPM = "Aero Control";
+    public static final String USER_ROLL = "User Roll";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 4.1;
+    private double version = 4.2;
 
     // Simulation object
     public Simulation activeSim;
@@ -136,6 +137,7 @@ public class simComponents {
     private ScalarGlobalParameter rearRide;
     private ScalarGlobalParameter sideSlip;
     private ScalarGlobalParameter userSteering;
+    private ScalarGlobalParameter rollParameter;
     public ScalarGlobalParameter angularVelocity;
 
     //Flags to track sim status
@@ -427,6 +429,7 @@ public class simComponents {
         userSteering = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_STEERING);
         corneringRadiusParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_CORNERING_RADIUS);
         angularVelocity = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(ANGULAR_VELOCITY);
+        rollParameter = (ScalarGlobalParameter) activeSim.get(GlobalParameterManager.class).getObject(USER_ROLL);
     }
 
     //Sets up boundary conditions. It's generally a good idea to avoid touching things (especially boundaries) when you can avoid it.
@@ -734,6 +737,10 @@ public class simComponents {
         else if (env.equals(CORNERING))
         {
             return corneringRadiusParameter.getQuantity().getRawValue();
+        }
+        else if (env.equals("roll"))
+        {
+            return rollParameter.getQuantity().getRawValue();
         }
         else if (env.equals(STEERING))
             return userSteering.getQuantity().getRawValue();
