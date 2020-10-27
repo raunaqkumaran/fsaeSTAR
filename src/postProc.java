@@ -267,7 +267,7 @@ public class postProc extends StarMacro {
         }
     }
 
-    private static String getFolderPath(String folderName, simComponents sim) {
+    public static String getFolderPath(String folderName, simComponents sim) {
         return sim.dir + sim.separator + sim.simName
                 + sim.separator + folderName;
     }

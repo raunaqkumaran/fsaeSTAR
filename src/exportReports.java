@@ -11,9 +11,9 @@ public class exportReports extends StarMacro {
 
     public static final String LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "Lift Coefficient Monitor Plot.txt";
     public static final String DRAG_COEFFICIENT_MONITOR_PLOT_TXT = "Drag Coefficient Monitor Plot.txt";
-    public static final String FW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "FW Lift Coefficient Monitor Plot.txt";
-    public static final String RW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "RW Lift Coefficient Monitor Plot.txt";
-    public static final String SW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "SW Lift Coefficient Monitor Plot.txt";
+    public static final String FW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "FW Lift Monitor Plot.txt";
+    public static final String RW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "RW Lift Monitor Plot.txt";
+    public static final String SW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "SW Lift Monitor Plot.txt";
     public static final int MOVING_AVERAGE_WINDOW = 500;
     public static final int CONVERGENCE_SCORE_CUTOFF = 15;
 
@@ -56,12 +56,12 @@ public class exportReports extends StarMacro {
         esObj.exportPlots(activeSim);
 
         // Testing for convergence
-
-        boolean convergesCl = convergence(path + activeSim.separator + LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesCd = convergence(path + activeSim.separator + DRAG_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesFW = convergence(path + activeSim.separator + FW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesRW = convergence(path + activeSim.separator + RW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesSW = convergence(path + activeSim.separator + SW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
+        String plotsPath = postProc.getFolderPath("Plots", activeSim);
+        boolean convergesCl = convergence(plotsPath + activeSim.separator + LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
+        boolean convergesCd = convergence(plotsPath + activeSim.separator + DRAG_COEFFICIENT_MONITOR_PLOT_TXT);
+        boolean convergesFW = convergence(plotsPath + activeSim.separator + FW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
+        boolean convergesRW = convergence(plotsPath + activeSim.separator + RW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
+        boolean convergesSW = convergence(plotsPath + activeSim.separator + SW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
 
         printConvergence(convergesCl, convergesCd, convergesFW, convergesRW, convergesSW, path, activeSim);
     }
