@@ -258,13 +258,8 @@ public class regions extends StarMacro {
                 setDomainBoundaries(activeSim);  //This is to make sure we're always in a consistent and well-defined state, rather than having to deal with deviations from the assumptions.
             }
 
-            //For the time being, don't want to set yaw if we're cornering.
-
             if (activeSim.corneringFlag)
             {
-                if (yawVal == 0)
-                    return;
-
                 activeSim.leftPlane.setBoundaryType(InletBoundary.class);
                 activeSim.leftPlane.getConditions().get(FlowDirectionOption.class).setSelected(FlowDirectionOption.Type.BOUNDARY_NORMAL);
                 activeSim.leftPlane.getConditions().get(ReferenceFrameOption.class).setSelected(ReferenceFrameOption.Type.LOCAL_FRAME);

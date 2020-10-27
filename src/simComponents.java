@@ -393,7 +393,11 @@ public class simComponents {
         plots = activeSim.getPlotManager().getPlots();
 
         //Define domain sizes
-        fullCarFlag = domainSizing();
+        if (corneringFlag)
+            fullCarFlag = true;
+        else
+            fullCarFlag = domainSizing();
+
         if (!fullCarFlag)
             profileLimits[1] = 0;
 
@@ -612,6 +616,7 @@ public class simComponents {
         {
             domain_c = (SolidModelPart) activeSim.get(SimulationPartManager.class).getPart(FREESTREAM_CORNERING);
             corneringFlag = true;
+            fullCarFlag = true;
             activeSim.println("Cornering domain detected");
         }
         else
