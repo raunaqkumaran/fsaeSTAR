@@ -696,7 +696,8 @@ public class simComponents {
             separator = File.separator;
             dir = activeSim.getSessionDir();
             simName = activeSim.getPresentationName();
-            finiteVol = (FvRepresentation) activeSim.getRepresentationManager().getObject("Volume Mesh");
+            if (activeSim.getRepresentationManager().has("Volume Mesh"))
+                finiteVol = (FvRepresentation) activeSim.getRepresentationManager().getObject("Volume Mesh");
             // this looks like carry over from the brief time i was trying to get screenplays to work. these aren't important, and should be safely delete-able from the code and the sim environment
             aftFore = activeSim.get(ScreenplayManager.class).getObject("Screenplay 1");
             profile = activeSim.get(ScreenplayManager.class).getObject("Screenplay 2");
