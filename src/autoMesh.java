@@ -61,6 +61,9 @@ public class autoMesh extends StarMacro {
                 activeSim.freestreamControl.getGeometryObjects().add(surf);
         }
 
+        activeSim.freestreamControl.getGeometryObjects().addObjects(activeSim.radPart.getPartSurfaces());
+        if (activeSim.dualRadFlag) activeSim.freestreamControl.getGeometryObjects().addObjects(activeSim.dualRadPart.getPartSurfaces());
+
         //Assign block parts to the associated volume controls. Whether or not these are used is dependent on whether or not the nodes are enabled in the sim file.
         activeSim.activeSim.println("Assigning volumetric controls");
         activeSim.volControlWake.getGeometryObjects().setObjects(activeSim.volumetricWake);
