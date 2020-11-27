@@ -58,7 +58,7 @@ public class autoMesh extends StarMacro {
             if (surf.getPresentationName().contains("UT"))
                 activeSim.undertrayControl.getGeometryObjects().add(surf);
             if (surf.getPresentationName().contains("RADIATOR"))
-                activeSim.bodyworkControl.getGeometryObjects().add(surf);
+                activeSim.freestreamControl.getGeometryObjects().add(surf);
         }
 
         //Assign block parts to the associated volume controls. Whether or not these are used is dependent on whether or not the nodes are enabled in the sim file.
