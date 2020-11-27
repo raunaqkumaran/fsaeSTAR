@@ -54,6 +54,10 @@ public class postProc extends StarMacro {
                 sim.inches, new DoubleVector(sim.profileDirection));
         sim.activeSim.println("---Exporting mesh---");
         postProc2D(sim, meshDisplayers, profileViews, sim.profileLimits, 1, 0.1, sim.meshScene);
+
+        if (sim.activeSim.getSimulationIterator().getCurrentIteration() < 10)
+            return;
+
         sim.activeSim.println("---Processing 3D---");
         postProc3D(sim, displayers3D, views3D);
 
