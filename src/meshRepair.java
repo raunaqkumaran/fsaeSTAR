@@ -37,8 +37,8 @@ public class meshRepair extends StarMacro {
         else
             regArray = new Object[] {activeSim.domainRegion, activeSim.radiatorRegion, activeSim.dualRadiatorRegion};
 
-        //If the iteration count is higher than 0, then run the mesh repair with the maxVel
-        if (activeSim.activeSim.getSimulationIterator().getCurrentIteration() > 0) {
+        //If the iteration count is higher than 4, then run the mesh repair with the maxVel
+        if (activeSim.activeSim.getSimulationIterator().getCurrentIteration() > 4) {
             if (activeSim.maxVelocity.getReportMonitorValue() > ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxVel.getCriterionType()).getLimit().evaluate())
             {
                 meshManager_0.removeInvalidCells(new NeoObjectVector(regArray), NeoProperty.fromString("{\'minimumContiguousFaceArea\': 0.0, \'minimumCellVolumeEnabled\': true, \'minimumVolumeChangeEnabled\': true, \'functionOperator\': 1, \'minimumContiguousFaceAreaEnabled\': true, \'minimumFaceValidityEnabled\': true, \'functionValue\':" + (activeSim.maxVelocity.getReportMonitorValue() * 0.5) + ", \'functionEnabled\': true, \'function\': \'VelocityMagnitude\', \'minimumVolumeChange\': 1.0E-10, \'minimumCellVolume\': 0.0, \'minimumCellQualityEnabled\': true, \'minimumCellQuality\': 1.0E-5, \'minimumDiscontiguousCells\': 1, \'minimumDiscontiguousCellsEnabled\': true, \'minimumFaceValidity\': 0.51}"));
