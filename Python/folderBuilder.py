@@ -22,7 +22,7 @@ for contents in os.listdir(importPath):
     if os.path.splitext(configFileName)[1] == ".config":
 
         # Get config vars
-        configFile = open(importPath + configFileName, "r")
+        configFile = open(importPath + os.sep + configFileName, "r")
 
         controllerVars = bbs.get_env_vals(configFile)
 
