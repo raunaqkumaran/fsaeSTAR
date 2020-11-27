@@ -11,6 +11,8 @@ if len(sys.argv) > 1:
         for i in range(0, len(sys.argv)):
             if i is not 1:
                 newArgv.append(sys.argv[i])
+    else:
+        importPath = os.getcwd()
 else:
     importPath = os.getcwd()  # current working directory call; change to wherever the .configs are exported to
 
