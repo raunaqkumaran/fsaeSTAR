@@ -57,8 +57,8 @@ public class autoMesh extends StarMacro {
                 activeSim.bodyworkControl.getGeometryObjects().add(surf);
             if (surf.getPresentationName().contains("UT"))
                 activeSim.undertrayControl.getGeometryObjects().add(surf);
-            if (surf.getPresentationName().contains("RADIATOR"))
-                activeSim.radiatorControlSurface.getGeometryObjects().add(surf);
+            //if (surf.getPresentationName().contains("RADIATOR"))
+                //activeSim.radiatorControlSurface.getGeometryObjects().add(surf);
         }
 
         //activeSim.radiatorControlSurface.getGeometryObjects().addObjects(activeSim.radPart.getPartSurfaces());
