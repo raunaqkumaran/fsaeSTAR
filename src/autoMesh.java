@@ -32,7 +32,7 @@ public class autoMesh extends StarMacro {
         activeSim.rearWingControl.getGeometryObjects().setObjects();
         activeSim.undertrayControl.getGeometryObjects().setObjects();
         activeSim.frontWingControl.getGeometryObjects().setObjects();
-        activeSim.radiatorControl.getGeometryObjects().setObjects();
+        activeSim.radiatorControlVolume.getGeometryObjects().setObjects();
 
         //It might make sense to move this over the simComponents, but that's some refactoring that right now has limited benefit for non-zero work.
         //This iterates through all the surfaces in the subtract node, and assigns them to the correct surface mesh controls based on our naming convention. Try to avoid changing the naming convection if you can.
@@ -57,10 +57,12 @@ public class autoMesh extends StarMacro {
                 activeSim.bodyworkControl.getGeometryObjects().add(surf);
             if (surf.getPresentationName().contains("UT"))
                 activeSim.undertrayControl.getGeometryObjects().add(surf);
+            if (surf.getPresentationName().contains("RADIATOR"))
+                activeSim.radiatorControlSurface.getGeometryObjects().add(surf);
         }
 
-        //activeSim.bodyworkControl.getGeometryObjects().addObjects(activeSim.radPart.getPartSurfaces());
-        //if (activeSim.dualRadFlag) activeSim.bodyworkControl.getGeometryObjects().addObjects(activeSim.dualRadPart.getPartSurfaces());
+        activeSim.radiatorControlSurface.getGeometryObjects().addObjects(activeSim.radPart.getPartSurfaces());
+        if (activeSim.dualRadFlag) activeSim.radiatorControlSurface.getGeometryObjects().addObjects(activeSim.dualRadPart.getPartSurfaces());
 
         //Assign block parts to the associated volume controls. Whether or not these are used is dependent on whether or not the nodes are enabled in the sim file.
         activeSim.activeSim.println("Assigning volumetric controls");
@@ -70,8 +72,8 @@ public class autoMesh extends StarMacro {
         activeSim.volControlUnderbody.getGeometryObjects().setObjects(activeSim.volumetricUnderbody);
         activeSim.volControlRearWing.getGeometryObjects().setObjects(activeSim.volumetricRearWing);
         activeSim.volControlCar.getGeometryObjects().setObjects(activeSim.volumetricCar);
-        activeSim.radiatorControl.getGeometryObjects().setObjects(activeSim.radPart);
-        if (activeSim.dualRadFlag) activeSim.radiatorControl.getGeometryObjects().add(activeSim.dualRadPart);
+        activeSim.radiatorControlVolume.getGeometryObjects().setObjects(activeSim.radPart);
+        if (activeSim.dualRadFlag) activeSim.radiatorControlVolume.getGeometryObjects().add(activeSim.dualRadPart);
         activeSim.farWakeControl.getGeometryObjects().setObjects(activeSim.farWakePart);
 
         //Don't need these next two lines. I like them though, so kept them.

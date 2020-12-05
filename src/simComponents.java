@@ -14,7 +14,6 @@ import star.common.*;
 import star.flow.AccumulatedForceTable;
 import star.meshing.*;
 import star.motion.UserRotatingAndTranslatingReferenceFrame;
-import star.motion.UserRotatingReferenceFrame;
 import star.screenplay.Screenplay;
 import star.screenplay.ScreenplayManager;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
@@ -231,10 +230,11 @@ public class simComponents {
     public SurfaceCustomMeshControl bodyworkControl;
     public SurfaceCustomMeshControl groundControl;
     public SurfaceCustomMeshControl freestreamControl;
+    public VolumeCustomMeshControl radiatorControlVolume;
     public VolumeCustomMeshControl volControlCar;
     public VolumeCustomMeshControl volControlWake;
     public VolumeCustomMeshControl farWakeControl;
-    public VolumeCustomMeshControl radiatorControl;
+    public SurfaceCustomMeshControl radiatorControlSurface;
     public VolumeCustomMeshControl volControlWingWake;
     public VolumeCustomMeshControl volControlRearWing;
     public VolumeCustomMeshControl volControlFrontWing;
@@ -676,7 +676,8 @@ public class simComponents {
             volControlFrontWing = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Front Wing");
             volControlUnderbody = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Underbody");
             farWakeControl = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Far Wake");
-            radiatorControl = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Radiator");
+            radiatorControlVolume = (VolumeCustomMeshControl) getCustomControl.getObject("Volumetric Control Radiator");
+            radiatorControlSurface = (SurfaceCustomMeshControl) getCustomControl.getObject("Surface Control Radiator");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Mesh initializer error");
         }
