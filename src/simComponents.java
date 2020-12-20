@@ -537,6 +537,11 @@ public class simComponents {
                 dualRadFanBound = bound;
         }
 
+        if (radInlet == null || radOutlet == null || domainRadInlet == null || domainRadOutlet == null)
+        {
+            throw new IllegalStateException("Could not assign radiator surfaces. Did you split radiator surfaces?");
+        }
+
         //Filter out freestream boundaries to make it easier to set up boundary conditions later.
         for (Boundary fsBound : freestreamBounds)
         {
