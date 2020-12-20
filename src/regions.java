@@ -51,6 +51,10 @@ public class regions extends StarMacro {
         // Some of these calls will need to be modified if coordinate systems change in the future.
 
         //Set up boundaries for the radiator inlets and outlest.
+        if (activeSim.radInlet == null || activeSim.radOutlet == null || activeSim.domainRadInlet == null || activeSim.domainRadOutlet == null)
+        {
+            throw new IllegalStateException("Could not assign radiator surfaces. Did you split radiator surfaces?");
+        }
         activeSim.massFlowInterfaceInlet = activeSim.activeSim.getInterfaceManager().
                 createBoundaryInterface(activeSim.domainRadInlet, activeSim.radInlet,
                         activeSim.massFlowInterfaceNameInlet);

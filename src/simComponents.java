@@ -537,11 +537,6 @@ public class simComponents {
                 dualRadFanBound = bound;
         }
 
-        if (radInlet == null || radOutlet == null || domainRadInlet == null || domainRadOutlet == null)
-        {
-            throw new IllegalStateException("Could not assign radiator surfaces. Did you split radiator surfaces?");
-        }
-
         //Filter out freestream boundaries to make it easier to set up boundary conditions later.
         for (Boundary fsBound : freestreamBounds)
         {
@@ -813,11 +808,7 @@ public class simComponents {
     // Removes old regions. Creates new ones. Avoid using this function too if you can avoid it. The way this does things is very destructive.
     public void regionSwap() {
 
-        try {
-            removeAllRegions();
-        } catch (Exception e) {
-            activeSim.println("Old regions not found");
-        }
+        removeAllRegions();
 
         try {
             radPart = activeSim.get(SimulationPartManager.class).getObject(RADIATOR_NAME);
@@ -852,6 +843,7 @@ public class simComponents {
     }
 
     public void removeAllRegions() {
+        activeSim.println("Removing all existing regions");
         for (Region x : activeSim.getRegionManager().getRegions())
         {
             activeSim.getRegionManager().removeRegion(x);
