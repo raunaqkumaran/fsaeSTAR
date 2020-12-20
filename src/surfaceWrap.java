@@ -19,6 +19,7 @@ public class surfaceWrap extends StarMacro {
         // Instantiate simComponents object
         Simulation simFile = getActiveSimulation();
         simComponents simObject = new simComponents(simFile);
+        simObject.removeAllRegions();
 
 
         // Set up controls. Unlike autoMesh which depends on the user to define which controls are enabled. surfaceWrap automatically enables everything.

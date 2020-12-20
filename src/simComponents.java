@@ -814,10 +814,7 @@ public class simComponents {
     public void regionSwap() {
 
         try {
-            for (Region x : activeSim.getRegionManager().getRegions())
-            {
-                activeSim.getRegionManager().removeRegion(x);
-            }
+            removeAllRegions();
         } catch (Exception e) {
             activeSim.println("Old regions not found");
         }
@@ -852,6 +849,13 @@ public class simComponents {
             dualRadiatorRegion.setPresentationName(DUAL_RADIATOR_REGION);
         }
 
+    }
+
+    public void removeAllRegions() {
+        for (Region x : activeSim.getRegionManager().getRegions())
+        {
+            activeSim.getRegionManager().removeRegion(x);
+        }
     }
 
     //I have no idea why this is here. But it reverses an array. eg [1, 2, 3] -> [3, 2, 1]
