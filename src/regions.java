@@ -357,7 +357,7 @@ public class regions extends StarMacro {
                 if (coll.contains(x))
                     mergeBounds.remove(x);
             }
-            if (x.getPresentationName().toLowerCase().contains("interface") || x.getPresentationName().toLowerCase().contains("radiator"))
+            if (x.getPresentationName().toLowerCase().contains("interface") || x.getPresentationName().toLowerCase().contains("radiator") || x.getBoundaryType() instanceof InvalidCellBoundary)
                 mergeBounds.remove(x);
         }
         activeSim.activeSim.println("merging: " + mergeBounds);
