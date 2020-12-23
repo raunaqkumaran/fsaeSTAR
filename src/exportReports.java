@@ -98,6 +98,8 @@ public class exportReports extends StarMacro {
         double[] avgArr = getMovingAvg(array[column]);
         double variance = getVariance(array[column], startIndex);
         //double stDev = getStanDev(array[column], startIndex);
+        if (arrLength(avgArr) < endIndex)
+            return false;
         double avgStDev = getStanDev(avgArr, arrLength(avgArr) - endIndex);
         //double diff = getMinMaxDiff(array[column], startIndex);
         double avgDiff1 = getMinMaxDiff(avgArr, arrLength(avgArr) - endIndex);
