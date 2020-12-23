@@ -8,17 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class convergenceChecker extends StarMacro {
+public class convergenceChecker {
 
     public static final int COLUMN = 1;
     public static final int MOVING_AVERAGE_WINDOW = 500;
     public static final int CONVERGENCE_SCORE_CUTOFF = 15;
     public static final int START_INDEX = 1000;
+    public static final int END_INDEX = 1000;
+    public HashMap<String, Boolean> convergenceResults;
 
-    public void execute()
+    public convergenceChecker(simComponents activeSim)
     {
-        simComponents activeSim = new simComponents(getActiveSimulation());
-        HashMap<String, Boolean> convergenceResults = new HashMap<>();
+        convergenceResults = new HashMap<>();
 
         for (StarPlot plt : activeSim.plots)
         {
@@ -41,13 +42,52 @@ public class convergenceChecker extends StarMacro {
             }
 
             double[] averageSlice = Arrays.copyOfRange(movingAverageArray, START_INDEX, movingAverageArray.length);
+            double[] latestSlice = Arrays.copyOfRange(movingAverageArray, movingAverageArray.length - END_INDEX, movingAverageArray.length);
             double averageStdDev = stdDeviation(averageSlice);
+            double max = getMaximum(latestSlice);
+            double min = getMinimum(latestSlice);
+            double percentageRange = Math.abs(((max - min) / min) * 100);
+            double score = cnvgAlgorithm(averageStdDev, percentageRange);
 
-
+            if (score < CONVERGENCE_SCORE_CUTOFF)
+                convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
+            else
+                convergenceResults.put(plt.getPresentationName() + " (" + score + ")", false);
 
             activeSim.activeSim.print("");
         }
         activeSim.activeSim.println("Complete");
+    }
+
+    public double cnvgAlgorithm(double stDev, double diff) {
+        int scaleFactor = 2500;
+        return (stDev * diff * scaleFactor);
+    }
+
+    public double getMaximum(double[] arr)
+    {
+        double max = arr[0];
+
+        for (double v : arr)
+        {
+            if (v > max)
+                max = v;
+        }
+
+        return max;
+    }
+
+    public double getMinimum(double[] arr)
+    {
+        double min = arr[0];
+
+        for (double v : arr)
+        {
+            if (v < min)
+                min = v;
+        }
+
+        return min;
     }
 
     public double[] movingAverage(double[] arr)

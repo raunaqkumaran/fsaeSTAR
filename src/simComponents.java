@@ -110,6 +110,7 @@ public class simComponents {
     public XyzInternalTable repTable;
     public Map<String, AccumulatedForceTable> forceTables;
     public Collection<StarPlot> plots;
+    public HashMap<String, Boolean> convergenceResults;
 
     //Units
     public Units noUnit;
