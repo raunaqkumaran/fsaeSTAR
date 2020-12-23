@@ -5,6 +5,7 @@ import star.common.StarMacro;
 import java.io.*;
 import java.lang.Math;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 
 public class exportReports extends StarMacro {
@@ -56,15 +57,22 @@ public class exportReports extends StarMacro {
         esObj.exportPlots(activeSim);
 
         // Testing for convergence
-        String plotsPath = postProc.getFolderPath("Plots", activeSim);
-        boolean convergesCl = convergence(plotsPath + activeSim.separator + LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesCd = convergence(plotsPath + activeSim.separator + DRAG_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesFW = convergence(plotsPath + activeSim.separator + FW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesRW = convergence(plotsPath + activeSim.separator + RW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
-        boolean convergesSW = convergence(plotsPath + activeSim.separator + SW_LIFT_COEFFICIENT_MONITOR_PLOT_TXT);
+        convergenceChecker convergenceObj = new convergenceChecker(activeSim);
 
-        printConvergence(convergesCl, convergesCd, convergesFW, convergesRW, convergesSW, path, activeSim);
+        File convergenceFile = new File(path + activeSim.separator + "Convergence.txt");
+        PrintWriter writer = new PrintWriter(convergenceFile);
+
+        for (String val : convergenceObj.convergenceResults.keySet())
+        {
+            String str = val + " : " + convergenceObj.convergenceResults.get(val).toString();
+            writer.println(str);
+        }
+
+        writer.close();
+
     }
+
+    /*
 
     public boolean convergence(String str) {
 
@@ -84,7 +92,7 @@ public class exportReports extends StarMacro {
          * large variations, but still converge after many more iterations. Also worth noting is that if the moving
          * average min/max values are higher than a certain value (discounting the first 1000 iterations), the program
          * will display non-convergence, even if the final 1000 iterations appear to converge (as in test case 2).
-         */
+         *\/
 
         int column = 1;
         int startIndex = 1000;
@@ -231,16 +239,21 @@ public class exportReports extends StarMacro {
 
     public double getMinMaxDiff(double[] arr, int index) {
 
+        //converts everything to absolute.
         for (int i = 0; i < arrLength(arr); i++)
             arr[i] = Math.abs(arr[i]);
 
         double arrMin = arr[index];
+
+        //finds minimum.
         for (int i = index; i < arrLength(arr); i++) {
             if (arr[i] < arrMin)
                 arrMin = arr[i];
         }
 
         double arrMax = arr[index];
+
+        //finds maximum
         for (int j = index; j < arrLength(arr); j++) {
             if (arr[j] > arrMax)
                 arrMax = arr[j];
@@ -296,6 +309,7 @@ public class exportReports extends StarMacro {
 
         writer.close();
     }
+    */
 
 }
 
