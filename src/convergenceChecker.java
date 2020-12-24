@@ -35,7 +35,7 @@ public class convergenceChecker {
 
             double[] movingAverageArray = movingAverage(iterationHistory);
 
-            if (movingAverageArray == null || START_INDEX > movingAverageArray.length)
+            if (movingAverageArray == null || START_INDEX > movingAverageArray.length || END_INDEX > movingAverageArray.length)
             {
                 convergenceResults.put(plt.getPresentationName(), false);
                 continue;
