@@ -21,6 +21,7 @@ public class postProc extends StarMacro {
     public void execute()
     {
         simComponents sim = new simComponents(getActiveSimulation());
+        sim.activeSim.getSceneManager().setVerbose(true);
 
         //Assign all regions to cross section derived part. Set origin to origin.
         sim.crossSection.getInputParts().setObjects(sim.activeSim.getRegionManager().getRegions());
