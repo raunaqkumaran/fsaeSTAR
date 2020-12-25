@@ -124,7 +124,7 @@ def generatecommand(config_list):
     command += " -batch-report"
     if config_list['CLUSTER'] == "gpu":
         command += " -rgraphics egl"
-    command = command + " >> " + '"$FILENAME' + "_" + get_timestamp() + '.txt"'
+    command = command + "| tee " + '"{$FILENAME}' + "_" + get_timestamp() + '.txt"'
     return command
 
 
