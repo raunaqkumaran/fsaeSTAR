@@ -111,7 +111,7 @@ def generatecommand(config_list):
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
     command = command + '"' + "$FILENAME" + '"'
-    command = command + " -logfile " + '"$FILENAME' + "_" + get_timestamp() + '.txt"'
+    command = command + " >> " + '"$FILENAME' + "_" + get_timestamp() + '.txt"'
     if 'PROCS' in config_list:
         if float(config_list['PROCS']) != 1:
             command = command + " -np " + "$PROCS"
