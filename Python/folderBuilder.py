@@ -28,6 +28,9 @@ for contents in os.listdir(importPath):
 
         controllerVars = bbs.get_env_vals(configFile)
 
+        if ('JOBS_PER_NODE' not in controllerVars.keys()) or (controllerVars['CLUMPED'] != "true"):
+            controllerVars['JOBS_PER_NODE'] = 1
+
         if controllerVars['CLUSTER'] != "LOCAL":
             if int(controllerVars['PROCS']) < 20:
                 controllerVars['NODES'] = 1
@@ -35,6 +38,7 @@ for contents in os.listdir(importPath):
                 controllerVars['NODES'] = int(int(controllerVars['PROCS']) / 20)
 
             controllerVars['PPN'] = int(int(controllerVars['PROCS']) / controllerVars['NODES'])
+            controllerVars['JOB_PROCS'] = int(controllerVars['PROCS']) // int(controllerVars['JOBS_PER_NODE'])
 
         path = controllerVars['SIMPATH']
 
@@ -55,7 +59,7 @@ for contents in os.listdir(importPath):
             bbs.posix_write_flag(key, value, outputFile)
 
         if controllerVars['CLUMPED'] == "true":
-            child_scripts = bbs.clumped(file_list, configFile, posixCommand)
+            child_scripts = bbs.clumped(file_list, controllerVars, posixCommand)
             outputFile.write((qsubCommand + '"' + child_scripts + '"').encode())
             bbs.posix_write_blanks(outputFile, 2)
             os.system("chmod +x " + '"' + child_scripts + '"')

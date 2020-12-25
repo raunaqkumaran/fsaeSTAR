@@ -2,6 +2,8 @@ import os
 import sys
 import datetime
 
+GPU_CORES = 16
+CPU_CORES = 20
 
 def get_timestamp():
     timeStamp = datetime.datetime.now()
@@ -73,9 +75,9 @@ def get_env_vals(file):
 
 def individuals(file_list, config_file, command):
     output_files = []
-    timeStampString = get_timestamp()
+    time_stamp_string = get_timestamp()
     for x in file_list:
-        output_file_name = x + "_" + timeStampString + "_script.sh"
+        output_file_name = x + "_" + time_stamp_string + "_script.sh"
         output_files.append(output_file_name)
         output_file = open(output_file_name, "wb")
         output_file.write("#!/bin/sh\n".encode())
@@ -88,18 +90,25 @@ def individuals(file_list, config_file, command):
     return output_files
 
 
-def clumped(file_list, config_file, command):
-    timeStampString = get_timestamp()
-    output_file_name = timeStampString + "_" + "clumped_run.sh"
+def clumped(file_list, config_list, command):
+    time_stamp_string = get_timestamp()
+    output_file_name = time_stamp_string + "_" + "clumped_run.sh"
     output_file = open(output_file_name, "wb")
     output_file.write("#!/bin/sh\n".encode())
-    config_list = get_env_vals(config_file)
+    i = 0
     for key, val in config_list.items():
         posix_write_flag(key, val, output_file)
+    posix_write_blanks(output_file, 2)
     for x in file_list:
+        output_file.write("(".encode())
         posix_write_flag("FILENAME", x, output_file)
         output_file.write(command.encode())
+        output_file.write(") &".encode())
+        i += 1
+        if i % int(config_list['JOBS_PER_NODE']) == 0:
+            output_file.write(" wait\n".encode())
         posix_write_blanks(output_file, 2)
+
     output_file.close()
     return output_file_name
 
@@ -113,7 +122,7 @@ def generatecommand(config_list):
     command = command + '"' + "$FILENAME" + '"'
     if 'PROCS' in config_list:
         if float(config_list['PROCS']) != 1:
-            command = command + " -np " + "$PROCS"
+            command = command + " -np " + "$JOB_PROCS"
     if 'PODKEY' in config_list and "cd-adapco" in config_list['LICPATH']:
         command = command + " -power -podkey " + "$PODKEY"
     command = command + " -batch " + '"' + "$CP" + os.sep + "$MACRO" + '"'
