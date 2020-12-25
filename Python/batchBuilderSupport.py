@@ -111,7 +111,6 @@ def generatecommand(config_list):
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
     command = command + '"' + "$FILENAME" + '"'
-    command = command + " >> " + '"$FILENAME' + "_" + get_timestamp() + '.txt"'
     if 'PROCS' in config_list:
         if float(config_list['PROCS']) != 1:
             command = command + " -np " + "$PROCS"
@@ -125,6 +124,7 @@ def generatecommand(config_list):
     command += " -batch-report"
     if config_list['CLUSTER'] == "gpu":
         command += " -rgraphics egl"
+    command = command + " >> " + '"$FILENAME' + "_" + get_timestamp() + '.txt"'
     return command
 
 
