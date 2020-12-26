@@ -133,7 +133,7 @@ def generatecommand(config_list):
     command += " -batch-report"
     if config_list['CLUSTER'] == "gpu":
         command += " -rgraphics egl"
-    command = command + "| tee " + '"${FILENAME}' + "_" + get_timestamp() + '.txt"'
+    command = command + "| tee " + '"${FILENAME}' + "_" + "${SLURM_JOB_ID}" + "_" + get_timestamp() + '.txt"'
     return command
 
 
