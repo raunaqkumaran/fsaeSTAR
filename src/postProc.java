@@ -4,6 +4,7 @@ import star.common.Boundary;
 import star.common.MonitorPlot;
 import star.common.StarMacro;
 import star.common.StarPlot;
+import star.flow.AccumulatedForceHistogram;
 import star.flow.AccumulatedForceTable;
 import star.vis.*;
 
@@ -250,8 +251,13 @@ public class postProc extends StarMacro {
 
     public void exportPlots(simComponents sim) {
         String plotsPath;
-        for (AccumulatedForceTable x : sim.forceTables.values())
+        for (AccumulatedForceTable x : sim.forceTables.values()) {
+            AccumulatedForceHistogram hist = (AccumulatedForceHistogram) x.getHistogram();
+            hist.getBinDirection().setComponents(0, 1, 0);
+            hist.getProfileDirection().setComponents(1, 0, 0);
+            hist.getForceDirection().setComponents(0, 0, 1);
             x.extract();
+        }
         for (StarPlot plot : sim.plots)
         {
             //Need to make sure the residuals X axis is physical time for transient, otherwise the plot is basically unreadable.
