@@ -105,7 +105,7 @@ def clumped(file_list, config_list, command):
         output_file.write(command.encode())
         output_file.write(") &".encode())
         i += 1
-        if i % int(config_list['JOBS_PER_NODE']) == 0:
+        if i % int(config_list['JOBS_IN_PARALLEL']) == 0:
             output_file.write(" wait\n".encode())
         posix_write_blanks(output_file, 2)
 

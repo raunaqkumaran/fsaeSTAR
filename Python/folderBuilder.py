@@ -28,8 +28,8 @@ for contents in os.listdir(importPath):
 
         controllerVars = bbs.get_env_vals(configFile)
 
-        if ('JOBS_PER_NODE' not in controllerVars.keys()) or (controllerVars['CLUMPED'] != "true"):
-            controllerVars['JOBS_PER_NODE'] = 1
+        if ('JOBS_IN_PARALLEL' not in controllerVars.keys()) or (controllerVars['CLUMPED'] != "true"):
+            controllerVars['JOBS_IN_PARALLEL'] = 1
 
         if controllerVars['CLUSTER'] != "LOCAL":
             if int(controllerVars['PROCS']) < 20:
@@ -38,7 +38,7 @@ for contents in os.listdir(importPath):
                 controllerVars['NODES'] = int(int(controllerVars['PROCS']) / 20)
 
             controllerVars['PPN'] = int(int(controllerVars['PROCS']) / controllerVars['NODES'])
-            controllerVars['JOB_PROCS'] = int(controllerVars['PROCS']) // int(controllerVars['JOBS_PER_NODE'])
+            controllerVars['JOB_PROCS'] = int(controllerVars['PROCS']) // int(controllerVars['JOBS_IN_PARALLEL'])
 
         path = controllerVars['SIMPATH']
 
