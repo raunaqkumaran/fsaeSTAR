@@ -58,9 +58,6 @@ for contents in os.listdir(importPath):
         for key, value in controllerVars.items():
             bbs.posix_write_flag(key, value, outputFile)
 
-        nodefile_command = command = "srun hostname | sort -u > nodefile.$SLURM_JOB_ID\n"
-        outputFile.write(nodefile_command.encode())
-
         if controllerVars['CLUMPED'] == "true":
             child_scripts = bbs.clumped(file_list, controllerVars, posixCommand)
             outputFile.write((qsubCommand + '"' + child_scripts + '"').encode())
