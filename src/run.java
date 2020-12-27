@@ -14,10 +14,10 @@ public class run extends StarMacro {
     public void execute() {
 
         SimComponents activeSim = new SimComponents(getActiveSimulation());
-        regions obj = new regions();
+        Regions obj = new Regions();
         obj.initFans(activeSim);
         activeSim.activeSim.println("--- RUNNING SIMULATION ---");
-        regions.setTurbulence(activeSim);
+        Regions.setTurbulence(activeSim);
         initial(activeSim);
         continueRun(activeSim);
         activeSim.saveSim();

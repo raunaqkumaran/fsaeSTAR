@@ -20,7 +20,7 @@ public class MacroController extends StarMacro {
                 "Steering.java",
                 "surfaceWrap.java",
                 "subtract.java",
-                "regions.java",
+                "Regions.java",
                 "AutoMesh.java",
                 "MeshRepair.java",
                 "MeshRepair.java",

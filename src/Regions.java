@@ -13,7 +13,7 @@ import java.util.Collection;
 Sets up regions and boundary conditions. Also holds a few functions used by other macros for boundary conditions.
  */
 
-public class regions extends StarMacro {
+public class Regions extends StarMacro {
 
     public void execute() {
         execute0();
@@ -166,7 +166,7 @@ public class regions extends StarMacro {
                     {
                         rotationRate = frontRotationRate + 0.5 * diffVelocity / activeSim.frontTyreRadius;
                     }
-                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + rotationRate);
+                    activeSim.activeSim.println("Setting front tyre rotation rate to : " + rotationRate + " for " + boundName);
                     wheelBound.getValues().
                             get(ReferenceFrame.class).setCoordinateSystem(activeSim.frontWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
@@ -182,7 +182,7 @@ public class regions extends StarMacro {
                     {
                         rotationRate = rearRotationRate + 0.5 * diffVelocity / activeSim.rearTyreRadius;
                     }
-                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + rotationRate);
+                    activeSim.activeSim.println("Setting rear tyre rotation rate to : " + + rotationRate + " for " + boundName);
                     wheelBound.getValues().get(ReferenceFrame.class).
                             setCoordinateSystem(activeSim.rearWheelCoord);
                     wheelBound.getValues().get(WallRelativeRotationProfile.class).
@@ -190,7 +190,7 @@ public class regions extends StarMacro {
                             setValue(rotationRate);
                 }
             } catch (Exception e) {
-                activeSim.activeSim.println("regions.java - Wheel boundary set-up failed");
+                activeSim.activeSim.println("Regions.java - Wheel boundary set-up failed");
             }
         }
     }

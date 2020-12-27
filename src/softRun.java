@@ -11,7 +11,7 @@ public class softRun extends StarMacro
     public void execute()
     {
         SimComponents sim = new SimComponents(getActiveSimulation());
-        regions obj = new regions();
+        Regions obj = new Regions();
         obj.initFans(sim);
         sim.activeSim.getSimulationIterator().step(1);
 

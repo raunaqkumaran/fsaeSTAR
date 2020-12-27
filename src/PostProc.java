@@ -64,7 +64,7 @@ public class PostProc extends StarMacro {
 
         //Need to merge boundaries, otherwise it takes forever to get 2D data when you have 10k+ boundaries (thanks powertrain)
         sim.activeSim.println("---Merging boundaries---");
-        regions obj = new regions();
+        Regions obj = new Regions();
         obj.mergeBoundaries(sim);
 
         //Export 2D scenes. Can figure out what the function arugements mean from the function definitions below.

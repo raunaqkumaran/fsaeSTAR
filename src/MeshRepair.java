@@ -65,7 +65,7 @@ public class MeshRepair extends StarMacro {
                 reg.setPhysicsContinuum(null);
             }
         }
-        regions.setTurbulence(activeSim);
+        Regions.setTurbulence(activeSim);
     }
 
 }
