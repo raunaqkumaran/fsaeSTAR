@@ -114,9 +114,7 @@ def clumped(file_list, config_list, command):
 
 
 def generatecommand(config_list):
-    command = "srun hostname | sort -u > nodefile.$SLURM_JOBID"
-    command += "\n"
-    command = command + '"' + "$STARLOC" + '"'
+    command = '"' + "$STARLOC" + '"'
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
     command = command + '"' + "$FILENAME" + '"'
