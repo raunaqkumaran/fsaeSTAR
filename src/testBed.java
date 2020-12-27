@@ -1,13 +1,13 @@
 import star.common.StarMacro;
 
 /*
-A nice little interface to test a macro chain without having to mess with macroController.
+A nice little interface to test a macro chain without having to mess with MacroController.
  */
 
 public class testBed extends StarMacro {
     public void execute()
     {
-        simComponents activeSim = new simComponents(getActiveSimulation());
+        SimComponents activeSim = new SimComponents(getActiveSimulation());
         //exportScenes.exportMesh(activeSim);
     }
 }

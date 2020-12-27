@@ -1,13 +1,10 @@
-import java.io.File;
-import java.util.*;
-
 import star.common.*;
 import star.base.neo.*;
 import star.meshing.*;
 
 //This looks like a one-off. Not important.
 
-public class freestream_fix extends StarMacro {
+public class FreestreamFix extends StarMacro {
 
     public void execute() {
 
@@ -15,7 +12,7 @@ public class freestream_fix extends StarMacro {
         Simulation simulation_0 =
                 getActiveSimulation();
 
-        simComponents sim = new simComponents(simulation_0);
+        SimComponents sim = new SimComponents(simulation_0);
 
         SimpleBlockPart simpleBlockPart_0 =
                 ((SimpleBlockPart) simulation_0.get(SimulationPartManager.class).getPart("Freestream"));

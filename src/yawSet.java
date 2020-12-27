@@ -9,7 +9,7 @@ public class yawSet extends StarMacro {
 
     private void yawSetter()
     {
-        simComponents sim = new simComponents(getActiveSimulation());
+        SimComponents sim = new SimComponents(getActiveSimulation());
         regions obj = new regions();
         obj.yawInterfaces(sim);
     }

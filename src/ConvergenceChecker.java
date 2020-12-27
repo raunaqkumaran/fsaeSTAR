@@ -1,14 +1,11 @@
 import com.klg.jclass.table.TableDataModel;
-import org.jfree.data.statistics.Statistics;
 import star.common.MonitorPlot;
-import star.common.StarMacro;
 import star.common.StarPlot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class convergenceChecker {
+public class ConvergenceChecker {
 
     public static final int COLUMN = 1;
     public static final int MOVING_AVERAGE_WINDOW = 500;
@@ -17,7 +14,7 @@ public class convergenceChecker {
     public static final int END_INDEX = 1000;
     public HashMap<String, Boolean> convergenceResults;
 
-    public convergenceChecker(simComponents activeSim)
+    public ConvergenceChecker(SimComponents activeSim)
     {
         convergenceResults = new HashMap<>();
 

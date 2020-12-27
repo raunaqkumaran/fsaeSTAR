@@ -1,11 +1,9 @@
 import star.base.neo.DoubleVector;
 import star.common.StarMacro;
 
-import java.util.Map;
+//Hacked this together to force a change to a half-car domain if the domainSet flag is set appropriately. This doesn't need to be a part of the MacroController flow, but it's a nice tool to have.
 
-//Hacked this together to force a change to a half-car domain if the domainSet flag is set appropriately. This doesn't need to be a part of the macroController flow, but it's a nice tool to have.
-
-public class domainSet extends StarMacro {
+public class DomainSet extends StarMacro {
 
     public void execute()
     {
@@ -15,10 +13,10 @@ public class domainSet extends StarMacro {
     private void execute0()
     {
 
-        simComponents sim = new simComponents(getActiveSimulation());
+        SimComponents sim = new SimComponents(getActiveSimulation());
 
         // Figure out if you want full car or half car
-        boolean fullCar = simComponents.boolEnv("domainSet");
+        boolean fullCar = SimComponents.boolEnv("domainSet");
 
         if (!fullCar)
             return;

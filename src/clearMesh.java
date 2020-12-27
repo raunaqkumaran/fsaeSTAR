@@ -4,7 +4,7 @@ public class clearMesh extends StarMacro
 {
     public void execute()
     {
-        simComponents activeSim = new simComponents(getActiveSimulation());
+        SimComponents activeSim = new SimComponents(getActiveSimulation());
         activeSim.clearMesh();
     }
 }

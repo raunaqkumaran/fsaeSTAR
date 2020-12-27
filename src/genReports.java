@@ -20,7 +20,7 @@ public class genReports extends StarMacro {
     }
     private void execute0()
     {
-        simComponents activeSim = new simComponents(getActiveSimulation());
+        SimComponents activeSim = new SimComponents(getActiveSimulation());
         activeSim.activeSim.println("--- SETTING UP REPORTS ---");
 
         //Sets up and extracts the FW and RW force histograms. This is scalable, so should be easy to add more force histograms if one was behooved to do so.
@@ -132,7 +132,7 @@ public class genReports extends StarMacro {
         }
 
         //We're out of the loop!
-        //Set up the report for max velocity. Need this to make sure the meshRepair trigger works. Assign the whole domain to it (might want to do radiator regions too, but no...)
+        //Set up the report for max velocity. Need this to make sure the MeshRepair trigger works. Assign the whole domain to it (might want to do radiator regions too, but no...)
         activeSim.maxVelocity.getParts().setObjects(activeSim.domainRegion);
         activeSim.maxVelocity.setRepresentation(activeSim.finiteVol);
 

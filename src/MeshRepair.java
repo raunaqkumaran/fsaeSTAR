@@ -8,7 +8,7 @@ import java.util.Vector;
 // This essentially scans the mesh for poor quality cells, high velocity cells, and removes them. This also splits the region by non-continguous, and proceedes to assign them with a null physics continuum to make sure they're essentially out of the solution.
 // If you want to improve the way we handle meshRepairing, this is where you'd tell fsaeSTAR which field functions to use for determining bad cells.
 
-public class meshRepair extends StarMacro {
+public class MeshRepair extends StarMacro {
 
     public void execute()
     {
@@ -20,7 +20,7 @@ public class meshRepair extends StarMacro {
         Simulation simulation_0 =
                 getActiveSimulation();
 
-        simComponents activeSim = new simComponents(simulation_0);
+        SimComponents activeSim = new SimComponents(simulation_0);
 
         activeSim.activeSim.println("--- Repairing Mesh ---");
 

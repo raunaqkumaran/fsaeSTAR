@@ -4,7 +4,7 @@ public class kill extends StarMacro {
 
     public void execute()
     {
-        simComponents sim = new simComponents(getActiveSimulation());
+        SimComponents sim = new SimComponents(getActiveSimulation());
         sim.killSim();
     }
 

@@ -8,8 +8,8 @@ public class walltimeKill extends StarMacro
 {
     public void execute()
     {
-        simComponents sim = new simComponents(getActiveSimulation());
-        long walltime = getWalltime(simComponents.valEnvString("WALLTIME"));
+        SimComponents sim = new SimComponents(getActiveSimulation());
+        long walltime = getWalltime(SimComponents.valEnvString("WALLTIME"));
         try {
             Thread.sleep((long) ((walltime - 180) * 1000));
             sim.saveSim();
@@ -23,7 +23,7 @@ public class walltimeKill extends StarMacro
     private long getWalltime(String str)
     {
         String [] splitString = str.split(":");
-        splitString = (String[]) simComponents.reverseArr(splitString);
+        splitString = (String[]) SimComponents.reverseArr(splitString);
         long walltime = 0;
         for (int i = 0 ; i < splitString.length; i++)
         {

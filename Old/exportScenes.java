@@ -15,7 +15,7 @@ import java.util.Collection;
 
 /**
  * @deprecated
- * Use postProc instead.
+ * Use PostProc instead.
  */
 
 @Deprecated
@@ -61,7 +61,7 @@ public class exportScenes extends StarMacro {
         cs = assignFlag("cs");
         uts = assignFlag("uts");
         ps = assignFlag("ps");
-        lic = simComponents.boolEnv("LIC");
+        lic = SimComponents.boolEnv("LIC");
         multiplier = getMultiplier();
         */
 

@@ -4,7 +4,7 @@ import star.common.StarMacro;
 /*
 This prepares the automated mesher, and runs it. Sets up custom controls, but does not define whether or not the control is enabled. Custom controls must be manually enabled in the sim file.
  */
-public class autoMesh extends StarMacro {
+public class AutoMesh extends StarMacro {
 
     public void execute()
     {
@@ -14,7 +14,7 @@ public class autoMesh extends StarMacro {
     private void execute0()
     {
 
-        simComponents activeSim = new simComponents(getActiveSimulation());
+        SimComponents activeSim = new SimComponents(getActiveSimulation());
         activeSim.activeSim.println("--- AUTOMESHING ---");
 
         activeSim.activeSim.println("Assigning surface controls");
@@ -34,7 +34,7 @@ public class autoMesh extends StarMacro {
         activeSim.frontWingControl.getGeometryObjects().setObjects();
         activeSim.radiatorControlVolume.getGeometryObjects().setObjects();
 
-        //It might make sense to move this over the simComponents, but that's some refactoring that right now has limited benefit for non-zero work.
+        //It might make sense to move this over the SimComponents, but that's some refactoring that right now has limited benefit for non-zero work.
         //This iterates through all the surfaces in the subtract node, and assigns them to the correct surface mesh controls based on our naming convention. Try to avoid changing the naming convection if you can.
 
         for (PartSurface surf :  activeSim.subtractPart.getPartSurfaceManager().getPartSurfaces())

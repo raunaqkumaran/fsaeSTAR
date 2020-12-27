@@ -7,24 +7,24 @@ import java.util.List;
 /*
 This is the God macro that runs the other macros. Pull in the sys env flags, and based on those decide which macros need to be executed.
  */
-public class macroController extends StarMacro {
+public class MacroController extends StarMacro {
     public void execute()
     {
-        simComponents sim = new simComponents(getActiveSimulation());
+        SimComponents sim = new SimComponents(getActiveSimulation());
         // Macros run in the order they're defined in this string[]
 
         String [] meshMacros = {
-                "domainSet.java",
-                "rideHeight.java",
+                "DomainSet.java",
+                "RideHeight.java",
                 "rollSet.java",
-                "steering.java",
+                "Steering.java",
                 "surfaceWrap.java",
                 "subtract.java",
                 "regions.java",
-                "autoMesh.java",
-                "meshRepair.java",
-                "meshRepair.java",
-                "meshRepair.java",
+                "AutoMesh.java",
+                "MeshRepair.java",
+                "MeshRepair.java",
+                "MeshRepair.java",
                 "save.java",
         };
 
@@ -32,9 +32,9 @@ public class macroController extends StarMacro {
                 "yawSet.java",
                 "genReports.java",
                 "softRun.java",                         //Sometimes STAR will find negative volume cells after first iteration, not before. If this happens, the macro crashes. I'd rather crash this sacrificial macro than crash the whole chain.
-                "meshRepair.java",
+                "MeshRepair.java",
                 "softRun.java",
-                "meshRepair.java",
+                "MeshRepair.java",
                 "run.java",
                 "exportReports.java",
                 "save.java"
@@ -43,15 +43,15 @@ public class macroController extends StarMacro {
 
         String [] postprocessMacros = {
                 "exportReports.java",
-                "postProc.java"
+                "PostProc.java"
         };
 
         List<String> runMacros = new ArrayList<>();
 
         //Get the sysenvs.
-        boolean process = simComponents.boolEnv("process");
-        boolean postprocess = simComponents.boolEnv("postprocess");
-        boolean preprocess = simComponents.boolEnv("preprocess");
+        boolean process = SimComponents.boolEnv("process");
+        boolean postprocess = SimComponents.boolEnv("postprocess");
+        boolean preprocess = SimComponents.boolEnv("preprocess");
 
         //Set up run order based on which flags are true and which aren't.
         if (preprocess)
@@ -76,7 +76,7 @@ public class macroController extends StarMacro {
         new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
         new StarScript(getActiveRootObject(), new java.io.File(resolvePath("kill.java"))).play();
 
-        //There's a lot of back and forth about whether or not macroController should handle save events, or if the individual macros should. I'll let that be your problem.
+        //There's a lot of back and forth about whether or not MacroController should handle save events, or if the individual macros should. I'll let that be your problem.
        
         
     }

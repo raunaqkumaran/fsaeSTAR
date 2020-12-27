@@ -4,7 +4,7 @@ public class save extends StarMacro {
 
     public void execute()
     {
-        simComponents sim = new simComponents(getActiveSimulation());
+        SimComponents sim = new SimComponents(getActiveSimulation());
         sim.saveSim();
     }
 

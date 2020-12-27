@@ -17,7 +17,7 @@ import java.util.Collections;
 Sets ride height for the car. Pretty self-explanatory code. Works by rotating the car about the front wheel axis, then the rear wheel axis. Gives good control for front and rear ride height independently, but since it's all trig it probably isn't a good idea to use this for insane ride height changes (multiple inches)
  */
 
-public class rideHeight extends StarMacro {
+public class RideHeight extends StarMacro {
 
     public void execute()
     {
@@ -26,7 +26,7 @@ public class rideHeight extends StarMacro {
 
     private void execute0()
     {
-        simComponents sim = new simComponents(getActiveSimulation());
+        SimComponents sim = new SimComponents(getActiveSimulation());
         double frontRot;
         double rearRot;
         double frh;

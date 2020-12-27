@@ -1,6 +1,5 @@
 import star.common.GeometryPart;
 import star.common.Simulation;
-import star.common.SimulationPartManager;
 import star.common.StarMacro;
 import star.meshing.MesherParallelModeOption;
 import star.meshing.SurfaceCustomMeshControl;
@@ -16,14 +15,14 @@ public class surfaceWrap extends StarMacro {
 
     private void execute0()
     {
-        // Instantiate simComponents object
+        // Instantiate SimComponents object
         Simulation simFile = getActiveSimulation();
-        simComponents simObject = new simComponents(simFile);
+        SimComponents simObject = new SimComponents(simFile);
         simObject.removeAllRegions();
-        simObject = new simComponents(simFile);
+        simObject = new SimComponents(simFile);
 
 
-        // Set up controls. Unlike autoMesh which depends on the user to define which controls are enabled. surfaceWrap automatically enables everything.
+        // Set up controls. Unlike AutoMesh which depends on the user to define which controls are enabled. surfaceWrap automatically enables everything.
 
         surfaceWrapSetup(simObject, simObject.surfaceWrapOperationPPM, simObject.aeroSurfaceWrapperPPM);
 
@@ -44,7 +43,7 @@ public class surfaceWrap extends StarMacro {
 
     }
 
-    private void surfaceWrapSetup(simComponents simObject, SurfaceWrapperAutoMeshOperation sWrap, SurfaceCustomMeshControl aeroSurface) {
+    private void surfaceWrapSetup(SimComponents simObject, SurfaceWrapperAutoMeshOperation sWrap, SurfaceCustomMeshControl aeroSurface) {
         sWrap.getInputGeometryObjects().setObjects(simObject.nonAeroParts);
         sWrap.getInputGeometryObjects().addObjects(simObject.wheels);
         sWrap.getInputGeometryObjects().addObjects(simObject.aeroParts);

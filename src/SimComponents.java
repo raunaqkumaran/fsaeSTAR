@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.*;
 
 
-public class simComponents {
+public class SimComponents {
 
     //Some string constants. This is something I started doing later on, and haven't done for every string.
     //I keep flip-flopping between whether or not this is a good idea or not, which means the final result of string management is pretty poor. Sorry.
@@ -258,7 +258,7 @@ public class simComponents {
     public GeometryPart farWakePart;
 
     // Constructor
-    public simComponents(Simulation inputSim) {
+    public SimComponents(Simulation inputSim) {
 
         long startTime = System.currentTimeMillis();
 
@@ -336,7 +336,7 @@ public class simComponents {
                 dualMassFlowInterfaceNameOutlet = "Dual outlet interface";
             }
         } catch (Exception e) {
-            activeSim.println("simComponents.java - Couldn't find/create domain or radiator region");
+            activeSim.println("SimComponents.java - Couldn't find/create domain or radiator region");
         }
 
 
@@ -416,7 +416,7 @@ public class simComponents {
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
 
-        activeSim.println("Time taken to generate simComponents : " + totalTime + " ms");
+        activeSim.println("Time taken to generate SimComponents : " + totalTime + " ms");
 
 
     }
@@ -543,9 +543,9 @@ public class simComponents {
         {
             //The check for YAW_INTERFACE is so i can keep using String.contains.
             String boundName = fsBound.getPresentationName();
-            if (boundName.contains("Left") && !boundName.contains(simComponents.YAW_INTERFACE_NAME))
+            if (boundName.contains("Left") && !boundName.contains(SimComponents.YAW_INTERFACE_NAME))
                 leftPlane = fsBound;
-            else if (boundName.contains("Symmetry") && !boundName.contains(simComponents.YAW_INTERFACE_NAME))
+            else if (boundName.contains("Symmetry") && !boundName.contains(SimComponents.YAW_INTERFACE_NAME))
                 symPlane = fsBound;
             else if (boundName.contains("Top"))
                 topPlane = fsBound;
@@ -600,7 +600,7 @@ public class simComponents {
         else
         {
             // I don't know if RuntimeException is the right exception class to throw. It probably isn't, but it gets the job done.
-            throw new RuntimeException("No physics continuum found for steady state. Check physicsSet() in simComponents.java for logic");
+            throw new RuntimeException("No physics continuum found for steady state. Check physicsSet() in SimComponents.java for logic");
         }
     }
 
@@ -621,7 +621,7 @@ public class simComponents {
             activeSim.println("Cornering domain detected");
         }
         else
-            throw new RuntimeException("Could not find a domain. Check the domainCatch() method in simComponents.java");
+            throw new RuntimeException("Could not find a domain. Check the domainCatch() method in SimComponents.java");
 
     }
 
@@ -796,7 +796,7 @@ public class simComponents {
             }
 
         } catch (Exception e) {
-            activeSim.println("simComponents.java - Coordinate system lookup failed");
+            activeSim.println("SimComponents.java - Coordinate system lookup failed");
         }
         try {
             rollAxis = (CartesianCoordinateSystem) activeSim.getCoordinateSystemManager().getCoordinateSystem("Roll axis");

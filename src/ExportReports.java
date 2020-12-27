@@ -3,12 +3,9 @@ import star.base.report.Report;
 import star.common.StarMacro;
 
 import java.io.*;
-import java.lang.Math;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 
-public class exportReports extends StarMacro {
+public class ExportReports extends StarMacro {
 
     public static final String LIFT_COEFFICIENT_MONITOR_PLOT_TXT = "Lift Coefficient Monitor Plot.txt";
     public static final String DRAG_COEFFICIENT_MONITOR_PLOT_TXT = "Drag Coefficient Monitor Plot.txt";
@@ -27,7 +24,7 @@ public class exportReports extends StarMacro {
     }
 
     private void execute0() throws IOException {
-        simComponents activeSim = new simComponents(getActiveSimulation());
+        SimComponents activeSim = new SimComponents(getActiveSimulation());
         String path;
 
         // Set file path for reports
@@ -52,12 +49,12 @@ public class exportReports extends StarMacro {
         activeSim.repTable.extract();
         activeSim.repTable.export(path + activeSim.separator + "Reports.csv");
 
-        //postProc.java still handles plot exports. This calls the exportPlots function from there.
-        postProc esObj = new postProc();
+        //PostProc.java still handles plot exports. This calls the exportPlots function from there.
+        PostProc esObj = new PostProc();
         esObj.exportPlots(activeSim);
 
         // Testing for convergence
-        convergenceChecker convergenceObj = new convergenceChecker(activeSim);
+        ConvergenceChecker convergenceObj = new ConvergenceChecker(activeSim);
 
         File convergenceFile = new File(path + activeSim.separator + "Convergence.txt");
         PrintWriter writer = new PrintWriter(convergenceFile);
@@ -283,7 +280,7 @@ public class exportReports extends StarMacro {
         return ((score <= CONVERGENCE_SCORE_CUTOFF) && (avgDiff < CONVERGENCE_SCORE_CUTOFF));
     }
 
-    public void printConvergence(boolean convergesCl, boolean convergesCd, boolean convergesFW, boolean convergesRW, boolean convergesSW, String filePath, simComponents simObj) throws IOException {
+    public void printConvergence(boolean convergesCl, boolean convergesCd, boolean convergesFW, boolean convergesRW, boolean convergesSW, String filePath, SimComponents simObj) throws IOException {
         File convergenceFile = new File(filePath + simObj.separator + "Convergence.txt");
         PrintWriter writer = new PrintWriter(convergenceFile);
         if (convergesCl)

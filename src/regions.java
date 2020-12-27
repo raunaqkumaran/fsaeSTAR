@@ -20,18 +20,18 @@ public class regions extends StarMacro {
     }
 
     private void execute0() {
-        simComponents activeSim = new simComponents(getActiveSimulation());
+        SimComponents activeSim = new SimComponents(getActiveSimulation());
 
         activeSim.activeSim.println("--- Setting up regions ---");
 
         //This defines the initial condition. Apparently setting to zero is bad? But I also don't like setting to the full freestream value, since that messes with the monitors in early iterations. Overall convergence time doesn't really change much.
-        double[] initialVector = simComponents.vectorRotate(activeSim.valEnv("Yaw"), simComponents.vectorScale(activeSim.freestreamVal * 0.1, activeSim.foreAftDirection));
+        double[] initialVector = SimComponents.vectorRotate(activeSim.valEnv("Yaw"), SimComponents.vectorScale(activeSim.freestreamVal * 0.1, activeSim.foreAftDirection));
 
         //Need to swap out the old region for the new regions. I like swapping rather than modifying, since it's more repeatable and consistent for the macros to deal with. This is destructive.,
         activeSim.regionSwap();
 
-        // Recreate the simComponents object after region swap.
-        activeSim = new simComponents(getActiveSimulation());
+        // Recreate the SimComponents object after region swap.
+        activeSim = new SimComponents(getActiveSimulation());
 
 
         // Assign boundary conditions to freestream/domain block. There is a naming convection to this.
@@ -86,7 +86,7 @@ public class regions extends StarMacro {
     }
 
     //This handles assigning a fan curve csv file to the fan curve table in STAR, and assigns that table to the fan boundary (passed as a parameter)
-    public void setUpFan(simComponents activeSim, BoundaryInterface fanInterface)
+    public void setUpFan(SimComponents activeSim, BoundaryInterface fanInterface)
     {
         //Make sure the fan interface is set to use a table
         fanInterface.setInterfaceType(FanInterface.class);
@@ -95,7 +95,7 @@ public class regions extends StarMacro {
 
         //assign fan curve table to fan interface
         node.setVolumeFlowTable(activeSim.fan_curve_table);
-        File fanfile = new File(activeSim.dir + activeSim.separator + simComponents.FAN_CURVE_CSV_FN);
+        File fanfile = new File(activeSim.dir + activeSim.separator + SimComponents.FAN_CURVE_CSV_FN);
 
         //If the csv file exists, set the fan curve table to use that csv, otherwise try to find it somewhere else.
         if (fanfile.exists())
@@ -105,8 +105,8 @@ public class regions extends StarMacro {
         else
         {
             activeSim.activeSim.println("Cannot find fan_curve.csv in working directory, attempting to find file in classpath");
-            String classPath = simComponents.valEnvString("CP");
-            String filePath = classPath + File.separator + simComponents.FAN_CURVE_CSV_FN;
+            String classPath = SimComponents.valEnvString("CP");
+            String filePath = classPath + File.separator + SimComponents.FAN_CURVE_CSV_FN;
             fanfile = new File(filePath);
             if (!fanfile.exists())
                 throw new IllegalStateException("No fan table found. Terminating");
@@ -127,7 +127,7 @@ public class regions extends StarMacro {
         node.setVolumeFlowUnitsP(activeSim.activeSim.getUnitsManager().getUnits("Pa"));
     }
 
-    private void setTyreRotation(simComponents activeSim) {
+    private void setTyreRotation(SimComponents activeSim) {
 
         //Calculate angular rotation rate for wheels based on freestream (vehicle speed) and provided tyre radii. (omega = v/r, need to have m/s and meters)
         double frontRotationRate = activeSim.freestreamVal / activeSim.frontTyreRadius;
@@ -196,14 +196,14 @@ public class regions extends StarMacro {
     }
 
     //Use track width and angular velocity to figure out what the linear velocity difference is between the two tyres.
-    private double velocityDifference(simComponents activeSim)
+    private double velocityDifference(SimComponents activeSim)
     {
         double omega = activeSim.angularVelocity.getQuantity().evaluate();
         return omega * activeSim.trackWidth * 0.0254;
     }
 
     //Sets up boundary conditions for the domain boundaries. Ground, inlet, outlet, symmetry, symmetry, symmetry.
-    private void setDomainBoundaries(simComponents activeSim) {
+    private void setDomainBoundaries(SimComponents activeSim) {
         if (activeSim.corneringFlag)
         {
             setDomainBoundaries_Cornering(activeSim);
@@ -228,7 +228,7 @@ public class regions extends StarMacro {
     }
 
     //Same thing as the method above, except for a cornering case.
-    private void setDomainBoundaries_Cornering(simComponents activeSim){
+    private void setDomainBoundaries_Cornering(SimComponents activeSim){
         activeSim.leftPlane.setBoundaryType(SymmetryBoundary.class);
         activeSim.symPlane.setBoundaryType(SymmetryBoundary.class);
         activeSim.topPlane.setBoundaryType(SymmetryBoundary.class);
@@ -245,7 +245,7 @@ public class regions extends StarMacro {
     //Set up interfaces for a full car domain. Need to interface the left and right boundaries together, otherwise the domain will naturally straighten any yaw condition you set at the inlet.
     //Honestly, I don't fully understand what's going on with this function, or the exact sequence of events that led me to write it the way it's written. It would've been a good idea for me to comment this function when I wrote it, but that ship has sailed.
     //I do know it was very hard to get this to work reliably. there are a lot of edge cases that unravel here, especially when resuing a sim, or changing a sim from full car to half car or vice versa.
-    public void yawInterfaces(simComponents activeSim) {
+    public void yawInterfaces(SimComponents activeSim) {
         setTyreRotation(activeSim);
         double yawVal = activeSim.valEnv("yaw");
         double slip = activeSim.freestreamVal * Math.tan(Math.toRadians(yawVal));
@@ -254,10 +254,10 @@ public class regions extends StarMacro {
             activeSim.activeSim.println("Setting boundary conditions for yaw");
 
             // I don't know why this chunk is important, but it is.
-            if (activeSim.activeSim.getInterfaceManager().has(simComponents.YAW_INTERFACE_NAME) && activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME) instanceof BoundaryInterface)
+            if (activeSim.activeSim.getInterfaceManager().has(SimComponents.YAW_INTERFACE_NAME) && activeSim.activeSim.getInterfaceManager().getInterface(SimComponents.YAW_INTERFACE_NAME) instanceof BoundaryInterface)
             {
                 activeSim.activeSim.println("Found yaw interface");
-                activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(simComponents.YAW_INTERFACE_NAME);
+                activeSim.yawInterface = (BoundaryInterface) activeSim.activeSim.getInterfaceManager().getInterface(SimComponents.YAW_INTERFACE_NAME);
                 activeSim.activeSim.getInterfaceManager().deleteInterface(activeSim.yawInterface);
                 setDomainBoundaries(activeSim);  //This is to make sure we're always in a consistent and well-defined state, rather than having to deal with deviations from the assumptions.
             }
@@ -282,9 +282,9 @@ public class regions extends StarMacro {
 
             //Keeping with the philosophy of deleting the existing components if they exist, and recreating them from scratch for consistency.
             activeSim.activeSim.println("Creating yaw interface");
-            activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, simComponents.YAW_INTERFACE_NAME);
+            activeSim.yawInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.leftPlane, activeSim.symPlane, SimComponents.YAW_INTERFACE_NAME);
 
-            activeSim.yawInterface.setPresentationName(simComponents.YAW_INTERFACE_NAME);
+            activeSim.yawInterface.setPresentationName(SimComponents.YAW_INTERFACE_NAME);
             activeSim.yawInterface.getTopology().setSelected(InterfaceConfigurationOption.Type.PERIODIC);               //I don't have the foggiest idea what interface topology is supposed to be for. this is some blatant plagiarism.
 
             //Set up the yaw condition at the inlet.
@@ -301,7 +301,7 @@ public class regions extends StarMacro {
     }
 
     //Set up viscous and inertial resistances for the radiators. There's a good article on Siemens' Steve portal (or whatever they're calling it now, there's a very solid chance the Steve portal no longer exists if you're reading this in the future) explaining how you can get radiator properties out of wind tunnel data for a given radiator.
-    private void setRadiatorParams(simComponents activeSim, Region radiatorRegion) {
+    private void setRadiatorParams(SimComponents activeSim, Region radiatorRegion) {
         radiatorRegion.setRegionType(PorousRegion.class);
         PrincipalTensorProfileMethod radiatorTensor = radiatorRegion.getValues().get(PorousInertialResistance.class).
                 getMethod(PrincipalTensorProfileMethod.class);
@@ -327,7 +327,7 @@ public class regions extends StarMacro {
     }
 
     //Make sure all regions are set to the correct physics model.
-    public static void setTurbulence(simComponents activeSim) {
+    public static void setTurbulence(SimComponents activeSim) {
 
         activeSim.domainRegion.setPhysicsContinuum(activeSim.steadyStatePhysics);
         activeSim.radiatorRegion.setPhysicsContinuum(activeSim.steadyStatePhysics);
@@ -343,8 +343,8 @@ public class regions extends StarMacro {
         }
     }
 
-    //this is really important for postProc. 2D postProc is very slow if you don't reduce the total number of boundaries. This merges boundaries. This could be done just before meshing, but I don't like doing that since you lose flexibility with reports. This is safe to do just before 2D postProc, so long as you understand that this function will destory the mesh.
-    public void mergeBoundaries (simComponents activeSim)
+    //this is really important for PostProc. 2D PostProc is very slow if you don't reduce the total number of boundaries. This merges boundaries. This could be done just before meshing, but I don't like doing that since you lose flexibility with reports. This is safe to do just before 2D PostProc, so long as you understand that this function will destory the mesh.
+    public void mergeBoundaries (SimComponents activeSim)
     {
         MeshManager meshManager = activeSim.activeSim.getMeshManager();
         Collection<Boundary> mergeBounds = new ArrayList<>();
@@ -365,7 +365,7 @@ public class regions extends StarMacro {
     }
 
     //Quick and dirty method to set up fans, and only fans when needed by run.java, and fan boundaries aren't already known.
-    public void initFans(simComponents activeSim)
+    public void initFans(SimComponents activeSim)
     {
         for (Interface x : activeSim.activeSim.getInterfaceManager().getObjects())
         {

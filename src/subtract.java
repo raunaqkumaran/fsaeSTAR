@@ -2,8 +2,6 @@ import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.meshing.MeshOperationPart;
 
-import java.util.Collection;
-
 public class subtract extends StarMacro {
 
     public void execute()
@@ -13,7 +11,7 @@ public class subtract extends StarMacro {
 
     private void execute0()
     {
-        simComponents simObject = new simComponents(getActiveSimulation());
+        SimComponents simObject = new SimComponents(getActiveSimulation());
 
         MeshOperationPart surfaceWrap = (MeshOperationPart)
                 simObject.activeSim.get(SimulationPartManager.class).getObject("Surface wrapper");
