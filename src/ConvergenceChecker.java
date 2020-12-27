@@ -123,8 +123,7 @@ public class ConvergenceChecker {
         }
 
         double variance = varianceN / arr.length;
-        double stdDev = Math.sqrt(variance);
-        return stdDev;
+        return Math.sqrt(variance);
     }
 
 }

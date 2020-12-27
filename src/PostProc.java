@@ -99,7 +99,7 @@ public class PostProc extends StarMacro {
         sim.crossSection.getSingleValue().setUnits(sim.inches);
         double arrayMin = getMinimum(limits);
         //There's very little overhead to changing a view. There's a lot of overhead to change a displayer or move your cross section. Minimize the number of displayer and cross section changes you make.
-        for (double i = limits[0]; i <= limits[1]; i += increment)
+        for (double section_val = limits[0]; section_val <= limits[1]; section_val += increment)
         {
             for (Displayer disp : displayers2D)
             {
@@ -110,12 +110,12 @@ public class PostProc extends StarMacro {
                 }
                 for (VisView view : views2D)
                 {
-                    String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(i + (int) Math.floor(arrayMin)), ".png");
+                    String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(section_val + (int) Math.floor(arrayMin)), ".png");
                     //This will not generate a new exported scene if the file path already exists. This is a very dumb way to do it, but this is one of those things where going big brain isn't worth the time.
                     if (!doesFileExist(filename) || disp.getPresentationName().toLowerCase().contains("mesh")) {
                         disp.setRepresentation(sim.finiteVol);
                         disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
-                        sim.crossSection.getSingleValue().setValue(i);
+                        sim.crossSection.getSingleValue().setValue(section_val);
                         scn.setCurrentView(view);
                         saveFile(filename, scn);
                     }
@@ -137,16 +137,16 @@ public class PostProc extends StarMacro {
     {
         double minimum = array[0];
 
-        for (int i = 0; i < array.length; i++)
-        {
-            if (array[i] < minimum)
-                minimum = array[i];
+        for (double v : array) {
+            if (v < minimum)
+                minimum = v;
         }
 
         return minimum;
     }
 
     //Return true if a file already exists. Generally used to avoid regenerating scenes that have already been exported.
+    @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "BooleanMethodNameMustStartWithQuestion"})
     private boolean doesFileExist(String filepath)
     {
         String resolved = resolvePath(filepath);
