@@ -16,7 +16,7 @@ public class MacroController extends StarMacro {
         String [] meshMacros = {
                 "DomainSet.java",
                 "RideHeight.java",
-                "rollSet.java",
+                "RollSet.java",
                 "Steering.java",
                 "surfaceWrap.java",
                 "subtract.java",
@@ -36,13 +36,13 @@ public class MacroController extends StarMacro {
                 "softRun.java",
                 "MeshRepair.java",
                 "run.java",
-                "exportReports.java",
+                "ExportReports.java",
                 "save.java"
         };
 
 
         String [] postprocessMacros = {
-                "exportReports.java",
+                "ExportReports.java",
                 "PostProc.java"
         };
 
