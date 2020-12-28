@@ -174,6 +174,10 @@ public class PostProc extends StarMacro {
                     sim.scene3D.setCurrentView(view);
                     saveFile(filepath, sim.scene3D);
                 }
+                else
+                {
+                    sim.activeSim.println(filepath + " already exists");
+                }
             }
 
             for (VisView view : views3D)        //Filtered exports
@@ -183,6 +187,10 @@ public class PostProc extends StarMacro {
                     disp.getInputParts().setObjects(getParts(sim, view));
                     sim.scene3D.setCurrentView(view);
                     saveFile(filepath, sim.scene3D);
+                }
+                else
+                {
+                    sim.activeSim.println(filepath + " already exists");
                 }
             }
         }
