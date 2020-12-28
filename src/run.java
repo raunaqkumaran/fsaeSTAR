@@ -51,7 +51,7 @@ public class run extends StarMacro {
         //If maximum velocity is triggered, run mesh repair, then continue iterating again.
         if (activeSim.maxVel.getIsSatisfied())
         {
-            new StarScript(getActiveRootObject(), new java.io.File(resolvePath("meshRepair.java"))).play();
+            new StarScript(getActiveRootObject(), new java.io.File(resolvePath("MeshRepair.java"))).play();
             continueRun(activeSim);
         }
     }
