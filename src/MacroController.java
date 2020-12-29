@@ -29,6 +29,7 @@ public class MacroController extends StarMacro {
         };
 
         String [] processMacros = {
+                "MeshRepair.java",
                 "yawSet.java",
                 "genReports.java",
                 "softRun.java",                         //Sometimes STAR will find negative volume cells after first iteration, not before. If this happens, the macro crashes. I'd rather crash this sacrificial macro than crash the whole chain.
