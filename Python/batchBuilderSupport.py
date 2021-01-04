@@ -26,15 +26,16 @@ def get_file_list(path, size=0):
     sim_list = []
     file_list = os.listdir(path)
     for f in file_list:
-        filePath = path + os.sep + f
-        if os.path.isdir(filePath):
-            subList = get_file_list(filePath, size)
-            for y in subList:
+        file_path = path + os.sep + f
+        if os.path.isdir(file_path):
+            sub_list = get_file_list(file_path, size)
+            for y in sub_list:
                 sim_list.append(y)
         if f.endswith(".sim"):
-            fileSize = os.path.getsize(filePath)
-            if fileSize >= size:
-                sim_list.append(filePath)
+            file_size = os.path.getsize(file_path)
+            if file_size >= size:
+                sim_list.append(file_path)
+    sim_list.sort()
     return sim_list
 
 
