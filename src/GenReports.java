@@ -12,7 +12,7 @@ Sets up reports.
 
 import java.util.Objects;
 
-public class genReports extends StarMacro {
+public class GenReports extends StarMacro {
 
     public void execute()
     {
