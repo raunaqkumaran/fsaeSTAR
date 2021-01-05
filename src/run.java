@@ -33,7 +33,7 @@ public class run extends StarMacro {
         activeSim.maxStepStop.setInnerIterationCriterion(true);
         activeSim.maxStepStop.setIsUsed(true);
         activeSim.setFreestreamParameterValue();
-        activeSim.abortFile.setAbortFilePath(SimComponents.valEnvString("PBS_O_WORKDIR") + File.separator + SimComponents.valEnvString("PBS_JOBID"));
+        activeSim.abortFile.setAbortFilePath(activeSim.dir + File.separator + SimComponents.valEnvString("SLURM_JOB_ID"));
     }
 
     //There's some recursion in here.
