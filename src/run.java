@@ -10,6 +10,8 @@ import java.io.File;
 
 public class run extends StarMacro {
 
+    private boolean CONVERGED = false;
+
 
     public void execute() {
 
@@ -37,6 +39,9 @@ public class run extends StarMacro {
     //There's some recursion in here.
     private void continueRun(SimComponents activeSim)
     {
+        //Flip the convergence flag, and we climb out of the recursion ladder as fast as we possibly can.
+        if (CONVERGED)
+            return;
 
         //Disable maximum velocity criteria and run for 4 steps.
         activeSim.maxVel.setIsUsed(false);
@@ -46,7 +51,24 @@ public class run extends StarMacro {
         //Enable maximum velocity criteria
         activeSim.maxVel.setIsUsed(true);
         activeSim.activeSim.println("Enable maxVel attempted");
-        activeSim.activeSim.getSimulationIterator().run();
+
+        //If we're not doing convergence checks, keep running indefinitely
+        if (activeSim.convergenceCheck == false)
+            activeSim.activeSim.getSimulationIterator().run();
+
+        //If we're doing convergence checks, check for convergence every 100 iterations.
+        else
+        {
+            ConvergenceChecker obj = new ConvergenceChecker(activeSim);
+            if (obj.convergenceResults.getOrDefault(SimComponents.LIFT_COEFFICIENT_PLOT, false))
+            {
+                CONVERGED = true;
+                return;
+            }
+
+            else if (!activeSim.maxStepStop.getIsSatisfied())
+                activeSim.activeSim.getSimulationIterator().run(100);
+        }
 
         //If maximum velocity is triggered, run mesh repair, then continue iterating again.
         if (activeSim.maxVel.getIsSatisfied())

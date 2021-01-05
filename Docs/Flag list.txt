@@ -17,6 +17,7 @@ frh = front ride height change in inches
 rrh = rear ride height change in inches. 
 freestream = freestream in m/s
 maxSteps = total steps to run
+CONV_SC = true to stop the sim if lift coefficient monitor is adjudged to converge. false otherwise.
 preprocess = true to surface wrap and mesh. false to skip
 process = true to run solver. false to skip
 postprocess = true to generate post processed data. false to skip

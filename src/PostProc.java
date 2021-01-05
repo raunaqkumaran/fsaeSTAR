@@ -260,20 +260,9 @@ public class PostProc extends StarMacro {
 
     public void exportPlots(SimComponents sim) {
         String plotsPath;
-        for (AccumulatedForceTable x : sim.forceTables.values()) {
-            AccumulatedForceHistogram hist = (AccumulatedForceHistogram) x.getHistogram();
-            hist.getBinDirection().setComponents(0, 1, 0);
-            hist.getProfileDirection().setComponents(1, 0, 0);
-            hist.getForceDirection().setComponents(0, 0, 1);
-            x.extract();
-        }
+
         for (StarPlot plot : sim.plots)
         {
-            //Need to make sure the residuals X axis is physical time for transient, otherwise the plot is basically unreadable.
-            if (sim.DESFlag && !plot.getPresentationName().contains("Residuals"))
-                ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Physical Time"));
-            else if (plot instanceof MonitorPlot)
-                ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Iteration"));
             String plotName = plot.getPresentationName().replaceAll("[\\/]", "");
             String plotsImagePath;
             plotsPath = getFolderPath("Plots", sim);

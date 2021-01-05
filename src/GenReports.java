@@ -1,9 +1,6 @@
 import star.base.report.*;
 import star.common.*;
-import star.flow.AccumulatedForceTable;
-import star.flow.ForceCoefficientReport;
-import star.flow.MassFlowReport;
-import star.flow.MomentCoefficientReport;
+import star.flow.*;
 
 
 /*
@@ -23,120 +20,26 @@ public class GenReports extends StarMacro {
         SimComponents activeSim = new SimComponents(getActiveSimulation());
         activeSim.activeSim.println("--- SETTING UP REPORTS ---");
 
-        //Sets up and extracts the FW and RW force histograms. This is scalable, so should be easy to add more force histograms if one was behooved to do so.
-        for (String x: activeSim.forceTables.keySet())
-        {
-            AccumulatedForceTable temp = activeSim.forceTables.get(x);
-            temp.setRepresentation(activeSim.finiteVol);
-            temp.getParts().setObjects(activeSim.partSpecBounds.get(x));
-            temp.extract();
-        }
-
         //Iterate through every report in the sim file. Process as appropriate.
         for (Report rep : activeSim.reports)
         {
-            //Based on whether or not its transient, set the average reports to either use all samples (DES, time averaging) or last N samples (steady state, iteration averaging to cover shitty convergence)
             if (rep instanceof StatisticsReport)
-            {
-
-                AllSamplesFilter all_samples = (AllSamplesFilter) ((StatisticsReport) rep).getSampleFilterManager().getObject("All samples");
-                LastNSamplesFilter lastN = (LastNSamplesFilter) ((StatisticsReport) rep).getSampleFilterManager().getObject("Last N Samples");
-                if (activeSim.DESFlag)
-                {
-                    ((StatisticsReport) rep).setSampleFilterOption(SampleFilterOption.AllSamples);
-                }
-                else
-                {
-                    ((StatisticsReport) rep).setSampleFilterOption(SampleFilterOption.LastNSamples);
-                    all_samples.setUpdateEvent(null);
-                    lastN.setNSamples(500);
-                }
-
-                continue;
-
-            }
-
-            // Setting up flags and casted vars to manage logic and part assignments. The flag var is essentially a break, without using a break.
-            int flag = 0;
-            MassFlowReport massFlowRep = null;
-            MomentCoefficientReport pitchRep = null;
-            ForceCoefficientReport fcRep = null;
-            ElementCountReport elementCount;
-
-            // Cast the rep to appropriate type based on rep type. Set referance area to 0.5 or 1 based on full car or half car. Set reference velocity to freestream val (defined in the parameter, not affected by yaw)
-            if (rep instanceof star.flow.MassFlowReport)
-                massFlowRep = (MassFlowReport) rep;
-            else if (rep instanceof  star.flow.MomentCoefficientReport)
-            {
-                pitchRep = (MomentCoefficientReport) rep;
-                if (activeSim.fullCarFlag)
-                    pitchRep.getReferenceArea().setValue(1.0);
-                else
-                    pitchRep.getReferenceArea().setValue(0.5);
-
-                pitchRep.getReferenceVelocity().setValue(activeSim.freestreamVal);
-            }
-            else if (rep instanceof star.flow.ForceCoefficientReport)
-            {
-                fcRep = (ForceCoefficientReport) rep;
-                if (activeSim.fullCarFlag)
-                    fcRep.getReferenceArea().setValue(1.0);
-                else
-                    fcRep.getReferenceArea().setValue(0.5);
-
-                fcRep.getReferenceVelocity().setValue(activeSim.freestreamVal);
-            }
-            else if (rep instanceof ElementCountReport)
-            {
-                elementCount = (ElementCountReport) rep;
-                elementCount.getParts().setObjects(activeSim.activeSim.getRegionManager().getRegions());
-            }
-
-            //Go through aeroPrefixes and assign them to their appropriate lift and drag reports. Set the flag to 1, essentially exiting out of the loop before double counting.
-            String repName = rep.getPresentationName();
-            for (String prefix : activeSim.AERO_PREFIXES)
-            {
-                if (repName.contains(prefix) && flag != 1)          //repName only contains prefix if it is a part specific report (eg "RW Lift")
-                {
-                    if (activeSim.partSpecBounds.containsKey(prefix))
-                        Objects.requireNonNull(fcRep).getParts().setObjects(activeSim.partSpecBounds.get(prefix));
-                    else
-                        Objects.requireNonNull(fcRep).getParts().setObjects();
-                    flag = 1;
-                }
-            }
-
-            //Make sure we don't forget about adding non-aero parts and wheels to the global lift and drag reports.
-            if (flag == 0 && (repName.toLowerCase().contains("lift") || repName.toLowerCase().contains("drag")))
-            {
-                Objects.requireNonNull(fcRep).getParts().setObjects(activeSim.partBounds);
-                fcRep.getParts().addObjects(activeSim.wheelBounds);
-                flag = 1;
-            }
-
-            //Add everything to the pitch moment report.
-            if (flag == 0 && repName.contains(activeSim.pitchRepName))
-            {
-                Objects.requireNonNull(pitchRep).getParts().setObjects(activeSim.partBounds);
-                pitchRep.getParts().addObjects(activeSim.wheelBounds);
-                flag = 1;
-            }
-
-            //Add rad boundaries to the mass flow rep.
-            if (flag == 0 && repName.contains(activeSim.massFlowRepName))
-            {
-                Objects.requireNonNull(massFlowRep).getParts().setObjects(activeSim.domainRadInlet);
-                if (activeSim.dualRadFlag && activeSim.domainDualRadInlet != null)
-                    massFlowRep.getParts().addObjects(activeSim.domainDualRadInlet);
-            }
+                setupStatisticsReport(activeSim, (StatisticsReport) rep);
+            else
+                setupUnkownReport(activeSim, rep);
         }
 
-        //We're out of the loop!
         //Set up the report for max velocity. Need this to make sure the MeshRepair trigger works. Assign the whole domain to it (might want to do radiator regions too, but no...)
         activeSim.maxVelocity.getParts().setObjects(activeSim.domainRegion);
         activeSim.maxVelocity.setRepresentation(activeSim.finiteVol);
 
         //Set up monitors. If it's transient, don't update monitors on every iteration. Do every timestep. If it's steady, update every iteration. Throw an exception if something breaks. Since this isn't critical code you probably don't need this to be a terminal exception.
+        setupMonitors(activeSim);
+
+        setupPlots(activeSim);
+    }
+
+    private void setupMonitors(SimComponents activeSim) {
         for (Monitor x : activeSim.activeSim.getMonitorManager().getMonitors())
         {
             if (activeSim.activeSim.getMonitorManager().getResidualMonitors().contains(x))
@@ -153,6 +56,130 @@ public class GenReports extends StarMacro {
             {
                 activeSim.activeSim.println("Trigger for " + x.getPresentationName() + " monitor not changed");
             }
+        }
+    }
+
+    private void setupUnkownReport(SimComponents activeSim, Report rep)
+    {
+        // Setting up flags and casted vars to manage logic and part assignments. The flag var is essentially a break, without using a break.
+        int flag = 0;
+        MassFlowReport massFlowRep = null;
+        MomentCoefficientReport pitchRep = null;
+        ForceCoefficientReport fcRep = null;
+        ElementCountReport elementCount;
+
+        // Cast the rep to appropriate type based on rep type. Set referance area to 0.5 or 1 based on full car or half car. Set reference velocity to freestream val (defined in the parameter, not affected by yaw)
+        if (rep instanceof star.flow.MassFlowReport)
+            massFlowRep = (MassFlowReport) rep;
+        else if (rep instanceof  star.flow.MomentCoefficientReport)
+        {
+            pitchRep = (MomentCoefficientReport) rep;
+            if (activeSim.fullCarFlag)
+                pitchRep.getReferenceArea().setValue(1.0);
+            else
+                pitchRep.getReferenceArea().setValue(0.5);
+
+            pitchRep.getReferenceVelocity().setValue(activeSim.freestreamVal);
+        }
+        else if (rep instanceof star.flow.ForceCoefficientReport)
+        {
+            fcRep = (ForceCoefficientReport) rep;
+            if (activeSim.fullCarFlag)
+                fcRep.getReferenceArea().setValue(1.0);
+            else
+                fcRep.getReferenceArea().setValue(0.5);
+
+            fcRep.getReferenceVelocity().setValue(activeSim.freestreamVal);
+        }
+        else if (rep instanceof ElementCountReport)
+        {
+            elementCount = (ElementCountReport) rep;
+            elementCount.getParts().setObjects(activeSim.activeSim.getRegionManager().getRegions());
+        }
+
+        //Go through aeroPrefixes and assign them to their appropriate lift and drag reports. Set the flag to 1, essentially exiting out of the loop before double counting.
+        String repName = rep.getPresentationName();
+        for (String prefix : activeSim.AERO_PREFIXES)
+        {
+            if (repName.contains(prefix) && flag != 1)          //repName only contains prefix if it is a part specific report (eg "RW Lift")
+            {
+                if (activeSim.partSpecBounds.containsKey(prefix))
+                    Objects.requireNonNull(fcRep).getParts().setObjects(activeSim.partSpecBounds.get(prefix));
+                else
+                    Objects.requireNonNull(fcRep).getParts().setObjects();
+                flag = 1;
+            }
+        }
+
+        //Make sure we don't forget about adding non-aero parts and wheels to the global lift and drag reports.
+        if (flag == 0 && (repName.toLowerCase().contains("lift") || repName.toLowerCase().contains("drag")))
+        {
+            Objects.requireNonNull(fcRep).getParts().setObjects(activeSim.partBounds);
+            fcRep.getParts().addObjects(activeSim.wheelBounds);
+            flag = 1;
+        }
+
+        //Add everything to the pitch moment report.
+        if (flag == 0 && repName.contains(activeSim.pitchRepName))
+        {
+            Objects.requireNonNull(pitchRep).getParts().setObjects(activeSim.partBounds);
+            pitchRep.getParts().addObjects(activeSim.wheelBounds);
+            flag = 1;
+        }
+
+        //Add rad boundaries to the mass flow rep.
+        if (flag == 0 && repName.contains(activeSim.massFlowRepName))
+        {
+            Objects.requireNonNull(massFlowRep).getParts().setObjects(activeSim.domainRadInlet);
+            if (activeSim.dualRadFlag && activeSim.domainDualRadInlet != null)
+                massFlowRep.getParts().addObjects(activeSim.domainDualRadInlet);
+        }
+
+        return;
+    }
+
+    private void setupStatisticsReport(SimComponents activeSim, StatisticsReport rep) {
+        AllSamplesFilter all_samples = (AllSamplesFilter) rep.getSampleFilterManager().getObject("All samples");
+        LastNSamplesFilter lastN = (LastNSamplesFilter) rep.getSampleFilterManager().getObject("Last N Samples");
+        if (activeSim.DESFlag)
+        {
+            rep.setSampleFilterOption(SampleFilterOption.AllSamples);
+        }
+        else
+        {
+            rep.setSampleFilterOption(SampleFilterOption.LastNSamples);
+            all_samples.setUpdateEvent(null);
+            lastN.setNSamples(500);
+        }
+
+        return;
+    }
+
+    public void setupPlots(SimComponents sim)
+    {
+        for (String x: sim.forceTables.keySet())
+        {
+            AccumulatedForceTable temp = sim.forceTables.get(x);
+            temp.setRepresentation(sim.finiteVol);
+            temp.getParts().setObjects(sim.partSpecBounds.get(x));
+            temp.extract();
+        }
+        
+        for (AccumulatedForceTable x : sim.forceTables.values()) {
+            AccumulatedForceHistogram hist = (AccumulatedForceHistogram) x.getHistogram();
+            hist.getBinDirection().setComponents(0, 1, 0);
+            hist.getProfileDirection().setComponents(1, 0, 0);
+            hist.getForceDirection().setComponents(0, 0, 1);
+            x.extract();
+        }
+
+        for (StarPlot plot : sim.plots)
+        {
+            //Need to make sure the residuals X axis is physical time for transient, otherwise the plot is basically unreadable.
+            if (sim.DESFlag && !plot.getPresentationName().contains("Residuals"))
+                ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Physical Time"));
+            else if (plot instanceof MonitorPlot)
+                ((MonitorPlot) plot).setXAxisMonitor((PlotableMonitor) sim.activeSim.getMonitorManager().getMonitor("Iteration"));
         }
     }
 

@@ -65,6 +65,7 @@ public class SimComponents {
     public static final String AERO_CONTROL_PPM = "Aero Control";
     public static final String USER_ROLL = "User Roll";
     public static final String CONFIG_ROLL = "roll";
+    public static final String LIFT_COEFFICIENT_PLOT = "Lift Coefficient Monitor Plot";
 
     //A bunch of declarations. Don't read too much into the access modifiers, they're not a big deal for a project like this.
     // I'm not going to comment all of these. there are way too many (future improvement suggestion: use fewer variables)
@@ -110,7 +111,6 @@ public class SimComponents {
     public XyzInternalTable repTable;
     public Map<String, AccumulatedForceTable> forceTables;
     public Collection<StarPlot> plots;
-    public HashMap<String, Boolean> convergenceResults;
 
     //Units
     public Units noUnit;
@@ -153,6 +153,7 @@ public class SimComponents {
     public MaxReport maxVelocity;
     public AbortFileStoppingCriterion abortFile;    //Don't think we're using this for anything right now.
     public UpdateEvent monitorWaypoint;             //Only for transient.
+    public boolean convergenceCheck;
 
     // Physics
     public PhysicsContinuum steadyStatePhysics;
@@ -576,6 +577,7 @@ public class SimComponents {
         maxVelocity = (MaxReport) activeSim.getReportManager().getReport("Maximum Velocity");
         abortFile = (AbortFileStoppingCriterion) activeSim.getSolverStoppingCriterionManager().getSolverStoppingCriterion("Stop File");
         monitorWaypoint = activeSim.getUpdateEventManager().getUpdateEvent("Monitor Waypoint");
+        convergenceCheck = boolEnv("CONV_SC");
 
     }
 
