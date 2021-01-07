@@ -135,7 +135,6 @@ public class GenReports extends StarMacro {
                 massFlowRep.getParts().addObjects(activeSim.domainDualRadInlet);
         }
 
-        return;
     }
 
     private void setupStatisticsReport(SimComponents activeSim, StatisticsReport rep) {
@@ -152,7 +151,6 @@ public class GenReports extends StarMacro {
             lastN.setNSamples(500);
         }
 
-        return;
     }
 
     public void setupPlots(SimComponents sim)
