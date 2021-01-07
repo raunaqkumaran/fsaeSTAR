@@ -11,6 +11,7 @@ public class MacroController extends StarMacro {
     public void execute()
     {
         SimComponents sim = new SimComponents(getActiveSimulation());
+        long startTime = System.currentTimeMillis();
         // Macros run in the order they're defined in this string[]
 
         String [] meshMacros = {
@@ -75,6 +76,12 @@ public class MacroController extends StarMacro {
 
         //Generate a report file for the sim, then kill the sim.
         new star.common.SimulationSummaryReporter().report(getActiveSimulation(), resolvePath(sim.activeSim.getSessionPath() + " report.html"));
+
+        long endTime = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+
+        sim.activeSim.println("Time taken to run MacroController pipeline : " + totalTime / (1000 * 60) + " minutes");
+
         new StarScript(getActiveRootObject(), new java.io.File(resolvePath("kill.java"))).play();
 
         //There's a lot of back and forth about whether or not MacroController should handle save events, or if the individual macros should. I'll let that be your problem.
