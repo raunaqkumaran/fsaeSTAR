@@ -114,7 +114,7 @@ public class PostProc extends StarMacro {
                 {
                     String filename = generateFileName(displayerPath, scn, disp, view, String.valueOf(section_val + (int) Math.floor(arrayMin)), ".png");
                     //This will not generate a new exported scene if the file path already exists. This is a very dumb way to do it, but this is one of those things where going big brain isn't worth the time.
-                    if (!doesFileExist(filename) || disp.getPresentationName().toLowerCase().contains("mesh")) {
+                    if (!doesFileExist(filename)) {
                         disp.setRepresentation(sim.finiteVol);
                         disp.setVisibilityOverrideMode(DisplayerVisibilityOverride.SHOW_ALL_PARTS);
                         sim.crossSection.getSingleValue().setValue(section_val);
