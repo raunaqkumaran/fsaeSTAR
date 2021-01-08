@@ -57,7 +57,7 @@ public class run extends StarMacro {
             activeSim.activeSim.getSimulationIterator().run();
 
         //If we're doing convergence checks, check for convergence every 100 iterations.
-        else
+        do
         {
             ConvergenceChecker obj = new ConvergenceChecker(activeSim);
             if (obj.convergenceResults.getOrDefault(SimComponents.LIFT_COEFFICIENT_PLOT, false))
@@ -68,7 +68,7 @@ public class run extends StarMacro {
 
             else if (!activeSim.maxStepStop.getIsSatisfied())
                 activeSim.activeSim.getSimulationIterator().run(100);
-        }
+        } while(CONVERGED != true);
 
         //If maximum velocity is triggered, run mesh repair, then continue iterating again.
         if (activeSim.maxVel.getIsSatisfied())
