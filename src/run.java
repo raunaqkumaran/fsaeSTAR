@@ -53,7 +53,7 @@ public class run extends StarMacro {
         activeSim.activeSim.println("Enable maxVel attempted");
 
         //If we're not doing convergence checks, keep running indefinitely
-        if (activeSim.convergenceCheck == false)
+        if (activeSim.convergenceCheck == false && !activeSim.abortFile.getIsSatisfied())
             activeSim.activeSim.getSimulationIterator().run();
 
         //If we're doing convergence checks, check for convergence every 100 iterations.
