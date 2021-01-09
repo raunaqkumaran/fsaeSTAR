@@ -10,8 +10,8 @@ public class ConvergenceChecker {
     public static final int COLUMN = 1;
     public static final int MOVING_AVERAGE_WINDOW = 500;
     public static final int CONVERGENCE_SCORE_CUTOFF = 15;
-    public static final int STD_WINDOW = 1000;
-    public static final int MIN_MAX_WINDOW = 1000;
+    public static final int STD_WINDOW = 750;
+    public static final int MIN_MAX_WINDOW = 750;
     public HashMap<String, Boolean> convergenceResults;
 
     public ConvergenceChecker(SimComponents activeSim)
