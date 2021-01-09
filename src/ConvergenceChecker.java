@@ -47,7 +47,10 @@ public class ConvergenceChecker {
             double score = cnvgAlgorithm(averageStdDev, percentageRange);
 
             if (score < CONVERGENCE_SCORE_CUTOFF)
+            {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
+                activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED");
+            }
             else
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", false);
 
