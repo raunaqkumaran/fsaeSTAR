@@ -60,13 +60,17 @@ public class run extends StarMacro {
         do
         {
             ConvergenceChecker obj = new ConvergenceChecker(activeSim);
-            if (obj.convergenceResults.getOrDefault(SimComponents.LIFT_COEFFICIENT_PLOT, false))
+            for (String key : obj.convergenceResults.keySet())
             {
-                CONVERGED = true;
-                return;
+                if (key.contains(SimComponents.LIFT_COEFFICIENT_PLOT))
+                {
+                    if (obj.convergenceResults.get(key) == true) {
+                        CONVERGED = true;
+                        return;
+                    }
+                }
             }
-
-            else if (!activeSim.maxStepStop.getIsSatisfied())
+            if (!activeSim.maxStepStop.getIsSatisfied())
                 activeSim.activeSim.getSimulationIterator().run(100);
         } while(CONVERGED != true && !activeSim.maxStepStop.getIsSatisfied() && !activeSim.abortFile.getIsSatisfied());
 
