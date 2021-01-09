@@ -39,7 +39,7 @@ public class run extends StarMacro {
     //There's some recursion in here.
     private void continueRun(SimComponents activeSim)
     {
-        //Flip the convergence flag, and we climb out of the recursion ladder as fast as we possibly can.
+        //If any of these conditions are true, we don't want to run any more iterations. Climb out of whatever recursion we've fallen down
         if (CONVERGED || activeSim.abortFile.getIsSatisfied() || activeSim.maxStepStop.getIsSatisfied())
             return;
 
