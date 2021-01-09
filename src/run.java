@@ -40,7 +40,7 @@ public class run extends StarMacro {
     private void continueRun(SimComponents activeSim)
     {
         //Flip the convergence flag, and we climb out of the recursion ladder as fast as we possibly can.
-        if (CONVERGED)
+        if (CONVERGED || activeSim.abortFile.getIsSatisfied() || activeSim.maxStepStop.getIsSatisfied())
             return;
 
         //Disable maximum velocity criteria and run for 4 steps.
