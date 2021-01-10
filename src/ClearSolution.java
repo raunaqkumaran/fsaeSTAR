@@ -5,5 +5,6 @@ public class ClearSolution extends StarMacro {
     public void execute() {
         SimComponents activeSim = new SimComponents(getActiveSimulation());
         activeSim.clearSoln();
+        activeSim.saveSim();
     }
 }
