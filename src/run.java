@@ -10,12 +10,13 @@ import java.io.File;
 
 public class run extends StarMacro {
 
-    private boolean CONVERGED = false;
+    private boolean CONVERGED;
 
 
     public void execute() {
 
         SimComponents activeSim = new SimComponents(getActiveSimulation());
+        CONVERGED = false;
         Regions obj = new Regions();
         obj.initFans(activeSim);
         activeSim.activeSim.println("--- RUNNING SIMULATION ---");
@@ -35,6 +36,7 @@ public class run extends StarMacro {
         activeSim.maxStepStop.setIsUsed(true);
         activeSim.setFreestreamParameterValue();
         activeSim.abortFile.setAbortFilePath(activeSim.dir + File.separator + SimComponents.valEnvString("SLURM_JOB_ID"));
+        activeSim.activeSim.getSimulationIterator().step(1);
     }
 
     //There's some recursion in here.
