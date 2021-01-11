@@ -30,6 +30,7 @@ public class run extends StarMacro {
     {
         int currentIteration = activeSim.activeSim.getSimulationIterator().getCurrentIteration();
         ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxStepStop.getCriterionType()).getLimit().setValue(currentIteration + activeSim.maxSteps);
+        activeSim.activeSim.println("Setting stopping criteria to: " + ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxStepStop.getCriterionType()).getLimit().evaluate());
         activeSim.maxStepStop.setInnerIterationCriterion(true);
         activeSim.maxStepStop.setIsUsed(true);
         activeSim.setFreestreamParameterValue();
