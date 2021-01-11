@@ -5,6 +5,7 @@ import datetime
 GPU_CORES = 16
 CPU_CORES = 20
 
+
 def get_timestamp():
     timeStamp = datetime.datetime.now()
     timeStampString = timeStamp.strftime("%Y%m%d_%H_%M_%S")
@@ -157,3 +158,12 @@ def generateqsub(config_list):
         qsub = "sh ./"
 
     return qsub
+
+
+def add_quotes(input_str):
+
+    if (input_str.startswith("'") or input_str.startswith('"')) and (input_str.endwith("'") or input_str.endswith('"')):
+        return input_str
+
+    new_str = '"' + input_str + '"'
+    return new_str
