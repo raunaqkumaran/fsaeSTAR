@@ -6,7 +6,7 @@ import star.meshing.SurfaceCustomMeshControl;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 
 
-public class surfaceWrap extends StarMacro {
+public class SurfaceWrap extends StarMacro {
 
     public void execute()
     {
@@ -22,7 +22,7 @@ public class surfaceWrap extends StarMacro {
         simObject = new SimComponents(simFile);
 
 
-        // Set up controls. Unlike AutoMesh which depends on the user to define which controls are enabled. surfaceWrap automatically enables everything.
+        // Set up controls. Unlike AutoMesh which depends on the user to define which controls are enabled. SurfaceWrap automatically enables everything.
 
         surfaceWrapSetup(simObject, simObject.surfaceWrapOperationPPM, simObject.aeroSurfaceWrapperPPM);
 

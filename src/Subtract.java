@@ -2,7 +2,7 @@ import star.base.neo.NeoObjectVector;
 import star.common.*;
 import star.meshing.MeshOperationPart;
 
-public class subtract extends StarMacro {
+public class Subtract extends StarMacro {
 
     public void execute()
     {

@@ -10,8 +10,8 @@ public class ConvergenceChecker {
     public static final int COLUMN = 1;
     public static final int MOVING_AVERAGE_WINDOW = 500;
     public static final int CONVERGENCE_SCORE_CUTOFF = 15;
-    public static final int START_INDEX = 1000;
-    public static final int END_INDEX = 1000;
+    public static final int STD_WINDOW = 750;
+    public static final int MIN_MAX_WINDOW = 750;
     public HashMap<String, Boolean> convergenceResults;
 
     public ConvergenceChecker(SimComponents activeSim)
@@ -32,22 +32,25 @@ public class ConvergenceChecker {
 
             double[] movingAverageArray = movingAverage(iterationHistory);
 
-            if (movingAverageArray == null || START_INDEX > movingAverageArray.length || END_INDEX > movingAverageArray.length)
+            if (movingAverageArray == null || STD_WINDOW > movingAverageArray.length || MIN_MAX_WINDOW > movingAverageArray.length)
             {
                 convergenceResults.put(plt.getPresentationName(), false);
                 continue;
             }
 
-            double[] averageSlice = Arrays.copyOfRange(movingAverageArray, START_INDEX, movingAverageArray.length);
-            double[] latestSlice = Arrays.copyOfRange(movingAverageArray, movingAverageArray.length - END_INDEX, movingAverageArray.length);
-            double averageStdDev = stdDeviation(averageSlice);
-            double max = getMaximum(latestSlice);
-            double min = getMinimum(latestSlice);
+            double[] std_slice = Arrays.copyOfRange(movingAverageArray, movingAverageArray.length - STD_WINDOW, movingAverageArray.length);
+            double[] min_max_slice = Arrays.copyOfRange(movingAverageArray, movingAverageArray.length - MIN_MAX_WINDOW, movingAverageArray.length);
+            double averageStdDev = stdDeviation(std_slice);
+            double max = getMaximum(min_max_slice);
+            double min = getMinimum(min_max_slice);
             double percentageRange = Math.abs(((max - min) / min) * 100);
             double score = cnvgAlgorithm(averageStdDev, percentageRange);
 
             if (score < CONVERGENCE_SCORE_CUTOFF)
+            {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
+                activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED");
+            }
             else
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", false);
 

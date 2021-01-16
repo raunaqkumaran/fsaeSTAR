@@ -6,7 +6,7 @@ This macro makes sure if that happens, you can make sure only this macro crashes
 Run this a few times, then run meshrepair, then run run.java. That way if anything crashes, it's this and not run.java.
  */
 
-public class softRun extends StarMacro
+public class SoftRun extends StarMacro
 {
     public void execute()
     {

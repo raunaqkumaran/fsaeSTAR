@@ -10,10 +10,13 @@ import java.io.File;
 
 public class run extends StarMacro {
 
+    private boolean CONVERGED;
+
 
     public void execute() {
 
         SimComponents activeSim = new SimComponents(getActiveSimulation());
+        CONVERGED = false;
         Regions obj = new Regions();
         obj.initFans(activeSim);
         activeSim.activeSim.println("--- RUNNING SIMULATION ---");
@@ -28,15 +31,20 @@ public class run extends StarMacro {
     {
         int currentIteration = activeSim.activeSim.getSimulationIterator().getCurrentIteration();
         ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxStepStop.getCriterionType()).getLimit().setValue(currentIteration + activeSim.maxSteps);
+        activeSim.activeSim.println("Setting stopping criteria to: " + ((MonitorIterationStoppingCriterionMaxLimitType) activeSim.maxStepStop.getCriterionType()).getLimit().evaluate());
         activeSim.maxStepStop.setInnerIterationCriterion(true);
         activeSim.maxStepStop.setIsUsed(true);
         activeSim.setFreestreamParameterValue();
-        activeSim.abortFile.setAbortFilePath(SimComponents.valEnvString("PBS_O_WORKDIR") + File.separator + SimComponents.valEnvString("PBS_JOBID"));
+        activeSim.abortFile.setAbortFilePath(activeSim.dir + File.separator + SimComponents.valEnvString("SLURM_JOB_ID"));
+        activeSim.activeSim.getSimulationIterator().step(1);
     }
 
     //There's some recursion in here.
     private void continueRun(SimComponents activeSim)
     {
+        //If any of these conditions are true, we don't want to run any more iterations. Climb out of whatever recursion we've fallen down
+        if (CONVERGED || activeSim.abortFile.getIsSatisfied() || activeSim.maxStepStop.getIsSatisfied())
+            return;
 
         //Disable maximum velocity criteria and run for 4 steps.
         activeSim.maxVel.setIsUsed(false);
@@ -46,7 +54,28 @@ public class run extends StarMacro {
         //Enable maximum velocity criteria
         activeSim.maxVel.setIsUsed(true);
         activeSim.activeSim.println("Enable maxVel attempted");
-        activeSim.activeSim.getSimulationIterator().run();
+
+        //If we're not doing convergence checks, keep running indefinitely
+        if (activeSim.convergenceCheck == false && !activeSim.abortFile.getIsSatisfied())
+            activeSim.activeSim.getSimulationIterator().run();
+
+        //If we're doing convergence checks, check for convergence every 100 iterations.
+        do
+        {
+            ConvergenceChecker obj = new ConvergenceChecker(activeSim);
+            for (String key : obj.convergenceResults.keySet())
+            {
+                if (key.contains(SimComponents.LIFT_COEFFICIENT_PLOT))
+                {
+                    if (obj.convergenceResults.get(key) == true) {
+                        CONVERGED = true;
+                        return;
+                    }
+                }
+            }
+            if (!activeSim.maxStepStop.getIsSatisfied())
+                activeSim.activeSim.getSimulationIterator().run(100);
+        } while(CONVERGED != true && !activeSim.maxStepStop.getIsSatisfied() && !activeSim.abortFile.getIsSatisfied() && !activeSim.maxVel.getIsSatisfied());
 
         //If maximum velocity is triggered, run mesh repair, then continue iterating again.
         if (activeSim.maxVel.getIsSatisfied())
