@@ -6,6 +6,7 @@ public class ClearHistory extends StarMacro {
 
         SimComponents simObj = new SimComponents(getActiveSimulation());
         simObj.clearHistory();
+        simObj.saveSim();
 
     }
 }
