@@ -130,8 +130,7 @@ def generatecommand(config_list):
     if config_list['CLUSTER'] != "LOCAL":
         command = command
 
-    command += " -hardwarebatch -machinefile nodefile.$SLURM_JOB_ID"
-    command += " -batch-report"
+    command += " -machinefile nodefile.$SLURM_JOB_ID"
     if config_list['CLUSTER'] == "gpu":
         command += " -rgraphics egl"
     command = command + "| tee " + '"${FILENAME}' + "_" + "${SLURM_JOB_ID}" + "_" + get_timestamp() + '.txt"'
