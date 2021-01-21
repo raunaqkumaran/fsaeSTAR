@@ -73,7 +73,7 @@ public class run extends StarMacro {
                     }
                 }
             }
-            if (!activeSim.maxStepStop.getIsSatisfied())
+            if (!activeSim.maxStepStop.getIsSatisfied() && !activeSim.abortFile.getIsSatisfied())
                 activeSim.activeSim.getSimulationIterator().run(100);
         } while(CONVERGED != true && !activeSim.maxStepStop.getIsSatisfied() && !activeSim.abortFile.getIsSatisfied() && !activeSim.maxVel.getIsSatisfied());
 

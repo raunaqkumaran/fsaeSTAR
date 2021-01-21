@@ -28,8 +28,8 @@ public class SurfaceWrap extends StarMacro {
 
         simObject.surfaceWrapOperationPPM.getMesherParallelModeOption().setSelected(MesherParallelModeOption.Type.CONCURRENT);
         simObject.surfaceWrapOperationPPM.setMeshPartByPart(true);
-        simObject.surfaceWrapOperationPPM.getInputGeometryObjects().removePart(simObject.radPart);
-        if (simObject.dualRadFlag) simObject.surfaceWrapOperationPPM.getInputGeometryObjects().removePart(simObject.dualRadPart);
+        //simObject.surfaceWrapOperationPPM.getInputGeometryObjects().removePart(simObject.radPart);
+        //if (simObject.dualRadFlag) simObject.surfaceWrapOperationPPM.getInputGeometryObjects().removePart(simObject.dualRadPart);
         simObject.surfaceWrapOperationPPM.getInputGeometryObjects().setObjects();
         simObject.surfaceWrapOperationPPM.execute();
 
