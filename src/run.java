@@ -23,7 +23,7 @@ public class run extends StarMacro {
         Regions.setTurbulence(activeSim);
         initial(activeSim);
         continueRun(activeSim);
-        activeSim.saveSim();
+        activeSim.saveSim();   //REMEMBER TO ADD SAVE.JAVA TO MACROCONTROLLER IF YOU REMOVE THIS LINE
     }
 
     //This is only called once. This is what you run the first time you enter run.java. Sets up the maximum step stopping criteria based on the sysenv, and sets the freestream value from sysenv. Also sets an abort file. This abort file hasn't worked in a very long time, but the code is still here.

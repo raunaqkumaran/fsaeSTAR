@@ -39,7 +39,6 @@ public class MacroController extends StarMacro {
                 "MeshRepair.java",
                 "run.java",
                 "ExportReports.java",
-                "save.java"
         };
 
 
