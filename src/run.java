@@ -74,7 +74,7 @@ public class run extends StarMacro {
                 }
             }
             if (!activeSim.maxStepStop.getIsSatisfied() && !activeSim.abortFile.getIsSatisfied())
-                activeSim.activeSim.getSimulationIterator().run(100);
+                activeSim.activeSim.getSimulationIterator().run(50);
         } while(CONVERGED != true && !activeSim.maxStepStop.getIsSatisfied() && !activeSim.abortFile.getIsSatisfied() && !activeSim.maxVel.getIsSatisfied());
 
         //If maximum velocity is triggered, run mesh repair, then continue iterating again.
