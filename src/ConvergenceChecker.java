@@ -51,12 +51,14 @@ public class ConvergenceChecker {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
                 activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED");
             }
-            else
+            else {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", false);
+                activeSim.activeSim.println(plt.getPresentationName() + " NOT CONVERGED");
+            }
 
             activeSim.activeSim.print("");
         }
-        activeSim.activeSim.println("Complete");
+        activeSim.activeSim.println("Convergence Check Complete");
     }
 
     public double cnvgAlgorithm(double stDev, double diff) {
