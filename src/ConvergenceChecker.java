@@ -46,14 +46,15 @@ public class ConvergenceChecker {
             double percentageRange = Math.abs(((max - min) / min) * 100);
             double score = cnvgAlgorithm(averageStdDev, percentageRange);
 
+            activeSim.activeSim.println("Convergence cutoff set to: " + CONVERGENCE_SCORE_CUTOFF);
             if (score < CONVERGENCE_SCORE_CUTOFF)
             {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
-                activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED");
+                activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED with score " + score);
             }
             else {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", false);
-                activeSim.activeSim.println(plt.getPresentationName() + " NOT CONVERGED");
+                activeSim.activeSim.println(plt.getPresentationName() + " NOT CONVERGED with score " + score);
             }
 
             activeSim.activeSim.print("");
