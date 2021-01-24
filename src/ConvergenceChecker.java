@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class ConvergenceChecker {
 
     public static final int COLUMN = 1;
-    public static final int MOVING_AVERAGE_WINDOW = 500;
+    public static final int MOVING_AVERAGE_WINDOW = 600;
     public static final int CONVERGENCE_SCORE_CUTOFF = 12;
     public static final int STD_WINDOW = 750;
     public static final int MIN_MAX_WINDOW = 750;
