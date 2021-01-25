@@ -1,11 +1,7 @@
 import star.base.neo.DoubleVector;
-import star.base.report.PlotableMonitor;
 import star.common.Boundary;
-import star.common.MonitorPlot;
 import star.common.StarMacro;
 import star.common.StarPlot;
-import star.flow.AccumulatedForceHistogram;
-import star.flow.AccumulatedForceTable;
 import star.vis.*;
 
 import java.io.File;
