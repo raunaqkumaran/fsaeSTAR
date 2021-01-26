@@ -17,6 +17,7 @@ public class ConvergenceChecker {
     public ConvergenceChecker(SimComponents activeSim)
     {
         convergenceResults = new HashMap<>();
+        activeSim.activeSim.println("Convergence cutoff set to: " + CONVERGENCE_SCORE_CUTOFF);
 
         for (StarPlot plt : activeSim.plots)
         {
@@ -45,8 +46,6 @@ public class ConvergenceChecker {
             double min = getMinimum(min_max_slice);
             double percentageRange = Math.abs(((max - min) / min) * 100);
             double score = cnvgAlgorithm(averageStdDev, percentageRange);
-
-            activeSim.activeSim.println("Convergence cutoff set to: " + CONVERGENCE_SCORE_CUTOFF);
             if (score < CONVERGENCE_SCORE_CUTOFF)
             {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
