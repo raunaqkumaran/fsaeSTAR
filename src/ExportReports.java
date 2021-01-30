@@ -25,10 +25,15 @@ public class ExportReports extends StarMacro {
 
     private void execute0() throws IOException {
         SimComponents activeSim = new SimComponents(getActiveSimulation());
-        String path;
+        String path, prefix;
 
         // Set file path for reports
-        path = activeSim.dir + activeSim.separator + activeSim.simName + activeSim.separator + "Reports";
+        if (activeSim.isUnix())
+            prefix = activeSim.separator + "tmp";
+        else
+            prefix = activeSim.dir;
+
+        path = prefix + activeSim.separator + activeSim.simName + activeSim.separator + "Reports";
         File repFolder = new File(resolvePath(path));
 
         // Create folder if it doesn't exist

@@ -18,6 +18,8 @@ import star.screenplay.Screenplay;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 
@@ -934,6 +936,24 @@ public class SimComponents {
         double sideslipAngle = valEnv(CONFIGSIDESLIP);
         double yVal = freestreamVal * Math.tan(Math.toRadians(sideslipAngle));
         return yVal;
+    }
+
+    public boolean isUnix() {
+        if (System.getProperty("os.name").contains("Windows"))
+        {
+            activeSim.println("Windows platform detected");
+            return false;
+        }
+        else
+        {
+            activeSim.println("I hope you're running this on a cluster with a \\tmp directory otherwise this could go poorly...");
+            String location = separator + "tmp";
+            if (!Files.isDirectory(Path.of(location)))
+            {
+                throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
+            }
+            return true;
+        }
     }
 
 }
