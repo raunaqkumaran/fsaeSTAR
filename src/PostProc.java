@@ -5,6 +5,9 @@ import star.common.StarPlot;
 import star.vis.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,10 +18,27 @@ Goes through scenes and displayers to export reports, plots, and scenes for a si
 
 public class PostProc extends StarMacro {
 
+    public boolean isUnix;
+
     public void execute()
     {
         SimComponents sim = new SimComponents(getActiveSimulation());
         sim.activeSim.getSceneManager().setVerbose(true);
+        if (System.getProperty("os.name").contains("Windows"))
+        {
+            sim.activeSim.println("Windows platform detected");
+            isUnix = false;
+        }
+        else
+        {
+            sim.activeSim.println("I hope you're running this on a cluster with a \\tmp directory otherwise this could go poorly...");
+            isUnix = true;
+            String location = sim.separator + "tmp";
+            if (!Files.isDirectory(Path.of(location)))
+            {
+                throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
+            }
+        }
 
         //Assign all regions to cross section derived part. Set origin to origin.
         sim.crossSection.getInputParts().setObjects(sim.activeSim.getRegionManager().getRegions());
@@ -272,9 +292,16 @@ public class PostProc extends StarMacro {
         }
     }
 
-    public static String getFolderPath(String folderName, SimComponents sim) {
-        return sim.dir + sim.separator + sim.simName
-                + sim.separator + folderName;
+    public String getFolderPath(String folderName, SimComponents sim) {
+
+        String prefix;
+        
+        if (isUnix)
+            prefix = sim.separator + "tmp";
+        else
+            prefix = sim.dir;
+
+        return prefix + sim.separator + sim.simName + sim.separator + folderName;
     }
 
     private void makeDir(String pathName)
