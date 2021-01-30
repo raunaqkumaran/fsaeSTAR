@@ -17,9 +17,8 @@ import star.motion.UserRotatingAndTranslatingReferenceFrame;
 import star.screenplay.Screenplay;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -954,14 +953,25 @@ public class SimComponents {
             {
                 throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
             }
-            Process process = Runtime.getRuntime().exec("du -ms " + location);
-            InputStream readShell = process.getInputStream();
-            Scanner test = new Scanner(readShell);
-            String result = test.hasNext() ? test.next() : "";
-            activeSim.println(result);
 
+            String sizeFile = location + "size." + valEnvString("SLURM_JOB_ID");
+            BufferedReader br = new BufferedReader(new FileReader(sizeFile));
+            String fileSize, currentline;
+            fileSize = "";
+            while ((currentline = br.readLine()) != null)
+            {
+                fileSize = currentline;
+                activeSim.println("File size line: " + fileSize);
+            }
+
+            String splitString[] = fileSize.split(" ");
+            double folderSize = Double.valueOf(splitString[0]);
+            activeSim.println("File size: " + folderSize + " megabytes");
+            if (folderSize > 400)
+                throw new RuntimeException("Not enough space on tmp to reliably run");
             return true;
         }
     }
+
 
 }

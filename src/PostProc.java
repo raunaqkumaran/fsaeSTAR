@@ -87,6 +87,10 @@ public class PostProc extends StarMacro {
         postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1, sim.scene2D);
         postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1, sim.scene2D);
 
+        if (isUnix) {
+            createTarArchive(sim);
+        }
+
     }
 
     /*
@@ -314,6 +318,18 @@ public class PostProc extends StarMacro {
         sim.crossSection.getSingleValue().getValueQuantity().setValue(0);
         sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
                 sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
+    }
+
+    public void createTarArchive(SimComponents sim) {
+        try {
+            String postedFolder = getFolderPath("", sim);
+            String tarLocation = postedFolder.substring(0, postedFolder.length() - 1) + SimComponents.valEnvString("SLURM_JOB_ID") + ".tar";
+            int process = Runtime.getRuntime().exec("tar -cvf " + tarLocation + " " + postedFolder).waitFor();
+            process = Runtime.getRuntime().exec("rm -r " + postedFolder).waitFor();
+            process = Runtime.getRuntime().exec("mv " + tarLocation + " " + sim.dir).waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

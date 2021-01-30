@@ -72,6 +72,8 @@ public class ExportReports extends StarMacro {
 
         writer.close();
 
+        if (activeSim.isUnix())
+            esObj.createTarArchive(activeSim);
     }
 
     /*
