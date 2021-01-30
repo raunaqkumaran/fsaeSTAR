@@ -5,6 +5,7 @@ import star.common.StarPlot;
 import star.vis.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,7 +22,11 @@ public class PostProc extends StarMacro {
     {
         SimComponents sim = new SimComponents(getActiveSimulation());
         sim.activeSim.getSceneManager().setVerbose(true);
-        isUnix = sim.isUnix();
+        try {
+            isUnix = sim.isUnix();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Assign all regions to cross section derived part. Set origin to origin.
         sim.crossSection.getInputParts().setObjects(sim.activeSim.getRegionManager().getRegions());

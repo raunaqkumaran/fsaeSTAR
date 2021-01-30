@@ -18,6 +18,8 @@ import star.screenplay.Screenplay;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -938,7 +940,7 @@ public class SimComponents {
         return yVal;
     }
 
-    public boolean isUnix() {
+    public boolean isUnix() throws IOException {
         if (System.getProperty("os.name").contains("Windows"))
         {
             activeSim.println("Windows platform detected");
@@ -946,12 +948,18 @@ public class SimComponents {
         }
         else
         {
-            activeSim.println("I hope you're running this on a cluster with a \\tmp directory otherwise this could go poorly...");
+            activeSim.println("I hope you're running this on a cluster with a \\tmp directory with plenty of space otherwise this could go poorly...");
             String location = separator + "tmp";
             if (!Files.isDirectory(Path.of(location)))
             {
                 throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
             }
+            Process process = Runtime.getRuntime().exec("du -sh " + location);
+            InputStream readShell = process.getInputStream();
+            Scanner test = new Scanner(readShell).useDelimiter("\\A");
+            String result = test.hasNext() ? test.next() : "";
+            activeSim.println(result);
+
             return true;
         }
     }
