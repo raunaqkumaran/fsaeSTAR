@@ -34,6 +34,7 @@ public class ExportReports extends StarMacro {
             prefix = activeSim.dir;
 
         path = prefix + activeSim.separator + activeSim.simName + activeSim.separator + "Reports";
+        activeSim.activeSim.println("Writing reports to: " + path);
         File repFolder = new File(resolvePath(path));
 
         // Create folder if it doesn't exist

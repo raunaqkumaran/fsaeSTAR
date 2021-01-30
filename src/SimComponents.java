@@ -954,7 +954,10 @@ public class SimComponents {
                 throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
             }
 
-            String sizeFile = location + "size." + valEnvString("SLURM_JOB_ID");
+            String sizeFile = location + separator + "size." + valEnvString("SLURM_JOB_ID");
+            if (!Files.exists(Path.of(sizeFile)))
+                throw new RuntimeException("Can't find size file in " + sizeFile);
+
             BufferedReader br = new BufferedReader(new FileReader(sizeFile));
             String fileSize, currentline;
             fileSize = "";
@@ -964,8 +967,8 @@ public class SimComponents {
                 activeSim.println("File size line: " + fileSize);
             }
 
-            String splitString[] = fileSize.split(" ");
-            double folderSize = Double.valueOf(splitString[0]);
+            String splitString = fileSize.replaceAll("[^\\d.]", "");
+            double folderSize = Double.valueOf(splitString);
             activeSim.println("File size: " + folderSize + " megabytes");
             if (folderSize > 400)
                 throw new RuntimeException("Not enough space on tmp to reliably run");
