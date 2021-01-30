@@ -116,7 +116,7 @@ def clumped(file_list, config_list, command):
 
 
 def generatecommand(config_list):
-    command = "srun hostname | sort -u > nodefile.$SLURM_JOB_ID; rm '/tmp/size.{$SLURM_JOB_ID}'; du -ms /tmp > '/tmp/size.{$SLURM_JOB_ID}' \n"
+    command = "srun hostname | sort -u > nodefile.$SLURM_JOB_ID; rm '/tmp/size.${SLURM_JOB_ID}'; du -ms /tmp > '/tmp/size.${SLURM_JOB_ID}' \n"
     command = command + '"' + "$STARLOC" + '"'
     command = command + " -licpath " + "$LICPATH" + " -collab "
     command = command + " -classpath " + '"' + "$CP" + '" '
