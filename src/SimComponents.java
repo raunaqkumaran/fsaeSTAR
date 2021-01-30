@@ -954,9 +954,9 @@ public class SimComponents {
             {
                 throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
             }
-            Process process = Runtime.getRuntime().exec("du -sh " + location);
+            Process process = Runtime.getRuntime().exec("du -ms " + location);
             InputStream readShell = process.getInputStream();
-            Scanner test = new Scanner(readShell).useDelimiter("\\A");
+            Scanner test = new Scanner(readShell);
             String result = test.hasNext() ? test.next() : "";
             activeSim.println(result);
 
