@@ -332,7 +332,7 @@ public class PostProc extends StarMacro {
             String postedFolder = getFolderPath("", sim, sim.isUnix());
             String tarLocation = postedFolder.substring(0, postedFolder.length() - 1) + SimComponents.valEnvString("SLURM_JOB_ID") + ".tar";
             sim.activeSim.println("tar -cvf " + tarLocation + " -C " + postedFolder + " .");
-            int process = Runtime.getRuntime().exec("tar -cvf " + tarLocation + " -C " + postedFolder + " .").waitFor();
+            int process = Runtime.getRuntime().exec("tar -cf " + tarLocation + " -C " + postedFolder + " .").waitFor();
             sim.activeSim.println("rm -r " + postedFolder);
             process = Runtime.getRuntime().exec("rm -r " + postedFolder).waitFor();
             sim.activeSim.println("mv " + tarLocation + " " + sim.dir);
