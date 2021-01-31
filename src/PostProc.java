@@ -337,6 +337,8 @@ public class PostProc extends StarMacro {
             process = Runtime.getRuntime().exec("rm -r " + postedFolder).waitFor();
             sim.activeSim.println("mv " + tarLocation + " " + sim.dir);
             process = Runtime.getRuntime().exec("mv " + tarLocation + " " + sim.dir).waitFor();
+            sim.activeSim.println("rm " + "size." + SimComponents.valEnvString("SLURM_JOB_ID"));
+            process = Runtime.getRuntime().exec("rm " + sim.separator + "tmp" + sim.separator + "size." + SimComponents.valEnvString("SLURM_JOB_ID")).waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
