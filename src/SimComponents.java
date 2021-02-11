@@ -596,11 +596,6 @@ public class SimComponents {
         //If there isn't a continuum named steady state, it will default to a continuum named S-a physics. This logic was largely for backwards compatibility, and could probably be removed.
         if (activeSim.getContinuumManager().has("Steady state"))
             steadyStatePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("Steady state");
-        else if (activeSim.getContinuumManager().has("S-a physics"))
-        {
-            steadyStatePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("S-a physics");
-            steadyStatePhysics.setPresentationName("Steady state");
-        }
         else
         {
             // I don't know if RuntimeException is the right exception class to throw. It probably isn't, but it gets the job done.
