@@ -12,6 +12,6 @@ public class ClearSolution extends StarMacro {
         sim.getSolution().clearSolution(Solution.Clear.Fields);
         sim.getSolution().clearSolution(Solution.Clear.History);
         sim.saveState(sim.getSessionDir() + File.separator + sim.getPresentationName() + ".sim");
-        
+
     }
 }

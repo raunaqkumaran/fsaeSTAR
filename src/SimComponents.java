@@ -15,10 +15,12 @@ import star.flow.AccumulatedForceTable;
 import star.meshing.*;
 import star.motion.UserRotatingAndTranslatingReferenceFrame;
 import star.screenplay.Screenplay;
-import star.screenplay.ScreenplayManager;
 import star.surfacewrapper.SurfaceWrapperAutoMeshOperation;
 import star.vis.*;
-import java.io.File;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 
@@ -72,7 +74,7 @@ public class SimComponents {
 
     //Version check. An easy way to make sure the sim and the macros are the same version. Throw an error at the beginning, rather than an uncaught NPE later.
     // This needs to match the version parameter in STAR. This is really just a way so people don't bug me with macro problems that can be solved with pulling the correct branch/tag
-    private double version = 4.3;
+    private double version = 4.4;
 
     // Simulation object
     public Simulation activeSim;
@@ -594,11 +596,6 @@ public class SimComponents {
         //If there isn't a continuum named steady state, it will default to a continuum named S-a physics. This logic was largely for backwards compatibility, and could probably be removed.
         if (activeSim.getContinuumManager().has("Steady state"))
             steadyStatePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("Steady state");
-        else if (activeSim.getContinuumManager().has("S-a physics"))
-        {
-            steadyStatePhysics = (PhysicsContinuum) activeSim.getContinuumManager().getContinuum("S-a physics");
-            steadyStatePhysics.setPresentationName("Steady state");
-        }
         else
         {
             // I don't know if RuntimeException is the right exception class to throw. It probably isn't, but it gets the job done.
@@ -702,10 +699,6 @@ public class SimComponents {
             simName = activeSim.getPresentationName();
             if (activeSim.getRepresentationManager().has("Volume Mesh"))
                 finiteVol = (FvRepresentation) activeSim.getRepresentationManager().getObject("Volume Mesh");
-            // this looks like carry over from the brief time i was trying to get screenplays to work. these aren't important, and should be safely delete-able from the code and the sim environment
-            aftFore = activeSim.get(ScreenplayManager.class).getObject("Screenplay 1");
-            profile = activeSim.get(ScreenplayManager.class).getObject("Screenplay 2");
-            topBottom = activeSim.get(ScreenplayManager.class).getObject("Screenplay 3");
         } catch (Exception e) {
             activeSim.println(this.getClass().getName() + " - Scene or displayer lookup failed, or volume mesh not found");
         }
@@ -940,5 +933,43 @@ public class SimComponents {
         double yVal = freestreamVal * Math.tan(Math.toRadians(sideslipAngle));
         return yVal;
     }
+
+    public boolean isUnix() throws IOException {
+        if (System.getProperty("os.name").contains("Windows"))
+        {
+            activeSim.println("Windows platform detected");
+            return false;
+        }
+        else
+        {
+            activeSim.println("I hope you're running this on a cluster with a \\tmp directory with plenty of space otherwise this could go poorly...");
+            String location = separator + "tmp";
+            if (!Files.isDirectory(Path.of(location)))
+            {
+                throw new RuntimeException("Can't find a \\tmp directory. we're not trying this");
+            }
+
+            String sizeFile = location + separator + "size." + valEnvString("SLURM_JOB_ID");
+            if (!Files.exists(Path.of(sizeFile)))
+                throw new RuntimeException("Can't find size file in " + sizeFile);
+
+            BufferedReader br = new BufferedReader(new FileReader(sizeFile));
+            String fileSize, currentline;
+            fileSize = "";
+            while ((currentline = br.readLine()) != null)
+            {
+                fileSize = currentline;
+                activeSim.println("File size line: " + fileSize);
+            }
+
+            String splitString = fileSize.replaceAll("[^\\d.]", "");
+            double folderSize = Double.valueOf(splitString);
+            activeSim.println("File size: " + folderSize + " megabytes");
+            if (folderSize > 400)
+                throw new RuntimeException("Not enough space on tmp to reliably run");
+            return true;
+        }
+    }
+
 
 }

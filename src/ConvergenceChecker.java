@@ -8,8 +8,8 @@ import java.util.HashMap;
 public class ConvergenceChecker {
 
     public static final int COLUMN = 1;
-    public static final int MOVING_AVERAGE_WINDOW = 500;
-    public static final int CONVERGENCE_SCORE_CUTOFF = 15;
+    public static final int MOVING_AVERAGE_WINDOW = 600;
+    public static final int CONVERGENCE_SCORE_CUTOFF = 12;
     public static final int STD_WINDOW = 750;
     public static final int MIN_MAX_WINDOW = 750;
     public HashMap<String, Boolean> convergenceResults;
@@ -17,6 +17,7 @@ public class ConvergenceChecker {
     public ConvergenceChecker(SimComponents activeSim)
     {
         convergenceResults = new HashMap<>();
+        activeSim.activeSim.println("Convergence cutoff set to: " + CONVERGENCE_SCORE_CUTOFF);
 
         for (StarPlot plt : activeSim.plots)
         {
@@ -45,18 +46,19 @@ public class ConvergenceChecker {
             double min = getMinimum(min_max_slice);
             double percentageRange = Math.abs(((max - min) / min) * 100);
             double score = cnvgAlgorithm(averageStdDev, percentageRange);
-
             if (score < CONVERGENCE_SCORE_CUTOFF)
             {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", true);
-                activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED");
+                activeSim.activeSim.println(plt.getPresentationName() + " CONVERGED with score " + score);
             }
-            else
+            else {
                 convergenceResults.put(plt.getPresentationName() + " (" + score + ")", false);
+                activeSim.activeSim.println(plt.getPresentationName() + " NOT CONVERGED with score " + score);
+            }
 
             activeSim.activeSim.print("");
         }
-        activeSim.activeSim.println("Complete");
+        activeSim.activeSim.println("Convergence Check Complete");
     }
 
     public double cnvgAlgorithm(double stDev, double diff) {

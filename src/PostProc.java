@@ -1,14 +1,11 @@
 import star.base.neo.DoubleVector;
-import star.base.report.PlotableMonitor;
 import star.common.Boundary;
-import star.common.MonitorPlot;
 import star.common.StarMacro;
 import star.common.StarPlot;
-import star.flow.AccumulatedForceHistogram;
-import star.flow.AccumulatedForceTable;
 import star.vis.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,10 +16,19 @@ Goes through scenes and displayers to export reports, plots, and scenes for a si
 
 public class PostProc extends StarMacro {
 
+    boolean isUnix;
+    int flagSet = 0;
+
     public void execute()
     {
         SimComponents sim = new SimComponents(getActiveSimulation());
         sim.activeSim.getSceneManager().setVerbose(true);
+        try {
+            isUnix = sim.isUnix();
+            flagSet = 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Assign all regions to cross section derived part. Set origin to origin.
         sim.crossSection.getInputParts().setObjects(sim.activeSim.getRegionManager().getRegions());
@@ -82,6 +88,10 @@ public class PostProc extends StarMacro {
                 sim.inches, new DoubleVector(sim.topBottomDirection));
         postProc2D(sim, displayers2D, topBottomViews, sim.utLimits, 0.25, 0.1, sim.scene2D);
         postProc2D(sim, displayers2D, topBottomViews, sim.topBottomLimits, 4, 0.1, sim.scene2D);
+
+        if (isUnix) {
+            createTarArchive(sim);
+        }
 
     }
 
@@ -258,27 +268,39 @@ public class PostProc extends StarMacro {
         return desiredViews;
     }
 
-    public void exportPlots(SimComponents sim) {
-        String plotsPath;
+    public void exportPlots(SimComponents sim) throws IOException {
+        String plotsPath, plotsPathText, plotName, plotsImagePath;
+        plotsPath = getFolderPath("Plots", sim, sim.isUnix());
+        sim.activeSim.println("Saving plots to: "+ plotsPath);
+        makeDir(plotsPath);
 
         for (StarPlot plot : sim.plots)
         {
-            String plotName = plot.getPresentationName().replaceAll("[\\/]", "");
-            String plotsImagePath;
-            plotsPath = getFolderPath("Plots", sim);
-            makeDir(plotsPath);
+            plotName = plot.getPresentationName().replaceAll("[\\/]", "");
             plotsImagePath = plotsPath + sim.separator + plotName + ".png";
-            plotsPath = plotsPath + sim.separator + plotName + ".txt";
+            plotsPathText = plotsPath + sim.separator + plotName + ".txt";
 
-            plot.export(plotsPath);
+            plot.export(plotsPathText);
             plot.encode(plotsImagePath, "png", 4000, 2000);
 
         }
     }
 
-    public static String getFolderPath(String folderName, SimComponents sim) {
-        return sim.dir + sim.separator + sim.simName
-                + sim.separator + folderName;
+    public String getFolderPath(String folderName, SimComponents sim, boolean unix)
+    {
+        String prefix;
+
+        if (unix)
+            prefix = sim.separator + "tmp";
+        else
+            prefix = sim.dir;
+
+        return prefix + sim.separator + sim.simName + sim.separator + folderName;
+    }
+
+    public String getFolderPath(String folderName, SimComponents sim) {
+
+        return getFolderPath(folderName, sim, isUnix);
     }
 
     private void makeDir(String pathName)
@@ -303,6 +325,23 @@ public class PostProc extends StarMacro {
         sim.crossSection.getSingleValue().getValueQuantity().setValue(0);
         sim.crossSection.getOriginCoordinate().setCoordinate(sim.inches,
                 sim.inches, sim.inches, new DoubleVector(new double[]{0, 0, 0}));
+    }
+
+    public void createTarArchive(SimComponents sim) {
+        try {
+            String postedFolder = getFolderPath("", sim, sim.isUnix());
+            String tarLocation = postedFolder.substring(0, postedFolder.length() - 1) + SimComponents.valEnvString("SLURM_JOB_ID") + ".tar";
+            sim.activeSim.println("tar -cvf " + tarLocation + " -C " + postedFolder + " .");
+            int process = Runtime.getRuntime().exec("tar -cf " + tarLocation + " -C " + postedFolder + " .").waitFor();
+            sim.activeSim.println("rm -r " + postedFolder);
+            process = Runtime.getRuntime().exec("rm -r " + postedFolder).waitFor();
+            sim.activeSim.println("mv " + tarLocation + " " + sim.dir);
+            process = Runtime.getRuntime().exec("mv " + tarLocation + " " + sim.dir).waitFor();
+            sim.activeSim.println("rm " + sim.separator + "tmp" + sim.separator + "size." + SimComponents.valEnvString("SLURM_JOB_ID"));
+            process = Runtime.getRuntime().exec("rm " + sim.separator + "tmp" + sim.separator + "size." + SimComponents.valEnvString("SLURM_JOB_ID")).waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

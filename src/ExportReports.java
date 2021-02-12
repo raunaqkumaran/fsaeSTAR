@@ -25,10 +25,19 @@ public class ExportReports extends StarMacro {
 
     private void execute0() throws IOException {
         SimComponents activeSim = new SimComponents(getActiveSimulation());
-        String path;
+        String path, prefix;
+
+        //PostProc.java still handles plot exports. This calls the exportPlots function from there.
+        PostProc esObj = new PostProc();
 
         // Set file path for reports
-        path = activeSim.dir + activeSim.separator + activeSim.simName + activeSim.separator + "Reports";
+        if (activeSim.isUnix())
+            prefix = activeSim.separator + "tmp";
+        else
+            prefix = activeSim.dir;
+
+        path = esObj.getFolderPath("Reports", activeSim, activeSim.isUnix());
+        activeSim.activeSim.println("Writing reports to: " + path);
         File repFolder = new File(resolvePath(path));
 
         // Create folder if it doesn't exist
@@ -49,10 +58,6 @@ public class ExportReports extends StarMacro {
         activeSim.repTable.extract();
         activeSim.repTable.export(path + activeSim.separator + "Reports.csv");
 
-        //PostProc.java still handles plot exports. This calls the exportPlots function from there.
-        PostProc esObj = new PostProc();
-        esObj.exportPlots(activeSim);
-
         // Testing for convergence
         ConvergenceChecker convergenceObj = new ConvergenceChecker(activeSim);
 
@@ -66,7 +71,10 @@ public class ExportReports extends StarMacro {
         }
 
         writer.close();
+        esObj.exportPlots(activeSim);
 
+        if (activeSim.isUnix() && !SimComponents.boolEnv("postprocess"))
+            esObj.createTarArchive(activeSim);
     }
 
     /*

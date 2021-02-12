@@ -2,10 +2,8 @@
 // Written by STAR-CCM+ 14.06.013
 
 import java.io.File;
-import java.util.*;
 
 import star.common.*;
-import star.base.neo.*;
 import star.base.report.*;
 import star.flow.*;
 
