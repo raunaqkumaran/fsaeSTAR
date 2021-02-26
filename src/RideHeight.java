@@ -43,8 +43,8 @@ public class RideHeight extends StarMacro {
         frh = -5.5;
         rrh = -5.5;
         */
-        frontRot = -Math.atan(rrh / sim.wheelBase);
-        rearRot = Math.atan(frh / sim.wheelBase);
+        frontRot = Math.atan(rrh / sim.wheelBase);
+        rearRot = -Math.atan(frh / sim.wheelBase);
 
         sim.activeSim.println("Front, rear pitch angle change attempted " + frontRot + " " + rearRot);
 
