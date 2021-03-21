@@ -965,7 +965,7 @@ public class SimComponents {
             String splitString = fileSize.replaceAll("[^\\d.]", "");
             double folderSize = Double.valueOf(splitString);
             activeSim.println("File size: " + folderSize + " megabytes");
-            if (folderSize > 400)
+            if (folderSize > 5000)
                 throw new RuntimeException("Not enough space on tmp to reliably run");
             return true;
         }
