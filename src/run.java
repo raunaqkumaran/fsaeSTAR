@@ -67,7 +67,7 @@ public class run extends StarMacro {
             {
                 if (key.contains(SimComponents.LIFT_COEFFICIENT_PLOT))
                 {
-                    if (obj.convergenceResults.get(key) == true) {
+                    if (obj.convergenceResults.get(key) == true && activeSim.convergenceCheck == true) {
                         CONVERGED = true;
                         return;
                     }
