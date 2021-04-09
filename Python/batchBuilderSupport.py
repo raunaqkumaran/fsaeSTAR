@@ -133,7 +133,7 @@ def generatecommand(config_list):
 
     command += " -machinefile nodefile.$SLURM_JOB_ID"
     if config_list['CLUSTER'] == "gpu":
-        command += " -hardwarebatch"
+        command += " -hardwarebatch "
     command = command + "| tee " + '"${FILENAME}' + "_" + "${SLURM_JOB_ID}" + "_" + get_timestamp() + '.txt"'
     return command
 
