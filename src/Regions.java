@@ -113,7 +113,7 @@ public class Regions extends StarMacro {
             String filePath = classPath + File.separator + SimComponents.FAN_CURVE_CSV_FN;
             fanfile = new File(filePath);
             if (!fanfile.exists())
-                throw new IllegalStateException("No fan table found. Terminating");
+                throw new IllegalStateException("No fan table found at " + filePath + " Terminating");
             else
                 activeSim.fan_curve_table.setFile(fanfile);
         }
