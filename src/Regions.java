@@ -75,6 +75,10 @@ public class Regions extends StarMacro {
                             activeSim.dualMassFlowInterfaceNameOutlet);
             activeSim.dualFanInterface = activeSim.activeSim.getInterfaceManager().createBoundaryInterface(activeSim.dualRadFanBound, activeSim.dualDomainFanBound, "Dual Fan Interface");
             setUpFan(activeSim, activeSim.dualFanInterface);
+            if (activeSim.fanFlag == false) {
+                if (activeSim.dualRadFlag) activeSim.dualFanInterface.setInterfaceType(InternalInterface.class);
+                activeSim.fanInterface.setInterfaceType(InternalInterface.class);
+            }
         }
 
         //Assign viscous properties to the radiator regions.
@@ -367,6 +371,19 @@ public class Regions extends StarMacro {
     //Quick and dirty method to set up fans, and only fans when needed by run.java, and fan boundaries aren't already known.
     public void initFans(SimComponents activeSim)
     {
+        if (activeSim.fanFlag)
+        {
+            try
+            {
+                activeSim.fanInterface.setInterfaceType(FanInterface.class);
+                if (activeSim.dualRadFlag) activeSim.dualFanInterface.setInterfaceType(FanInterface.class);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                activeSim.activeSim.println("Tried to set fan interfaces to fan type....but something went wrong, check initFans(SimComponents activeSim)");
+            }
+        }
         for (Interface x : activeSim.activeSim.getInterfaceManager().getObjects())
         {
             if (x.getInterfaceType() instanceof FanInterface)
